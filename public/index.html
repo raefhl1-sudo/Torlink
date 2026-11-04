@@ -187,9 +187,18 @@ async function api(method,url,body,pin){
 }
 
 /* ===================== routing ===================== */
-const P=location.pathname.split('/').filter(Boolean);
-const MODE=P[0]==='m'?'manage':P[0]==='admin'?'admin':'book';
-const KEY=P[1]||'demo';
+// PREVIEW = in-browser test build (no server): routes live in the #hash instead of the path
+const PREVIEW=!!window.__TL_PREVIEW;
+const SITE=PREVIEW?'https://torlink.netlify.app':location.origin;
+const href=p=>PREVIEW?'#'+p.slice(1).replace('/','-'):p;
+function parseRoute(){
+  if(!PREVIEW)return location.pathname.split('/').filter(Boolean);
+  const h=decodeURIComponent(location.hash.slice(1))||'b-demo',i=h.indexOf('-');
+  return i<0?[h,'demo']:[h.slice(0,i),h.slice(i+1)];
+}
+let P=parseRoute();
+let MODE=P[0]==='m'?'manage':P[0]==='admin'?'admin':'book';
+let KEY=P[1]||'demo';
 let S={biz:null,today:null,loadErr:null};
 let cb=null; // booking flow
 const freshCb=()=>({step:0,serviceId:null,staffId:null,date:null,time:null,name:store.get('tl-name')||'',phone:store.get('tl-phone')||'',err:'',busy:false,slots:null,done:null,resched:null});
@@ -230,8 +239,8 @@ function renderBook(){
     const b=cb.done.booking;
     return h+`<div class="card"><div class="ok-ic">✓</div><h2 class="center">${cb.resched?t('changedOk'):t('booked')}</h2>
       ${summary(b.serviceName,b.staffId,b.date,b.time,null,b.price)}${msgBox(cb.done.message)}
-      <a class="btn ghost full" style="margin-top:12px" href="/m/${encodeURIComponent(b.id)}">${t('manageLink')}</a>
-      <a class="btn full" style="margin-top:8px" href="/b/${encodeURIComponent(S.biz.slug)}">${t('another')}</a></div>`;
+      <a class="btn ghost full" style="margin-top:12px" href="${href('/m/'+encodeURIComponent(b.id))}">${t('manageLink')}</a>
+      <a class="btn full" style="margin-top:8px" href="${href('/b/'+encodeURIComponent(S.biz.slug))}">${t('another')}</a></div>`;
   }
   const seq=cb.resched?[2,3]:single()?[0,2,3]:[0,1,2,3];
   h+=`<div class="steps">${seq.map(i=>`<i class="${i<=cb.step?'on':''}"></i>`).join('')}</div><div class="card">`;
@@ -305,7 +314,7 @@ function renderManage(){
   const d=mg.data,b=d.booking;
   let h=bizCard(t('manageLink'));
   if(b.status==='cancelled')return h+`<div class="card center"><div class="ok-ic x">✕</div><h2>${t('cancelledOk')}</h2>${summary(b.serviceName,b.staffId,b.date,b.time,null,b.price)}${msgBox(mg.msg)}
-    <a class="btn full" style="margin-top:12px" href="/b/${encodeURIComponent(S.biz.slug)}">${t('bookNew')}</a></div>`;
+    <a class="btn full" style="margin-top:12px" href="${href('/b/'+encodeURIComponent(S.biz.slug))}">${t('bookNew')}</a></div>`;
   h+=`<div class="card"><h2>${t('yourBooking')} · ${esc(b.name)}</h2>${summary(b.serviceName,b.staffId,b.date,b.time,null,b.price)}`;
   if(!d.canChange)h+=`<div class="info-box">${errMsg(d.reason,S.biz.cutoff)}</div>`;
   else h+=`${mg.err?`<div class="err">${mg.err}</div>`:''}<div class="row"><button class="btn" style="flex:1" data-a="resched">${t('changeBtn')}</button><button class="btn ghost" style="flex:1" data-a="cancelMine">${mg.confirm?t('sure'):t('cancelBtn')}</button></div>`;
@@ -317,7 +326,7 @@ function renderAdmin(){
   if(!A.biz){
     return `<div class="card" style="max-width:380px;margin:30px auto"><h2>${t('adminTitle')}</h2>
       <label class="f"><span>${t('pin')}</span><input type="password" inputmode="numeric" id="pinIn" dir="ltr" autocomplete="current-password"></label>
-      ${A.err?`<div class="err">${A.err}</div>`:''}<button class="btn full" data-a="login" ${A.loading?'disabled':''}>${t('enter')}</button></div>`;
+      ${A.err?`<div class="err">${A.err}</div>`:''}${PREVIEW?`<p class="note">${lang==='ar'?'رمز التجربة':'קוד לבדיקה'}: <b dir="ltr">7693</b></p>`:''}<button class="btn full" data-a="login" ${A.loading?'disabled':''}>${t('enter')}</button></div>`;
   }
   S.biz=A.biz;
   const tabs=[['cal','tCal'],['report','tReport'],['msgs','tMsgs'],['clients','tClients'],['services','tServices'],['hours','tHours'],['settings','tSettings']];
@@ -366,7 +375,7 @@ function admCal(){
     const k=addDaysK(S.today,i),n=tabData.filter(b=>b.date===k&&b.status!=='cancelled').length;
     h+=`<button class="chip ${A.date===k?'on':''}" data-adate="${k}"><small>${i===0?t('today'):t('daysS')[wd(k)]}</small><b>${dnum(k)}</b><small>${n?'● '+n:'—'}</small></button>`;
   }
-  h+=`</div><div class="row" style="justify-content:space-between;margin-top:8px"><b>${fmtDate(A.date)}</b><div class="row"><button class="btn sm ghost" data-a="refresh">↻</button><a class="btn sm" href="/b/${encodeURIComponent(A.biz.slug)}" target="_blank" rel="noopener">${t('manual')}</a></div></div>`;
+  h+=`</div><div class="row" style="justify-content:space-between;margin-top:8px"><b>${fmtDate(A.date)}</b><div class="row"><button class="btn sm ghost" data-a="refresh">↻</button><a class="btn sm" href="${href('/b/'+encodeURIComponent(A.biz.slug))}" ${PREVIEW?'':'target="_blank" rel="noopener"'}>${t('manual')}</a></div></div>`;
   if(!day.length)h+=`<div class="empty">${t('noBookings')}</div>`;
   A.biz.staff.forEach(p=>{
     const list=day.filter(b=>b.staffId===p.id).sort((a,b)=>a.time.localeCompare(b.time));
@@ -450,10 +459,10 @@ function admHours(){
   return `<div class="card"><p class="note" style="margin-top:0">${t('hoursNote')}</p>`+A.biz.hours.map((x,i)=>`<div class="hrs"><b>${t('days')[i]}</b><input type="checkbox" data-hr="${i}" data-f="open" ${x.open?'checked':''} style="width:20px;height:20px"><input type="time" data-hr="${i}" data-f="from" value="${x.from}" ${x.open?'':'disabled'}><input type="time" data-hr="${i}" data-f="to" value="${x.to}" ${x.open?'':'disabled'}></div>`).join('')+`</div>`;
 }
 function admSettings(){
-  const link=location.origin+'/b/'+A.biz.slug;
+  const link=SITE+'/b/'+A.biz.slug;
   return `<div class="card"><label class="f"><span>${t('bizName')} (עב)</span><input type="text" data-biz="he" value="${esc(A.biz.name.he)}"></label>
    <label class="f"><span>${t('bizName')} (عر)</span><input type="text" data-biz="ar" value="${esc(A.biz.name.ar)}"></label>
-   <label class="f"><span>${t('bookLink')}</span></label><div class="link"><span style="flex:1">${esc(link)}</span><button class="btn sm" data-a="copyLink">${t('copy')}</button><a class="btn sm ghost" href="${esc(link)}" target="_blank" rel="noopener">${t('open')}</a></div>
+   <label class="f"><span>${t('bookLink')}</span></label><div class="link"><span style="flex:1">${esc(link)}</span><button class="btn sm" data-a="copyLink">${t('copy')}</button><a class="btn sm ghost" href="${PREVIEW?href('/b/'+A.biz.slug):esc(link)}" ${PREVIEW?'':'target="_blank" rel="noopener"'}>${t('open')}</a></div>
    <p class="note">${t('linkNote')}</p></div>
    <div class="card"><h2>${t('staffTitle')}</h2><p class="note" style="margin-top:-6px">${t('staffNote')}</p>
    ${A.biz.staff.map(p=>`<div class="ed" style="grid-template-columns:1fr 1fr 36px"><input type="text" data-sf="${p.id}" data-f="he" value="${esc(p.name.he)}" placeholder="${t('nameHe')}"><input type="text" data-sf="${p.id}" data-f="ar" value="${esc(p.name.ar)}" placeholder="${t('nameAr')}"><button class="x" data-delsf="${p.id}" ${single()?'disabled':''}>×</button></div>`).join('')}
@@ -516,7 +525,7 @@ document.addEventListener('click',async e=>{
     try{await api('POST',`/admin/${A.biz.slug}/status`,{date:d.d,id:d.id,status:d.st},A.pin)}catch(err){b.status=prev;render();toast(errMsg(err.code))}
     return}
   if(d.a==='copyReport'){copyText(reportText());return}
-  if(d.a==='copyLink'){copyText(location.origin+'/b/'+A.biz.slug);return}
+  if(d.a==='copyLink'){copyText(SITE+'/b/'+A.biz.slug);return}
   if(d.a==='test'){
     const ph=document.getElementById('testPhone').value.replace(/\D/g,'');
     if(!/^05\d{8}$/.test(ph)){toast(errMsg('bad_phone'));return}
@@ -551,7 +560,19 @@ document.addEventListener('change',e=>{
 });
 
 /* ===================== boot ===================== */
-(async function boot(){
+if(PREVIEW){
+  const nav=document.createElement('div');nav.className='seg';nav.id='pvNav';
+  document.querySelector('.top .sp').after(nav);
+  const paintNav=()=>{nav.innerHTML=`<a href="#b-demo" style="color:#fff;text-decoration:none;padding:6px 10px;border-radius:8px;font-size:14px;${MODE!=='admin'?'background:#fff;color:#1d1b19;font-weight:600':''}">${lang==='ar'?'الزبون':'לקוח'}</a><a href="#admin-demo" style="color:#fff;text-decoration:none;padding:6px 10px;border-radius:8px;font-size:14px;${MODE==='admin'?'background:#fff;color:#1d1b19;font-weight:600':''}">${lang==='ar'?'الإدارة':'ניהול'}</a>`};
+  const _render=render;render=function(){_render();paintNav()};
+  window.addEventListener('hashchange',()=>{
+    P=parseRoute();MODE=P[0]==='m'?'manage':P[0]==='admin'?'admin':'book';KEY=P[1]||'demo';
+    S={biz:null,today:null,loadErr:null};cb=null;mg={data:null,confirm:false};tabData=null;
+    A={pin:null,biz:null,wa:false,tab:'cal',date:null,period:'month',cache:{},msgs:null,confirm:null,loading:false,err:''};
+    window.scrollTo(0,0);boot();
+  });
+}
+async function boot(){
   render();
   try{
     if(MODE==='admin'){const p=store.sget('tl-pin-'+KEY);if(p)login(p);else render();return}
@@ -564,7 +585,8 @@ document.addEventListener('change',e=>{
     }
   }catch(e){S.loadErr=e.code}
   render();
-})();
+}
+boot();
 </script>
 </body>
 </html>
