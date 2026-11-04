@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TorLink</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f4f1;--card:#fff;--ink:#1d1b19;--muted:#77716a;--line:#e7e2db;--brand:#1f6f5c;--brand-2:#e9f3f0;--danger:#b84a3a;--ok:#2f7d4f;--warn:#a87a14;--wa:#1fa855;--r:14px}
+*{box-sizing:border-box}
+body{margin:0;font-family:Rubik,system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.45}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:inherit}
+.top{position:sticky;top:0;z-index:5;background:var(--ink);color:#fff;padding:10px 14px;display:flex;align-items:center;gap:10px}
+.logo{font-weight:700;font-size:18px}.logo span{color:#7fd1b9}
+.sp{flex:1}
+.seg{display:flex;background:#ffffff1a;border-radius:10px;padding:3px}
+.seg button{background:none;border:0;color:#fff;padding:6px 12px;border-radius:8px;font-size:14px}
+.seg button.on{background:#fff;color:var(--ink);font-weight:600}
+.wrap{max-width:760px;margin:0 auto;padding:16px 14px 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:14px}
+.biz{display:flex;gap:14px;align-items:center}
+.biz-ic{width:56px;height:56px;border-radius:16px;background:var(--brand);color:#fff;display:grid;place-items:center;font-size:26px;flex:none}
+.biz h1{margin:0;font-size:20px}.biz p{margin:2px 0 0;color:var(--muted);font-size:13px}
+.steps{display:flex;gap:6px;margin:4px 0 14px}.steps i{flex:1;height:4px;border-radius:4px;background:var(--line)}.steps i.on{background:var(--brand)}
+h2{font-size:17px;margin:0 0 12px}h3{font-size:15px;margin:16px 0 8px}
+.list{display:grid;gap:8px}
+.opt{display:flex;align-items:center;gap:10px;width:100%;text-align:start;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px}
+.opt:hover{border-color:var(--brand)}
+.opt .n{font-weight:600}.opt .m{color:var(--muted);font-size:13px}.opt .pr{margin-inline-start:auto;font-weight:600;white-space:nowrap}
+.av{width:38px;height:38px;border-radius:50%;background:var(--brand-2);color:var(--brand);display:grid;place-items:center;font-weight:700;flex:none}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px}
+.chip{flex:none;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:8px 10px;min-width:62px;text-align:center}
+.chip b{display:block;font-size:17px}.chip small{color:var(--muted);font-size:12px}
+.chip.on{background:var(--brand);border-color:var(--brand);color:#fff}.chip.on small{color:#ffffffcc}
+.chip:disabled{opacity:.4;cursor:not-allowed}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.pill{border:1.5px solid var(--line);background:#fff;border-radius:20px;padding:6px 12px;font-size:13px}
+.pill.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:8px;margin-top:12px}
+.slot{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:9px 0;font-weight:600;direction:ltr}
+.slot:hover{border-color:var(--brand)}
+.empty{color:var(--muted);text-align:center;padding:18px 6px}
+label.f{display:block;margin-bottom:10px}label.f span{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+input[type=text],input[type=tel],input[type=number],input[type=time],input[type=password],select{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff}
+input:focus,select:focus{outline:none;border-color:var(--brand)}
+.btn{border:0;border-radius:12px;padding:12px 16px;font-weight:600;background:var(--brand);color:#fff;text-decoration:none;display:inline-block;text-align:center}
+.btn.full{width:100%}.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.sm{padding:6px 10px;font-size:13px;border-radius:9px}.btn.danger{background:var(--danger)}.btn.wa{background:var(--wa)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:8px;align-items:center}
+.back{background:none;border:0;color:var(--muted);padding:0;margin-bottom:10px;font-size:14px}
+.sum{background:var(--brand-2);border-radius:12px;padding:12px 14px;margin-bottom:12px}
+.sum div{display:flex;justify-content:space-between;padding:3px 0;gap:10px}.sum div span:first-child{color:var(--muted)}
+.sum .old{text-decoration:line-through;color:var(--muted)}
+.ok-ic{width:64px;height:64px;border-radius:50%;background:var(--ok);color:#fff;display:grid;place-items:center;font-size:32px;margin:6px auto 10px}
+.ok-ic.x{background:var(--muted)}
+.center{text-align:center}
+.wa-box{background:#e7f8e9;border-radius:12px;padding:12px;margin-top:12px}
+.wa-box .lbl{font-size:12px;color:#2c7a3e;font-weight:600;margin-bottom:6px}
+.bub{background:#fff;border-radius:10px 10px 10px 2px;padding:10px 12px;font-size:14px;box-shadow:0 1px 1px #0001;white-space:pre-line;word-break:break-word}
+.err{color:var(--danger);font-size:13px;margin:6px 0}
+.info-box{background:#fff7e8;border:1px solid #f0dcb5;border-radius:12px;padding:10px 12px;font-size:13px;color:#6b5320;margin-bottom:12px}
+.ok-box{background:#e3f3e8;border:1px solid #bfe0c9;border-radius:12px;padding:10px 12px;font-size:13px;color:#245c37;margin-bottom:12px}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin-bottom:14px;padding-bottom:4px}
+.tabs button{flex:none;border:1.5px solid var(--line);background:#fff;border-radius:20px;padding:7px 14px;font-size:14px}
+.tabs button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}.stats.two{grid-template-columns:repeat(2,1fr)}
+.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.stat b{display:block;font-size:22px}.stat span{font-size:12px;color:var(--muted)}
+.stat.hl{background:var(--brand);color:#fff;border-color:var(--brand)}.stat.hl span{color:#ffffffcc}
+.staff-h{font-weight:600;margin:14px 0 8px;display:flex;align-items:center;gap:8px}
+.bk{display:flex;gap:12px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px;background:#fff;border-inline-start:4px solid var(--brand)}
+.bk.arrived{border-inline-start-color:var(--ok)}.bk.noshow{border-inline-start-color:var(--danger);opacity:.8}.bk.cancelled{border-inline-start-color:var(--line);opacity:.55}
+.bk .tm{font-weight:700;direction:ltr;min-width:48px}.bk .tm small{display:block;font-weight:400;color:var(--muted);font-size:12px}
+.bk .info{flex:1;min-width:0}.bk .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;background:var(--brand-2);color:var(--brand);font-weight:600;white-space:nowrap}
+.badge.arrived,.badge.sent{background:#e3f3e8;color:var(--ok)}.badge.noshow,.badge.failed,.badge.blocked{background:#f7e4e1;color:var(--danger)}
+.badge.cancelled{background:#eee;color:#777}.badge.demo{background:#fff3dc;color:var(--warn)}
+table{width:100%;border-collapse:collapse}td,th{padding:8px 4px;border-bottom:1px solid var(--line);text-align:start;vertical-align:middle;font-size:14px}
+th{font-size:12px;color:var(--muted);font-weight:500}td.num,th.num{text-align:end;white-space:nowrap}
+.ed{display:grid;grid-template-columns:1fr 1fr 70px 70px 36px;gap:6px;align-items:center;margin-bottom:8px}.ed input{padding:8px}
+.x{background:none;border:0;color:var(--danger);font-size:20px;line-height:1}.x:disabled{opacity:.25}
+.hrs{display:grid;grid-template-columns:90px 50px 1fr 1fr;gap:8px;align-items:center;margin-bottom:8px}
+.link{display:flex;gap:8px;align-items:center;background:var(--bg);border-radius:10px;padding:10px 12px;direction:ltr;font-size:14px;word-break:break-all}
+.note{font-size:13px;color:var(--muted)}
+.bar{display:grid;grid-template-columns:60px 1fr 40px;gap:8px;align-items:center;margin-bottom:6px;font-size:13px}
+.bar i{display:block;height:12px;border-radius:6px;background:var(--brand)}.bar .tr{background:var(--brand-2);border-radius:6px}
+.msg{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.msg .hd{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px;font-size:13px}
+.msg .bub{background:#f1fbf3;box-shadow:none;font-size:13px}
+.spin{width:28px;height:28px;border:3px solid var(--line);border-top-color:var(--brand);border-radius:50%;animation:s 1s linear infinite;margin:24px auto}
+@keyframes s{to{transform:rotate(360deg)}}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;opacity:0;transition:.2s;pointer-events:none;z-index:9}
+.toast.on{opacity:1}
+@media (max-width:520px){.ed{grid-template-columns:1fr 1fr 58px 58px 28px}.stats b{font-size:19px}}
+</style>
+</head>
+<body>
+<div class="top"><div class="logo">Tor<span>Link</span></div><div class="sp"></div>
+  <div class="seg" id="langSeg"><button data-l="he">עב</button><button data-l="ar">عر</button></div></div>
+<div class="wrap" id="app"><div class="spin"></div></div>
+<div class="toast" id="toast"></div>
+<script>
+/* ===================== i18n ===================== */
+const T={
+he:{bookNow:'קביעת תור אונליין',chooseService:'בחר שירות',chooseStaff:'בחר ספר',anyStaff:'כל ספר פנוי',anyStaffD:'התור הראשון שפנוי',
+chooseDate:'בחר יום ושעה',chooseNewDate:'בחר מועד חדש',noSlots:'אין שעות פנויות ביום הזה',closed:'סגור',details:'הפרטים שלך',name:'שם מלא',phone:'טלפון נייד',
+confirm:'אישור התור',confirmChange:'אישור השינוי',back:'→ חזרה',min:'דק׳',service:'שירות',staff:'ספר',date:'תאריך',time:'שעה',price:'מחיר',oldTime:'מועד קודם',newTime:'מועד חדש',
+booked:'התור נקבע!',changedOk:'התור עודכן!',cancelledOk:'התור בוטל',
+w_sent:'ההודעה נשלחה אליך בוואטסאפ:',w_demo:'מצב בדיקה: וואטסאפ עוד לא מחובר, ההודעה לא נשלחה בפועל.',w_failed:'התור נשמר, אבל לא הצלחנו לשלוח וואטסאפ.',
+manageLink:'ניהול התור שלי (שינוי / ביטול)',another:'קביעת תור נוסף',yourBooking:'התור שלך',changeBtn:'שינוי מועד',cancelBtn:'ביטול התור',bookNew:'קביעת תור חדש',
+e_taken:'השעה נתפסה בינתיים, בחר שעה אחרת',e_blocked:'לא ניתן לקבוע תור אונליין מהמספר הזה. נא ליצור קשר עם העסק.',e_bad_phone:'מספר טלפון לא תקין',e_bad_name:'נא למלא שם',
+e_too_late:'אי אפשר לשנות או לבטל פחות מ-{h} שעות לפני התור. נא להתקשר לעסק.',e_passed:'מועד התור כבר עבר.',e_not_found:'לא נמצא',e_bad_pin:'קוד שגוי',e_network:'אין חיבור, נסה שוב',e_server_error:'שגיאה, נסה שוב',e_cancelled:'התור הזה בוטל.',e_arrived:'התור הזה כבר התקיים.',e_noshow:'מועד התור כבר עבר.',
+adminTitle:'ניהול העסק',pin:'קוד ניהול',enter:'כניסה',logout:'יציאה',
+tCal:'יומן',tReport:'דוח',tMsgs:'וואטסאפ',tClients:'לקוחות',tServices:'שירותים',tHours:'שעות',tSettings:'הגדרות',
+sToday:'תורים ביום',sRev:'הכנסה צפויה',sNext:'התור הבא',noBookings:'אין תורים ביום הזה',arrived:'הגיע',noshow:'לא הגיע',cancel:'ביטול',restore:'החזר',
+st_confirmed:'מאושר',st_arrived:'הגיע',st_noshow:'לא הגיע',st_cancelled:'בוטל',manual:'+ תור ידני',nameHe:'שם בעברית',nameAr:'שם בערבית',dur:'דק׳',add:'+ הוספה',addStaff:'+ הוספת ספר',
+visits:'ביקורים',nos:'לא הגיע',block:'חסימה',unblock:'ביטול חסימה',blocked:'חסום',noClients:'עדיין אין לקוחות',blockNote:'לקוח חסום לא יכול לקבוע תור אונליין.',
+bizName:'שם העסק',bookLink:'הקישור להזמנת תורים',copy:'העתק',copied:'הועתק',open:'פתח',linkNote:'את הקישור הזה שמים באינסטגרם, בוואטסאפ ובגוגל.',
+staffTitle:'ספרים / עובדים',staffNote:'עם ספר אחד הלקוח לא בוחר ספר. כשמוסיפים ספר נוסף, מופיע שלב בחירת ספר ולכל ספר יומן משלו.',
+cutoff:'עד כמה שעות לפני התור הלקוח יכול לשנות או לבטל',newPin:'קוד ניהול חדש (4–8 ספרות)',savePin:'שמור קוד',saved:'נשמר',hoursNote:'השעות קובעות אילו תורים הלקוח רואה.',
+pWeek:'השבוע',pMonth:'החודש',pLast:'חודש קודם',p30:'30 יום',rRevenue:'הכנסה בפועל',rExpected:'עוד צפוי',rBookings:'תורים',rArrived:'הגיעו',rNoshow:'לא הגיעו',rCancelled:'בוטלו',rNoshowRate:'אחוז אי-הגעה',rAvg:'ממוצע ליום עבודה',
+rByService:'לפי שירות',rByStaff:'לפי ספר',rByDay:'עומס לפי יום',rTop:'לקוחות מובילים',rCount:'כמות',rCopy:'העתק דוח לוואטסאפ',rTitle:'דוח מרוכז',
+waOn:'וואטסאפ מחובר ✅ ההודעות נשלחות אוטומטית ללקוחות.',waOff:'וואטסאפ עוד לא מחובר. המערכת עובדת והכל נרשם כאן, אבל ההודעות לא יוצאות עד שמחברים את Meta.',
+waInfo:'נשלח אוטומטית: אישור בקביעת תור, תזכורת יום לפני (18:00), והודעה בכל שינוי או ביטול. בכל הודעה יש קישור אישי לשינוי התור.',
+testTitle:'שליחת הודעת בדיקה',testBtn:'שלח בדיקה',noMsgs:'אין עדיין הודעות',m_sent:'נשלחה',m_demo:'לא נשלחה (בדיקה)',m_failed:'נכשלה',
+ty_confirm:'אישור',ty_reminder:'תזכורת',ty_changed:'שינוי',ty_cancelled:'ביטול',
+days:['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'],daysS:['א׳','ב׳','ג׳','ד׳','ה׳','ו׳','ש׳'],today:'היום',
+months:['ינו׳','פבר׳','מרץ','אפר׳','מאי','יוני','יולי','אוג׳','ספט׳','אוק׳','נוב׳','דצמ׳'],sure:'בטוח? לחץ שוב'},
+ar:{bookNow:'حجز دور أونلاين',chooseService:'اختر الخدمة',chooseStaff:'اختر الحلاق',anyStaff:'أي حلاق متاح',anyStaffD:'أول موعد متاح',
+chooseDate:'اختر اليوم والساعة',chooseNewDate:'اختر موعدًا جديدًا',noSlots:'لا توجد ساعات متاحة في هذا اليوم',closed:'مغلق',details:'تفاصيلك',name:'الاسم الكامل',phone:'رقم الهاتف',
+confirm:'تأكيد الحجز',confirmChange:'تأكيد التغيير',back:'→ رجوع',min:'د',service:'الخدمة',staff:'الحلاق',date:'التاريخ',time:'الساعة',price:'السعر',oldTime:'الموعد السابق',newTime:'الموعد الجديد',
+booked:'تم الحجز!',changedOk:'تم تعديل الموعد!',cancelledOk:'تم إلغاء الموعد',
+w_sent:'أُرسلت إليك الرسالة عبر واتساب:',w_demo:'وضع التجربة: واتساب غير مربوط بعد، لم تُرسل الرسالة فعليًا.',w_failed:'تم حفظ الموعد، لكن لم نتمكن من إرسال واتساب.',
+manageLink:'إدارة موعدي (تغيير / إلغاء)',another:'حجز موعد آخر',yourBooking:'موعدك',changeBtn:'تغيير الموعد',cancelBtn:'إلغاء الموعد',bookNew:'حجز موعد جديد',
+e_taken:'هذه الساعة حُجزت للتو، اختر ساعة أخرى',e_blocked:'لا يمكن الحجز أونلاين من هذا الرقم. الرجاء التواصل مع المصلحة.',e_bad_phone:'رقم الهاتف غير صحيح',e_bad_name:'الرجاء إدخال الاسم',
+e_too_late:'لا يمكن التغيير أو الإلغاء قبل أقل من {h} ساعات من الموعد. الرجاء الاتصال بالمصلحة.',e_passed:'موعد الحجز قد مضى.',e_not_found:'غير موجود',e_bad_pin:'رمز خاطئ',e_network:'لا يوجد اتصال، حاول مرة أخرى',e_server_error:'خطأ، حاول مرة أخرى',e_cancelled:'هذا الموعد ملغى.',e_arrived:'هذا الموعد تم.',e_noshow:'موعد الحجز قد مضى.',
+adminTitle:'إدارة المصلحة',pin:'رمز الإدارة',enter:'دخول',logout:'خروج',
+tCal:'اليومية',tReport:'تقرير',tMsgs:'واتساب',tClients:'الزبائن',tServices:'الخدمات',tHours:'الساعات',tSettings:'الإعدادات',
+sToday:'مواعيد اليوم',sRev:'دخل متوقع',sNext:'الموعد القادم',noBookings:'لا توجد مواعيد في هذا اليوم',arrived:'حضر',noshow:'لم يحضر',cancel:'إلغاء',restore:'إرجاع',
+st_confirmed:'مؤكد',st_arrived:'حضر',st_noshow:'لم يحضر',st_cancelled:'ملغى',manual:'+ موعد يدوي',nameHe:'الاسم بالعبرية',nameAr:'الاسم بالعربية',dur:'د',add:'+ إضافة',addStaff:'+ إضافة حلاق',
+visits:'زيارات',nos:'لم يحضر',block:'حظر',unblock:'إلغاء الحظر',blocked:'محظور',noClients:'لا يوجد زبائن بعد',blockNote:'الزبون المحظور لا يستطيع الحجز أونلاين.',
+bizName:'اسم المصلحة',bookLink:'رابط حجز المواعيد',copy:'نسخ',copied:'تم النسخ',open:'فتح',linkNote:'ضع هذا الرابط في إنستغرام وواتساب وجوجل.',
+staffTitle:'الحلاقون / الموظفون',staffNote:'مع حلاق واحد لا يختار الزبون حلاقًا. عند إضافة حلاق تظهر خطوة الاختيار ولكل حلاق يومية خاصة.',
+cutoff:'حتى كم ساعة قبل الموعد يمكن للزبون التغيير أو الإلغاء',newPin:'رمز إدارة جديد (4–8 أرقام)',savePin:'حفظ الرمز',saved:'تم الحفظ',hoursNote:'ساعات العمل تحدد المواعيد التي يراها الزبون.',
+pWeek:'هذا الأسبوع',pMonth:'هذا الشهر',pLast:'الشهر السابق',p30:'30 يومًا',rRevenue:'دخل فعلي',rExpected:'متوقع أيضًا',rBookings:'مواعيد',rArrived:'حضروا',rNoshow:'لم يحضروا',rCancelled:'أُلغيت',rNoshowRate:'نسبة عدم الحضور',rAvg:'معدل ليوم عمل',
+rByService:'حسب الخدمة',rByStaff:'حسب الحلاق',rByDay:'الضغط حسب اليوم',rTop:'أفضل الزبائن',rCount:'العدد',rCopy:'نسخ التقرير لواتساب',rTitle:'تقرير مُجمّع',
+waOn:'واتساب مربوط ✅ الرسائل تُرسل تلقائيًا للزبائن.',waOff:'واتساب غير مربوط بعد. النظام يعمل وكل شيء يُسجَّل هنا، لكن الرسائل لا تُرسل حتى ربط Meta.',
+waInfo:'يُرسل تلقائيًا: تأكيد عند الحجز، تذكير قبل يوم (18:00)، ورسالة عند كل تغيير أو إلغاء. في كل رسالة رابط شخصي لتغيير الموعد.',
+testTitle:'إرسال رسالة تجربة',testBtn:'أرسل تجربة',noMsgs:'لا توجد رسائل بعد',m_sent:'أُرسلت',m_demo:'لم تُرسل (تجربة)',m_failed:'فشلت',
+ty_confirm:'تأكيد',ty_reminder:'تذكير',ty_changed:'تغيير',ty_cancelled:'إلغاء',
+days:['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'],daysS:['أحد','إثن','ثلا','أرب','خمي','جمع','سبت'],today:'اليوم',
+months:['ينا','فبر','مار','أبر','ماي','يون','يول','أغس','سبت','أكت','نوف','ديس'],sure:'متأكد؟ اضغط مرة أخرى'}};
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}},
+  sget(k){try{return sessionStorage.getItem(k)}catch(e){return null}},sset(k,v){try{v==null?sessionStorage.removeItem(k):sessionStorage.setItem(k,v)}catch(e){}}};
+let lang=store.get('tl-lang')==='ar'?'ar':'he';
+const t=k=>T[lang][k]??k;
+const tx=o=>o==null?'':(typeof o==='string'?o:(o[lang]||o.he||o.ar||''));
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const errMsg=(code,extra)=>(T[lang]['e_'+code]||t('e_server_error')).replace('{h}',extra??'');
+const $app=document.getElementById('app');
+function toast(m){const el=document.getElementById('toast');el.textContent=m;el.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(()=>el.classList.remove('on'),1800)}
+const rid=()=>Math.random().toString(36).slice(2,8).replace(/[^a-z0-9]/g,'x');
+
+/* ===================== dates (Israel day keys from server) ===================== */
+const pad=n=>String(n).padStart(2,'0');
+const addDaysK=(k,n)=>{const [y,m,d]=k.split('-').map(Number);return new Date(Date.UTC(y,m-1,d+n)).toISOString().slice(0,10)};
+const wd=k=>{const [y,m,d]=k.split('-').map(Number);return new Date(Date.UTC(y,m-1,d)).getUTCDay()};
+const dnum=k=>+k.slice(8,10), mon=k=>+k.slice(5,7)-1;
+const fmtDate=k=>`${t('days')[wd(k)]} ${dnum(k)} ${t('months')[mon(k)]}`;
+const toMin=s=>{const [h,m]=s.split(':').map(Number);return h*60+m};
+const toHM=m=>`${pad(Math.floor(m/60))}:${pad(m%60)}`;
+const fmtStamp=ts=>{const d=new Date(ts);return `${d.getDate()}/${d.getMonth()+1} ${pad(d.getHours())}:${pad(d.getMinutes())}`};
+
+/* ===================== API ===================== */
+async function api(method,url,body,pin){
+  let res;
+  try{res=await fetch('/api'+url,{method,headers:{'content-type':'application/json',...(pin?{'x-admin-pin':pin}:{})},body:body?JSON.stringify(body):undefined})}
+  catch(e){throw {code:'network'}}
+  const j=await res.json().catch(()=>({}));
+  if(!res.ok)throw {code:j.error||'server_error',status:res.status};
+  return j;
+}
+
+/* ===================== routing ===================== */
+const P=location.pathname.split('/').filter(Boolean);
+const MODE=P[0]==='m'?'manage':P[0]==='admin'?'admin':'book';
+const KEY=P[1]||'demo';
+let S={biz:null,today:null,loadErr:null};
+let cb=null; // booking flow
+const freshCb=()=>({step:0,serviceId:null,staffId:null,date:null,time:null,name:store.get('tl-name')||'',phone:store.get('tl-phone')||'',err:'',busy:false,slots:null,done:null,resched:null});
+let mg={data:null,confirm:false};
+let A={pin:null,biz:null,wa:false,tab:'cal',date:null,period:'month',cache:{},msgs:null,confirm:null,loading:false,err:''};
+
+const single=()=>!S.biz||S.biz.staff.length<2;
+const svc=id=>S.biz.services.find(x=>x.id===id);
+const stf=id=>S.biz.staff.find(x=>x.id===id);
+const bizCard=sub=>`<div class="card"><div class="biz"><div class="biz-ic">${esc(S.biz.icon)}</div><div><h1>${esc(tx(S.biz.name))}</h1><p>${sub}</p></div></div></div>`;
+const spin='<div class="spin"></div>';
+
+function render(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll('#langSeg button').forEach(b=>b.classList.toggle('on',b.dataset.l===lang));
+  if(S.loadErr){$app.innerHTML=`<div class="card empty">${errMsg(S.loadErr)}</div>`;return}
+  if(MODE==='admin'){$app.innerHTML=renderAdmin();return}
+  if(!S.biz){$app.innerHTML=spin;return}
+  document.title=tx(S.biz.name)+' · TorLink';
+  $app.innerHTML=(MODE==='manage'&&!cb)?renderManage():renderBook();
+}
+
+/* ===================== booking flow ===================== */
+function summary(sv,staffId,date,time,old,price){
+  return `<div class="sum"><div><span>${t('service')}</span><span>${esc(tx(sv))}</span></div>${single()?'':`<div><span>${t('staff')}</span><span>${esc(tx(stf(staffId)?.name))}</span></div>`}
+  ${old?`<div><span>${t('oldTime')}</span><span class="old">${fmtDate(old.date)} · <span dir="ltr">${old.time}</span></span></div><div><span>${t('newTime')}</span><b>${fmtDate(date)} · <span dir="ltr">${time}</span></b></div>`
+  :`<div><span>${t('date')}</span><span>${fmtDate(date)}</span></div><div><span>${t('time')}</span><span dir="ltr">${time}</span></div>`}
+  <div><span>${t('price')}</span><span>${price??''} ₪</span></div></div>`;
+}
+function msgBox(m){
+  if(!m)return '';
+  const head=m.status==='sent'?t('w_sent'):m.status==='demo'?t('w_demo'):t('w_failed');
+  return `<div class="wa-box"><div class="lbl">🟢 WhatsApp · ${head}</div>${m.status==='failed'?'':`<div class="bub">${esc(m.text)}</div>`}</div>`;
+}
+function renderBook(){
+  let h=bizCard(t('bookNow'));
+  if(cb.done){
+    const b=cb.done.booking;
+    return h+`<div class="card"><div class="ok-ic">✓</div><h2 class="center">${cb.resched?t('changedOk'):t('booked')}</h2>
+      ${summary(b.serviceName,b.staffId,b.date,b.time,null,b.price)}${msgBox(cb.done.message)}
+      <a class="btn ghost full" style="margin-top:12px" href="/m/${encodeURIComponent(b.id)}">${t('manageLink')}</a>
+      <a class="btn full" style="margin-top:8px" href="/b/${encodeURIComponent(S.biz.slug)}">${t('another')}</a></div>`;
+  }
+  const seq=cb.resched?[2,3]:single()?[0,2,3]:[0,1,2,3];
+  h+=`<div class="steps">${seq.map(i=>`<i class="${i<=cb.step?'on':''}"></i>`).join('')}</div><div class="card">`;
+  if(cb.step>0)h+=`<button class="back" data-a="back">${t('back')}</button>`;
+  if(cb.step===0){
+    h+=`<h2>${t('chooseService')}</h2><div class="list">`+S.biz.services.map(x=>
+      `<button class="opt" data-svc="${x.id}"><div><div class="n">${esc(tx(x.name))}</div><div class="m">${x.dur} ${t('min')}</div></div><div class="pr">${x.price} ₪</div></button>`).join('')+`</div>`;
+  }else if(cb.step===1){
+    h+=`<h2>${t('chooseStaff')}</h2><div class="list"><button class="opt" data-stf="any"><div class="av">★</div><div><div class="n">${t('anyStaff')}</div><div class="m">${t('anyStaffD')}</div></div></button>`+
+      S.biz.staff.map(p=>`<button class="opt" data-stf="${p.id}"><div class="av">${esc(tx(p.name).slice(0,1))}</div><div class="n">${esc(tx(p.name))}</div></button>`).join('')+`</div>`;
+  }else if(cb.step===2){
+    h+=`<h2>${cb.resched?t('chooseNewDate'):t('chooseDate')}</h2><div class="chips">`;
+    for(let i=0;i<21;i++){
+      const k=addDaysK(S.today,i),open=S.biz.hours[wd(k)].open;
+      h+=`<button class="chip ${cb.date===k?'on':''}" data-date="${k}" ${open?'':'disabled'}><small>${i===0?t('today'):t('daysS')[wd(k)]}</small><b>${dnum(k)}</b><small>${open?t('months')[mon(k)]:t('closed')}</small></button>`;
+    }
+    h+=`</div>`;
+    if(cb.err)h+=`<div class="err">${cb.err}</div>`;
+    if(cb.date){
+      if(!cb.slots)h+=spin;
+      else h+=cb.slots.length?`<div class="slots">${cb.slots.map(x=>`<button class="slot" data-time="${x.time}" data-sid="${x.staffId}">${x.time}</button>`).join('')}</div>`:`<div class="empty">${t('noSlots')}</div>`;
+    }
+  }else if(cb.step===3){
+    if(cb.resched){
+      const b=mg.data.booking;
+      h+=`<h2>${t('confirmChange')}</h2>${summary(b.serviceName,cb.staffId,cb.date,cb.time,b,b.price)}
+      ${cb.err?`<div class="err">${cb.err}</div>`:''}<button class="btn full" data-a="book" ${cb.busy?'disabled':''}>${t('confirmChange')}</button>`;
+    }else{
+      const s=svc(cb.serviceId);
+      h+=`<h2>${t('details')}</h2>${summary(s.name,cb.staffId,cb.date,cb.time,null,s.price)}
+      <label class="f"><span>${t('name')}</span><input type="text" id="fName" value="${esc(cb.name)}" autocomplete="name"></label>
+      <label class="f"><span>${t('phone')}</span><input type="tel" id="fPhone" value="${esc(cb.phone)}" placeholder="05X-XXXXXXX" dir="ltr" autocomplete="tel"></label>
+      ${cb.err?`<div class="err">${cb.err}</div>`:''}
+      <button class="btn full" style="margin-top:8px" data-a="book" ${cb.busy?'disabled':''}>${t('confirm')}</button>`;
+    }
+  }
+  return h+`</div>`;
+}
+async function loadSlots(){
+  const date=cb.date;cb.slots=null;cb.err='';render();
+  const q=new URLSearchParams({slug:S.biz.slug,date,staff:cb.staffId||'any'});
+  if(cb.resched)q.set('ignore',cb.resched);else q.set('service',cb.serviceId);
+  try{const r=await api('GET','/slots?'+q);if(cb.date===date){cb.slots=r.slots;render()}}
+  catch(e){cb.slots=[];cb.err=errMsg(e.code);render()}
+}
+const firstOpen=()=>{for(let i=0;i<21;i++){const k=addDaysK(S.today,i);if(S.biz.hours[wd(k)].open)return k}return S.today};
+async function submitBooking(){
+  cb.err='';
+  try{
+    cb.busy=true;render();
+    if(cb.resched){
+      const r=await api('POST',`/booking/${cb.resched}/reschedule`,{date:cb.date,time:cb.time,staffId:cb.staffId});
+      cb.done=r;
+    }else{
+      const name=cb.name.trim(),phone=cb.phone.replace(/\D/g,'');
+      if(!name)throw {code:'bad_name'};
+      if(!/^05\d{8}$/.test(phone))throw {code:'bad_phone'};
+      store.set('tl-name',name);store.set('tl-phone',cb.phone);
+      cb.done=await api('POST','/book',{slug:S.biz.slug,serviceId:cb.serviceId,staffId:cb.staffId,date:cb.date,time:cb.time,name,phone,lang});
+    }
+    window.scrollTo(0,0);
+  }catch(e){
+    if(e.code==='taken'){cb.step=2;cb.err=errMsg('taken');loadSlots()}
+    else cb.err=errMsg(e.code,S.biz.cutoff);
+  }
+  cb.busy=false;render();
+}
+
+/* ===================== manage (client's personal link) ===================== */
+function renderManage(){
+  const d=mg.data,b=d.booking;
+  let h=bizCard(t('manageLink'));
+  if(b.status==='cancelled')return h+`<div class="card center"><div class="ok-ic x">✕</div><h2>${t('cancelledOk')}</h2>${summary(b.serviceName,b.staffId,b.date,b.time,null,b.price)}${msgBox(mg.msg)}
+    <a class="btn full" style="margin-top:12px" href="/b/${encodeURIComponent(S.biz.slug)}">${t('bookNew')}</a></div>`;
+  h+=`<div class="card"><h2>${t('yourBooking')} · ${esc(b.name)}</h2>${summary(b.serviceName,b.staffId,b.date,b.time,null,b.price)}`;
+  if(!d.canChange)h+=`<div class="info-box">${errMsg(d.reason,S.biz.cutoff)}</div>`;
+  else h+=`${mg.err?`<div class="err">${mg.err}</div>`:''}<div class="row"><button class="btn" style="flex:1" data-a="resched">${t('changeBtn')}</button><button class="btn ghost" style="flex:1" data-a="cancelMine">${mg.confirm?t('sure'):t('cancelBtn')}</button></div>`;
+  return h+`</div>`;
+}
+
+/* ===================== admin ===================== */
+function renderAdmin(){
+  if(!A.biz){
+    return `<div class="card" style="max-width:380px;margin:30px auto"><h2>${t('adminTitle')}</h2>
+      <label class="f"><span>${t('pin')}</span><input type="password" inputmode="numeric" id="pinIn" dir="ltr" autocomplete="current-password"></label>
+      ${A.err?`<div class="err">${A.err}</div>`:''}<button class="btn full" data-a="login" ${A.loading?'disabled':''}>${t('enter')}</button></div>`;
+  }
+  S.biz=A.biz;
+  const tabs=[['cal','tCal'],['report','tReport'],['msgs','tMsgs'],['clients','tClients'],['services','tServices'],['hours','tHours'],['settings','tSettings']];
+  let h=`<div class="card"><div class="biz"><div class="biz-ic">${esc(A.biz.icon)}</div><div style="flex:1"><h1>${esc(tx(A.biz.name))}</h1><p>${t('adminTitle')}</p></div><button class="btn sm ghost" data-a="logout">${t('logout')}</button></div></div>`;
+  h+=`<div class="tabs">${tabs.map(([k,l])=>`<button data-tab="${k}" class="${A.tab===k?'on':''}">${t(l)}</button>`).join('')}</div>`;
+  return h+({cal:admCal,report:admReport,msgs:admMsgs,clients:admClients,services:admServices,hours:admHours,settings:admSettings}[A.tab])();
+}
+async function getRange(from,to,force){
+  const key=from+'_'+to;
+  if(!force&&A.cache[key])return A.cache[key];
+  const r=await api('GET',`/admin/${A.biz.slug}/bookings?from=${from}&to=${to}`,null,A.pin);
+  A.cache[key]=r.bookings;return r.bookings;
+}
+const calRange=()=>[addDaysK(S.today,-3),addDaysK(S.today,14)];
+function periodRange(p){
+  const td=S.today,y=+td.slice(0,4),m=+td.slice(5,7);
+  if(p==='week'){const s=addDaysK(td,-wd(td));return [s,addDaysK(s,6)]}
+  const last=(yy,mm)=>new Date(Date.UTC(yy,mm,0)).getUTCDate();
+  if(p==='month')return [`${y}-${pad(m)}-01`,`${y}-${pad(m)}-${pad(last(y,m))}`];
+  if(p==='last'){const yy=m===1?y-1:y,mm=m===1?12:m-1;return [`${yy}-${pad(mm)}-01`,`${yy}-${pad(mm)}-${pad(last(yy,mm))}`]}
+  return [addDaysK(td,-29),td];
+}
+let tabData=null;
+async function loadTab(force){
+  tabData=null;render();
+  try{
+    if(A.tab==='cal')tabData=await getRange(...calRange(),force);
+    else if(A.tab==='report')tabData=await getRange(...periodRange(A.period),force);
+    else if(A.tab==='clients')tabData=await getRange(addDaysK(S.today,-120),addDaysK(S.today,0),force);
+    else if(A.tab==='msgs'){const r=await api('GET',`/admin/${A.biz.slug}/messages`,null,A.pin);A.wa=r.waConnected;tabData=r.messages}
+    else tabData=[];
+  }catch(e){if(e.code==='bad_pin')return logout();toast(errMsg(e.code));tabData=[]}
+  render();
+}
+function admCal(){
+  if(!tabData)return spin;
+  if(!A.date)A.date=S.today;
+  const day=tabData.filter(b=>b.date===A.date);
+  const act=day.filter(b=>b.status!=='cancelled');
+  const rev=act.filter(b=>b.status!=='noshow').reduce((a,b)=>a+(+b.price||0),0);
+  const nowMin=new Date().getHours()*60+new Date().getMinutes();
+  const next=A.date===S.today?act.filter(b=>b.status==='confirmed'&&toMin(b.time)>=nowMin).sort((a,b)=>a.time.localeCompare(b.time))[0]:null;
+  let h=`<div class="stats"><div class="stat"><b>${act.length}</b><span>${t('sToday')}</span></div><div class="stat"><b>${rev} ₪</b><span>${t('sRev')}</span></div><div class="stat"><b dir="ltr">${next?next.time:'—'}</b><span>${t('sNext')}</span></div></div>`;
+  h+=`<div class="card"><div class="chips">`;
+  for(let i=-3;i<=14;i++){
+    const k=addDaysK(S.today,i),n=tabData.filter(b=>b.date===k&&b.status!=='cancelled').length;
+    h+=`<button class="chip ${A.date===k?'on':''}" data-adate="${k}"><small>${i===0?t('today'):t('daysS')[wd(k)]}</small><b>${dnum(k)}</b><small>${n?'● '+n:'—'}</small></button>`;
+  }
+  h+=`</div><div class="row" style="justify-content:space-between;margin-top:8px"><b>${fmtDate(A.date)}</b><div class="row"><button class="btn sm ghost" data-a="refresh">↻</button><a class="btn sm" href="/b/${encodeURIComponent(A.biz.slug)}" target="_blank" rel="noopener">${t('manual')}</a></div></div>`;
+  if(!day.length)h+=`<div class="empty">${t('noBookings')}</div>`;
+  A.biz.staff.forEach(p=>{
+    const list=day.filter(b=>b.staffId===p.id).sort((a,b)=>a.time.localeCompare(b.time));
+    if(!list.length)return;
+    h+=single()?'<div style="height:10px"></div>':`<div class="staff-h"><div class="av">${esc(tx(p.name).slice(0,1))}</div>${esc(tx(p.name))}</div>`;
+    list.forEach(b=>{
+      const bl=A.biz.blocked.includes(b.phone);
+      h+=`<div class="bk ${b.status}"><div class="tm">${b.time}<small>${toHM(toMin(b.time)+b.dur)}</small></div><div class="info">
+      <div class="row" style="justify-content:space-between"><b>${esc(b.name)}</b><span class="badge ${b.status}">${t('st_'+b.status)}</span></div>
+      <div class="note">${esc(tx(b.serviceName))} · ${b.price} ₪ · <span dir="ltr">${esc(b.phone)}</span>${bl?` <span class="badge blocked">${t('blocked')}</span>`:''}</div>
+      <div class="acts">${b.status==='confirmed'?`<button class="btn sm" style="background:var(--ok)" data-st="arrived" data-id="${b.id}" data-d="${b.date}">${t('arrived')}</button><button class="btn sm danger" data-st="noshow" data-id="${b.id}" data-d="${b.date}">${t('noshow')}</button><button class="btn sm ghost" data-st="cancelled" data-id="${b.id}" data-d="${b.date}">${A.confirm==='c'+b.id?t('sure'):t('cancel')}</button>`
+        :b.status==='cancelled'?'':`<button class="btn sm ghost" data-st="confirmed" data-id="${b.id}" data-d="${b.date}">${t('restore')}</button>`}
+        <a class="btn sm wa" href="https://wa.me/972${esc(b.phone.replace(/^0/,''))}" target="_blank" rel="noopener">WhatsApp</a></div></div></div>`;
+    });
+  });
+  return h+`</div>`;
+}
+function reportData(list){
+  const [from,to]=periodRange(A.period);
+  const by=s=>list.filter(b=>b.status===s);
+  const arrived=by('arrived'),noshow=by('noshow'),cancelled=by('cancelled'),confirmed=by('confirmed');
+  const live=[...arrived,...confirmed];
+  const sum=a=>a.reduce((x,b)=>x+b.price,0);
+  const workDays=new Set(arrived.map(b=>b.date)).size||1;
+  const group=(keyFn,nameFn)=>{const m=new Map();live.forEach(b=>{const k=keyFn(b);const g=m.get(k)||{name:nameFn(b),n:0,rev:0};g.n++;if(b.status==='arrived')g.rev+=b.price;m.set(k,g)});return [...m.values()].sort((a,b)=>b.rev-a.rev||b.n-a.n)};
+  const cm=new Map();arrived.forEach(b=>{const c=cm.get(b.phone)||{name:b.name,n:0,rev:0};c.n++;c.rev+=b.price;cm.set(b.phone,c)});
+  return {from,to,total:live.length+noshow.length,arrived:arrived.length,noshow:noshow.length,cancelled:cancelled.length,revenue:sum(arrived),expected:sum(confirmed),
+    avg:Math.round(sum(arrived)/workDays),rate:arrived.length+noshow.length?Math.round(noshow.length*100/(arrived.length+noshow.length)):0,
+    bySvc:group(b=>b.serviceId,b=>tx(b.serviceName)),byStaff:group(b=>b.staffId,b=>tx(stf(b.staffId)?.name)||'—'),
+    byDay:[0,1,2,3,4,5,6].map(i=>live.filter(b=>wd(b.date)===i).length),top:[...cm.values()].sort((a,b)=>b.n-a.n||b.rev-a.rev).slice(0,5)};
+}
+function admReport(){
+  const per=[['week','pWeek'],['month','pMonth'],['last','pLast'],['30','p30']];
+  let h=`<div class="pills">${per.map(([k,l])=>`<button class="pill ${A.period===k?'on':''}" data-period="${k}">${t(l)}</button>`).join('')}</div>`;
+  if(!tabData)return h+spin;
+  const R=reportData(tabData);
+  h+=`<p class="note" style="margin:-4px 0 10px">${fmtDate(R.from)} – ${fmtDate(R.to)}</p>
+  <div class="stats two"><div class="stat hl"><b>${R.revenue.toLocaleString()} ₪</b><span>${t('rRevenue')}</span></div><div class="stat"><b>${R.expected.toLocaleString()} ₪</b><span>${t('rExpected')}</span></div></div>
+  <div class="stats"><div class="stat"><b>${R.total}</b><span>${t('rBookings')}</span></div><div class="stat"><b>${R.arrived}</b><span>${t('rArrived')}</span></div><div class="stat"><b>${R.noshow}</b><span>${t('rNoshow')}</span></div>
+  <div class="stat"><b>${R.cancelled}</b><span>${t('rCancelled')}</span></div><div class="stat"><b>${R.rate}%</b><span>${t('rNoshowRate')}</span></div><div class="stat"><b>${R.avg} ₪</b><span>${t('rAvg')}</span></div></div>
+  <div class="card"><h3 style="margin-top:0">${t('rByService')}</h3><table><tr><th>${t('service')}</th><th class="num">${t('rCount')}</th><th class="num">${t('rRevenue')}</th></tr>${R.bySvc.map(x=>`<tr><td>${esc(x.name)}</td><td class="num">${x.n}</td><td class="num">${x.rev.toLocaleString()} ₪</td></tr>`).join('')}</table>`;
+  if(!single())h+=`<h3>${t('rByStaff')}</h3><table>${R.byStaff.map(x=>`<tr><td>${esc(x.name)}</td><td class="num">${x.n}</td><td class="num">${x.rev.toLocaleString()} ₪</td></tr>`).join('')}</table>`;
+  const mx=Math.max(1,...R.byDay);
+  h+=`<h3>${t('rByDay')}</h3>`+R.byDay.map((n,i)=>A.biz.hours[i].open||n?`<div class="bar"><span>${t('days')[i]}</span><div class="tr"><i style="width:${n*100/mx}%"></i></div><b class="num">${n}</b></div>`:'').join('');
+  if(R.top.length)h+=`<h3>${t('rTop')}</h3><table>${R.top.map(c=>`<tr><td>${esc(c.name)}</td><td class="num">${c.n} ${t('visits')}</td><td class="num">${c.rev.toLocaleString()} ₪</td></tr>`).join('')}</table>`;
+  return h+`<button class="btn wa full" style="margin-top:14px" data-a="copyReport">📋 ${t('rCopy')}</button></div>`;
+}
+function reportText(){
+  const R=reportData(tabData||[]);
+  const L=[`📊 ${t('rTitle')} – ${tx(A.biz.name)}`,`${fmtDate(R.from)} – ${fmtDate(R.to)}`,'',`💰 ${t('rRevenue')}: ${R.revenue.toLocaleString()} ₪`,`⏳ ${t('rExpected')}: ${R.expected.toLocaleString()} ₪`,
+    `📅 ${t('rBookings')}: ${R.total} | ${t('rArrived')}: ${R.arrived} | ${t('rNoshow')}: ${R.noshow} | ${t('rCancelled')}: ${R.cancelled}`,`⚠️ ${t('rNoshowRate')}: ${R.rate}%`,`📈 ${t('rAvg')}: ${R.avg} ₪`,'',`✂️ ${t('rByService')}:`];
+  R.bySvc.forEach(x=>L.push(`• ${x.name}: ${x.n} – ${x.rev.toLocaleString()} ₪`));
+  if(!single()){L.push('',`👤 ${t('rByStaff')}:`);R.byStaff.forEach(x=>L.push(`• ${x.name}: ${x.n} – ${x.rev.toLocaleString()} ₪`))}
+  return L.join('\n');
+}
+function admMsgs(){
+  if(!tabData)return spin;
+  let h=`<div class="${A.wa?'ok-box':'info-box'}">${A.wa?t('waOn'):t('waOff')}</div><p class="note">${t('waInfo')}</p>
+  <div class="card"><h3 style="margin-top:0">${t('testTitle')}</h3><div class="row"><input type="tel" id="testPhone" placeholder="05X-XXXXXXX" dir="ltr" value="${esc(store.get('tl-test')||'')}"><button class="btn sm wa" data-a="test" style="padding:10px 14px">${t('testBtn')}</button></div></div><div class="card">`;
+  if(!tabData.length)h+=`<div class="empty">${t('noMsgs')}</div>`;
+  h+=tabData.map(m=>`<div class="msg"><div class="hd"><b>${esc(m.name)}</b><span dir="ltr" class="note">${esc(m.phone)}</span><span class="badge">${t('ty_'+m.type)}</span><span class="badge ${m.status}">${t('m_'+m.status)}</span><span class="note">${fmtStamp(m.at)}</span></div>
+    <div class="bub">${esc(m.text)}</div>${m.error?`<div class="err">${esc(m.error)}</div>`:''}</div>`).join('');
+  return h+`</div>`;
+}
+function admClients(){
+  if(!tabData)return spin;
+  const m=new Map();
+  tabData.forEach(b=>{const c=m.get(b.phone)||{name:b.name,phone:b.phone,visits:0,nos:0};if(b.status==='arrived')c.visits++;if(b.status==='noshow')c.nos++;m.set(b.phone,c)});
+  A.biz.blocked.forEach(p=>{if(!m.has(p))m.set(p,{name:'—',phone:p,visits:0,nos:0})});
+  const rows=[...m.values()].sort((a,b)=>b.visits-a.visits);
+  if(!rows.length)return `<div class="card empty">${t('noClients')}</div>`;
+  return `<div class="card"><p class="note" style="margin-top:0">${t('blockNote')}</p><table><tr><th>${t('name')}</th><th>${t('phone')}</th><th class="num">${t('visits')}</th><th class="num">${t('nos')}</th><th></th></tr>`+
+    rows.map(c=>{const bl=A.biz.blocked.includes(c.phone);return `<tr><td>${esc(c.name)}</td><td dir="ltr" style="text-align:end">${esc(c.phone)}</td><td class="num">${c.visits}</td><td class="num">${c.nos?`<span class="badge noshow">${c.nos}</span>`:'0'}</td><td class="num"><button class="btn sm ${bl?'ghost':'danger'}" data-blk="${esc(c.phone)}">${bl?t('unblock'):t('block')}</button></td></tr>`}).join('')+`</table></div>`;
+}
+function admServices(){
+  return `<div class="card"><div class="ed note"><span>${t('nameHe')}</span><span>${t('nameAr')}</span><span>${t('dur')}</span><span>₪</span><span></span></div>`+
+  A.biz.services.map(x=>`<div class="ed"><input type="text" data-sv="${x.id}" data-f="he" value="${esc(x.name.he)}"><input type="text" data-sv="${x.id}" data-f="ar" value="${esc(x.name.ar)}"><input type="number" min="5" step="5" data-sv="${x.id}" data-f="dur" value="${x.dur}"><input type="number" min="0" data-sv="${x.id}" data-f="price" value="${x.price}"><button class="x" data-delsv="${x.id}" ${A.biz.services.length<2?'disabled':''}>×</button></div>`).join('')+
+  `<button class="btn ghost full" data-a="addSv">${t('add')}</button></div>`;
+}
+function admHours(){
+  return `<div class="card"><p class="note" style="margin-top:0">${t('hoursNote')}</p>`+A.biz.hours.map((x,i)=>`<div class="hrs"><b>${t('days')[i]}</b><input type="checkbox" data-hr="${i}" data-f="open" ${x.open?'checked':''} style="width:20px;height:20px"><input type="time" data-hr="${i}" data-f="from" value="${x.from}" ${x.open?'':'disabled'}><input type="time" data-hr="${i}" data-f="to" value="${x.to}" ${x.open?'':'disabled'}></div>`).join('')+`</div>`;
+}
+function admSettings(){
+  const link=location.origin+'/b/'+A.biz.slug;
+  return `<div class="card"><label class="f"><span>${t('bizName')} (עב)</span><input type="text" data-biz="he" value="${esc(A.biz.name.he)}"></label>
+   <label class="f"><span>${t('bizName')} (عر)</span><input type="text" data-biz="ar" value="${esc(A.biz.name.ar)}"></label>
+   <label class="f"><span>${t('bookLink')}</span></label><div class="link"><span style="flex:1">${esc(link)}</span><button class="btn sm" data-a="copyLink">${t('copy')}</button><a class="btn sm ghost" href="${esc(link)}" target="_blank" rel="noopener">${t('open')}</a></div>
+   <p class="note">${t('linkNote')}</p></div>
+   <div class="card"><h2>${t('staffTitle')}</h2><p class="note" style="margin-top:-6px">${t('staffNote')}</p>
+   ${A.biz.staff.map(p=>`<div class="ed" style="grid-template-columns:1fr 1fr 36px"><input type="text" data-sf="${p.id}" data-f="he" value="${esc(p.name.he)}" placeholder="${t('nameHe')}"><input type="text" data-sf="${p.id}" data-f="ar" value="${esc(p.name.ar)}" placeholder="${t('nameAr')}"><button class="x" data-delsf="${p.id}" ${single()?'disabled':''}>×</button></div>`).join('')}
+   <button class="btn ghost full" data-a="addSf">${t('addStaff')}</button></div>
+   <div class="card"><label class="f"><span>${t('cutoff')}</span><select id="cutSel">${[0,1,2,3,6,12,24].map(n=>`<option value="${n}" ${A.biz.cutoff===n?'selected':''}>${n}</option>`).join('')}</select></label></div>
+   <div class="card"><label class="f"><span>${t('newPin')}</span><input type="password" inputmode="numeric" id="newPin" dir="ltr"></label><button class="btn ghost full" data-a="savePin">${t('savePin')}</button></div>`;
+}
+let saveTimer=null;
+function saveConfig(now){
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(async()=>{
+    try{const {name,services,staff,hours,cutoff,blocked}=A.biz;const r=await api('PUT',`/admin/${A.biz.slug}/config`,{name,services,staff,hours,cutoff,blocked},A.pin);A.biz=r.biz;S.biz=r.biz;toast(t('saved'))}
+    catch(e){if(e.code==='bad_pin')return logout();toast(errMsg(e.code))}
+  },now?0:800);
+}
+async function login(pin){
+  A.loading=true;A.err='';render();
+  try{const r=await api('POST',`/admin/${KEY}/login`,{},pin);A.pin=pin;A.biz=r.biz;A.wa=r.waConnected;S.biz=r.biz;S.today=r.today;store.sset('tl-pin-'+KEY,pin);A.loading=false;loadTab()}
+  catch(e){A.loading=false;store.sset('tl-pin-'+KEY,null);A.err=errMsg(e.code);render()}
+}
+function logout(){store.sset('tl-pin-'+KEY,null);A.biz=null;A.pin=null;A.cache={};render()}
+function copyText(txt){
+  const fb=()=>{const ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast(t('copied'))}catch(e){}ta.remove()};
+  try{navigator.clipboard.writeText(txt).then(()=>toast(t('copied')),fb)}catch(e){fb()}
+}
+
+/* ===================== events ===================== */
+document.addEventListener('click',async e=>{
+  const el=e.target.closest('button');if(!el)return;
+  const d=el.dataset;
+  if(d.l){lang=d.l;store.set('tl-lang',lang);render();return}
+  // booking
+  if(d.svc){cb.serviceId=d.svc;if(single()){cb.staffId=S.biz.staff[0].id;cb.step=2;cb.date=cb.date||firstOpen();loadSlots()}else{cb.step=1;render()}return}
+  if(d.stf){cb.staffId=d.stf;cb.step=2;cb.date=cb.date||firstOpen();loadSlots();return}
+  if(d.date){cb.date=d.date;loadSlots();return}
+  if(d.time){cb.time=d.time;cb.staffId=d.sid;cb.step=3;cb.err='';render();window.scrollTo(0,0);return}
+  if(d.a==='back'){
+    if(cb.resched&&cb.step===2){cb=null;render();return}
+    cb.err='';if(cb.step===3){cb.step=2;loadSlots();return}
+    cb.step=cb.step===2&&!single()?1:0;render();return}
+  if(d.a==='book'){submitBooking();return}
+  // manage
+  if(d.a==='resched'){const b=mg.data.booking;cb={...freshCb(),resched:b.id,serviceId:b.serviceId,staffId:b.staffId,date:b.date,step:2};loadSlots();return}
+  if(d.a==='cancelMine'){
+    if(!mg.confirm){mg.confirm=true;render();return}
+    el.disabled=true;
+    try{const r=await api('POST',`/booking/${KEY}/cancel`);mg.data.booking=r.booking;mg.msg=r.message}catch(err){mg.err=errMsg(err.code,S.biz.cutoff)}
+    mg.confirm=false;render();return}
+  // admin
+  if(d.a==='login'){const v=document.getElementById('pinIn').value.trim();if(v)login(v);return}
+  if(d.a==='logout'){logout();return}
+  if(d.tab){A.tab=d.tab;A.confirm=null;loadTab();return}
+  if(d.adate){A.date=d.adate;render();return}
+  if(d.a==='refresh'){A.cache={};loadTab(true);return}
+  if(d.period){A.period=d.period;loadTab();return}
+  if(d.st){
+    if(d.st==='cancelled'&&A.confirm!=='c'+d.id){A.confirm='c'+d.id;render();return}
+    A.confirm=null;
+    const b=tabData.find(x=>x.id===d.id);const prev=b.status;b.status=d.st;render();
+    try{await api('POST',`/admin/${A.biz.slug}/status`,{date:d.d,id:d.id,status:d.st},A.pin)}catch(err){b.status=prev;render();toast(errMsg(err.code))}
+    return}
+  if(d.a==='copyReport'){copyText(reportText());return}
+  if(d.a==='copyLink'){copyText(location.origin+'/b/'+A.biz.slug);return}
+  if(d.a==='test'){
+    const ph=document.getElementById('testPhone').value.replace(/\D/g,'');
+    if(!/^05\d{8}$/.test(ph)){toast(errMsg('bad_phone'));return}
+    store.set('tl-test',ph);el.disabled=true;
+    try{const r=await api('POST',`/admin/${A.biz.slug}/test-message`,{phone:ph,lang},A.pin);toast(t('m_'+r.message.status));loadTab()}catch(err){toast(errMsg(err.code));el.disabled=false}
+    return}
+  if(d.a==='addSv'){A.biz.services.push({id:rid(),name:{he:'',ar:''},dur:30,price:50});render();saveConfig();return}
+  if(d.delsv){if(A.biz.services.length>1){A.biz.services=A.biz.services.filter(x=>x.id!==d.delsv);render();saveConfig()}return}
+  if(d.a==='addSf'){A.biz.staff.push({id:rid(),name:{he:'',ar:''}});render();saveConfig();return}
+  if(d.delsf){if(!single()){A.biz.staff=A.biz.staff.filter(x=>x.id!==d.delsf);render();saveConfig()}return}
+  if(d.blk){A.biz.blocked=A.biz.blocked.includes(d.blk)?A.biz.blocked.filter(p=>p!==d.blk):[...A.biz.blocked,d.blk];render();saveConfig(true);return}
+  if(d.a==='savePin'){
+    const v=document.getElementById('newPin').value.trim();
+    if(!/^\d{4,8}$/.test(v)){toast(errMsg('bad_pin'));return}
+    try{await api('PUT',`/admin/${A.biz.slug}/config`,{pin:v},A.pin);A.pin=v;store.sset('tl-pin-'+KEY,v);toast(t('saved'));document.getElementById('newPin').value=''}catch(err){toast(errMsg(err.code))}
+    return}
+});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='pinIn'){const v=e.target.value.trim();if(v)login(v)}});
+document.addEventListener('input',e=>{
+  const el=e.target,d=el.dataset;
+  if(el.id==='fName'){cb.name=el.value;return}
+  if(el.id==='fPhone'){cb.phone=el.value;return}
+  if(!A.biz)return;
+  if(d.sv){const x=A.biz.services.find(s=>s.id===d.sv);if(!x)return;if(d.f==='he'||d.f==='ar')x.name[d.f]=el.value;else x[d.f]=Math.max(0,+el.value||0);saveConfig();return}
+  if(d.sf){const p=A.biz.staff.find(s=>s.id===d.sf);if(p){p.name[d.f]=el.value;saveConfig()}return}
+  if(d.biz){A.biz.name[d.biz]=el.value;saveConfig();return}
+});
+document.addEventListener('change',e=>{
+  const el=e.target,d=el.dataset;if(!A.biz)return;
+  if(d.hr!=null){const h=A.biz.hours[+d.hr];if(d.f==='open')h.open=el.checked;else h[d.f]=el.value;render();saveConfig();return}
+  if(el.id==='cutSel'){A.biz.cutoff=+el.value;saveConfig(true)}
+});
+
+/* ===================== boot ===================== */
+(async function boot(){
+  render();
+  try{
+    if(MODE==='admin'){const p=store.sget('tl-pin-'+KEY);if(p)login(p);else render();return}
+    if(MODE==='manage'){
+      const r=await api('GET','/booking/'+encodeURIComponent(KEY));
+      S.biz=r.biz;S.today=r.today;mg.data=r;
+    }else{
+      const r=await api('GET','/biz/'+encodeURIComponent(KEY));
+      S.biz=r.biz;S.today=r.today;cb=freshCb();
+    }
+  }catch(e){S.loadErr=e.code}
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "name": "torlink",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@netlify/blobs": "*",
+    "@netlify/functions": "*"
+  }
+}
