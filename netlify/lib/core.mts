@@ -14,13 +14,25 @@ export interface KV {
 export type Env = (k: string) => string | undefined;
 type L = { he: string; ar: string };
 
-export interface Service { id: string; name: L; dur: number; price: number }
+export interface Service { id: string; name: L; dur: number; price: number; icon?: string }
 export interface Staff { id: string; name: L }
 export interface Hours { open: boolean; from: string; to: string }
+export interface Product { id: string; name: L; desc: L; price: number; stock: number; icon: string; active: boolean }
+export interface Club { enabled: boolean; rewardEvery: number; reward: L }
 export interface Biz {
   slug: string; type: string; icon: string; name: L; pin: string; cutoff: number;
   services: Service[]; staff: Staff[]; hours: Hours[]; blocked: string[]; created: number;
+  products: Product[]; club: Club; address?: string; phone?: string;
 }
+/** Customer-club record, kept up to date as bookings/orders change status */
+export interface Client {
+  phone: string; name: string; first: number; lang: "he" | "ar";
+  bookings: number; visits: number; noshows: number; cancels: number; spend: number; productSpend: number;
+  last: string; visitDates: string[]; services: Record<string, number>;
+  notes: string; tags: string[]; birthday: string; rewardsUsed: number;
+}
+export interface OrderItem { id: string; name: L; price: number; qty: number; icon: string }
+export interface Order { id: string; code: string; slug: string; items: OrderItem[]; total: number; name: string; phone: string; note: string; status: "new" | "ready" | "picked" | "cancelled"; created: number; lang: "he" | "ar" }
 export interface Booking {
   id: string; slug: string; date: string; time: string; dur: number;
   serviceId: string; serviceName: L; staffId: string; name: string; phone: string; price: number;
@@ -40,18 +52,48 @@ const rid = (n = 8) => {
 };
 export const newToken = () => rid(12);
 
-export const PRESETS: Record<string, { icon: string; name: L; services: [string, string, number, number][]; staff: [string, string][] }> = {
+type PSvc = [string, string, number, number, string];
+type PProd = [string, string, string, string, number, number, string];
+export const PRESETS: Record<string, { icon: string; name: L; services: PSvc[]; staff: [string, string][]; products: PProd[]; reward: L }> = {
   barber: {
-    icon: "💈", name: { he: "ברבר סטודיו", ar: "باربر ستوديو" },
-    services: [["תספורת גבר", "قص شعر رجالي", 30, 60], ["תספורת + זקן", "قص شعر + لحية", 45, 80], ["עיצוב זקן", "تصفيف لحية", 20, 40], ["תספורת ילד", "قص شعر أطفال", 25, 50], ["החלקה", "تمليس", 60, 150]],
+    icon: "scissors", name: { he: "ברבר סטודיו", ar: "باربر ستوديو" },
+    services: [["תספורת גבר", "قص شعر رجالي", 30, 60, "scissors"], ["תספורת + זקן", "قص شعر + لحية", 45, 80, "crown"], ["עיצוב זקן", "تصفيف لحية", 20, 40, "sparkles"], ["תספורת ילד", "قص شعر أطفال", 25, 50, "smile"], ["החלקה", "تمليس", 60, 150, "wind"]],
     staff: [["מוחמד", "محمد"]],
+    products: [
+      ["ווקס לשיער – אחיזה חזקה", "واكس للشعر – تثبيت قوي", "גימור מט, מחזיק כל היום", "لمسة مطفأة، يثبت طوال اليوم", 55, 12, "gem"],
+      ["שמן זקן פרימיום", "زيت لحية فاخر", "מרכך ומבריק, ריח עצי", "يُنعّم ويُلمّع، برائحة خشبية", 70, 8, "droplet"],
+      ["שמפו לזקן", "شامبو للحية", "ניקוי עדין ליום-יום", "تنظيف لطيف يومي", 45, 10, "flask-conical"],
+      ["פומייד מבריק", "بوميد لامع", "מראה קלאסי ומסודר", "مظهر كلاسيكي مرتب", 60, 6, "sparkles"],
+      ["מסרק עץ לזקן", "مشط خشبي للحية", "עבודת יד, נגד חשמל סטטי", "صناعة يدوية، ضد الكهرباء الساكنة", 35, 15, "align-justify"],
+      ["אפטרשייב מרגיע", "أفترشيف مهدئ", "מרגיע את העור אחרי גילוח", "يهدئ البشرة بعد الحلاقة", 50, 9, "spray-can"],
+    ],
+    reward: { he: "תספורת חינם", ar: "قصة شعر مجانية" },
   },
   nails: {
-    icon: "💅", name: { he: "סטודיו ציפורניים", ar: "ستوديو أظافر" },
-    services: [["בניית ציפורניים", "تركيب أظافر", 120, 250], ["מילוי", "تعبئة", 90, 180], ["לק ג׳ל", "جل", 60, 120], ["מניקור", "مانيكير", 45, 90], ["פדיקור", "باديكير", 60, 130]],
+    icon: "sparkles", name: { he: "סטודיו ציפורניים", ar: "ستوديو أظافر" },
+    services: [["בניית ציפורניים", "تركيب أظافر", 120, 250, "gem"], ["מילוי", "تعبئة", 90, 180, "repeat"], ["לק ג׳ל", "جل", 60, 120, "droplet"], ["מניקור", "مانيكير", 45, 90, "hand"], ["פדיקור", "باديكير", 60, 130, "footprints"]],
     staff: [["לינא", "لينا"]],
+    products: [
+      ["שמן קוטיקולה", "زيت الجلد المحيط بالأظافر", "מזין ומרכך", "مغذٍّ ومُنعّم", 40, 12, "droplet"],
+      ["קרם ידיים", "كريم لليدين", "לחות עמוקה", "ترطيب عميق", 45, 10, "hand"],
+      ["פצירה מקצועית", "مبرد احترافي", "לעיצוב מדויק", "لتشكيل دقيق", 20, 20, "align-justify"],
+      ["לק ג׳ל לבית", "جل للمنزل", "מגוון גוונים", "ألوان متنوعة", 35, 15, "palette"],
+    ],
+    reward: { he: "מניקור חינם", ar: "مانيكير مجاني" },
   },
 };
+export const ICONS = ["scissors", "crown", "sparkles", "smile", "wind", "gem", "repeat", "droplet", "hand", "footprints", "flask-conical", "align-justify", "spray-can", "palette", "brush", "package", "star", "heart", "flame", "leaf", "zap", "shield"];
+const safeIcon = (s: any, d = "package") => (ICONS.includes(s) ? s : d);
+const defaultClub = (type: string): Club => ({ enabled: true, rewardEvery: 10, reward: { ...(PRESETS[type] || PRESETS.barber).reward } });
+/** fills fields added in later versions so older saved businesses keep working */
+export function normalizeBiz(b: Biz): Biz {
+  const p = PRESETS[b.type] || PRESETS.barber;
+  if (!Array.isArray(b.products)) b.products = [];
+  if (!b.club) b.club = defaultClub(b.type);
+  if (!ICONS.includes(b.icon)) b.icon = p.icon;
+  b.services.forEach((s, i) => { if (!s.icon) s.icon = p.services[i]?.[4] || "scissors" });
+  return b;
+}
 const DEFAULT_HOURS: Hours[] = [0, 1, 2, 3, 4].map(() => ({ open: true, from: "09:00", to: "20:00" }))
   .concat([{ open: true, from: "08:00", to: "14:00" }, { open: false, from: "09:00", to: "18:00" }]);
 
@@ -59,9 +101,11 @@ export function buildBiz(slug: string, type: string, pin: string, name?: L): Biz
   const p = PRESETS[type] || PRESETS.barber;
   return {
     slug, type: PRESETS[type] ? type : "barber", icon: p.icon, name: name || { ...p.name }, pin, cutoff: 3,
-    services: p.services.map(([he, ar, dur, price]) => ({ id: rid(6), name: { he, ar }, dur, price })),
+    services: p.services.map(([he, ar, dur, price, icon]) => ({ id: rid(6), name: { he, ar }, dur, price, icon })),
     staff: p.staff.map(([he, ar]) => ({ id: rid(6), name: { he, ar } })),
     hours: DEFAULT_HOURS.map(h => ({ ...h })), blocked: [], created: Date.now(),
+    products: p.products.map(([he, ar, dhe, dar, price, stock, icon]) => ({ id: rid(6), name: { he, ar }, desc: { he: dhe, ar: dar }, price, stock, icon, active: true })),
+    club: defaultClub(type),
   };
 }
 
@@ -96,12 +140,122 @@ const isTime = (s: any) => typeof s === "string" && /^\d{2}:\d{2}$/.test(s);
 /* ---------------- storage helpers ---------------- */
 export async function getBiz(kv: KV, slug: string): Promise<Biz | null> {
   if (!/^[a-z0-9-]{2,40}$/.test(slug)) return null;
-  return (await kv.get(`biz/${slug}`, { type: "json" })) || null;
+  const b = await kv.get(`biz/${slug}`, { type: "json" });
+  return b ? normalizeBiz(b) : null;
 }
 export async function ensureDemo(kv: KV, env: Env) {
   let b = await getBiz(kv, "demo");
   if (!b) { b = buildBiz("demo", "barber", env("ADMIN_PIN") || "1234"); await kv.setJSON("biz/demo", b) }
   return b;
+}
+
+/* ---------------- customer club ---------------- */
+export async function getClients(kv: KV, slug: string): Promise<Record<string, Client>> {
+  return (await kv.get(`clients/${slug}`, { type: "json" }))?.items || {};
+}
+export const saveClients = (kv: KV, slug: string, items: Record<string, Client>) => kv.setJSON(`clients/${slug}`, { items });
+export function blankClient(phone: string, name: string, lang: "he" | "ar" = "he"): Client {
+  return { phone, name, first: Date.now(), lang, bookings: 0, visits: 0, noshows: 0, cancels: 0, spend: 0, productSpend: 0, last: "", visitDates: [], services: {}, notes: "", tags: [], birthday: "", rewardsUsed: 0 };
+}
+/** moves a booking's effect on the client from status `prev` to `next` */
+export function applyStatus(c: Client, b: Booking, prev: string | null, next: string | null) {
+  if (prev === next) return;
+  const sid = b.serviceId;
+  if (prev === "arrived") {
+    c.visits = Math.max(0, c.visits - 1); c.spend = Math.max(0, c.spend - b.price);
+    const i = c.visitDates.lastIndexOf(b.date); if (i >= 0) c.visitDates.splice(i, 1);
+    c.services[sid] = Math.max(0, (c.services[sid] || 1) - 1);
+  } else if (prev === "noshow") c.noshows = Math.max(0, c.noshows - 1);
+  else if (prev === "cancelled") c.cancels = Math.max(0, c.cancels - 1);
+  if (next === "arrived") {
+    c.visits++; c.spend += b.price; c.visitDates.push(b.date); c.visitDates.sort();
+    if (c.visitDates.length > 60) c.visitDates = c.visitDates.slice(-60);
+    c.services[sid] = (c.services[sid] || 0) + 1;
+  } else if (next === "noshow") c.noshows++;
+  else if (next === "cancelled") c.cancels++;
+  c.last = c.visitDates[c.visitDates.length - 1] || "";
+}
+async function touchClient(kv: KV, slug: string, phone: string, fn: (c: Client) => void, name?: string, lang?: "he" | "ar") {
+  const items = await getClients(kv, slug);
+  const c = items[phone] || (items[phone] = blankClient(phone, name || "", lang));
+  if (name && !c.name) c.name = name;
+  fn(c);
+  await saveClients(kv, slug, items);
+  return c;
+}
+export function clubCard(biz: Biz, c: Client | undefined) {
+  const visits = c?.visits || 0, every = Math.max(2, biz.club.rewardEvery);
+  const earned = Math.floor(visits / every), available = Math.max(0, earned - (c?.rewardsUsed || 0));
+  const tier = visits >= 30 ? "vip" : visits >= 15 ? "gold" : visits >= 5 ? "silver" : "member";
+  return { enabled: biz.club.enabled, visits, every, progress: visits % every, available, reward: biz.club.reward, tier, name: c?.name || "" };
+}
+/** rebuilds every client record from bookings (used for imports / sample data) */
+export function buildClients(bookings: Booking[]): Record<string, Client> {
+  const items: Record<string, Client> = {};
+  for (const b of [...bookings].sort((a, z) => a.created - z.created)) {
+    const c = items[b.phone] || (items[b.phone] = blankClient(b.phone, b.name, b.lang));
+    c.first = Math.min(c.first, b.created); c.bookings++;
+    applyStatus(c, b, null, b.status === "confirmed" ? null : b.status);
+  }
+  return items;
+}
+
+/* ---------------- store ---------------- */
+export async function createOrder(kv: KV, biz: Biz, input: any) {
+  const name = String(input.name || "").trim().slice(0, 60);
+  const phone = cleanPhone(input.phone);
+  if (!name) throw new HttpError(400, "bad_name");
+  if (!/^05\d{8}$/.test(phone)) throw new HttpError(400, "bad_phone");
+  if (!Array.isArray(input.items) || !input.items.length) throw new HttpError(400, "empty_cart");
+  const items: OrderItem[] = [];
+  for (const it of input.items.slice(0, 30)) {
+    const p = biz.products.find(x => x.id === it.id && x.active);
+    const qty = Math.max(1, Math.min(20, Math.floor(+it.qty || 1)));
+    if (!p) throw new HttpError(400, "bad_product");
+    if (p.stock < qty) throw new HttpError(409, "out_of_stock");
+    items.push({ id: p.id, name: { ...p.name }, price: p.price, qty, icon: p.icon });
+  }
+  items.forEach(it => { biz.products.find(x => x.id === it.id)!.stock -= it.qty });
+  await saveBiz(kv, biz);
+  const o: Order = {
+    id: rid(10), code: String(1000 + Math.floor(Math.random() * 9000)), slug: biz.slug, items,
+    total: items.reduce((a, i) => a + i.price * i.qty, 0), name, phone, note: String(input.note || "").slice(0, 200),
+    status: "new", created: Date.now(), lang: input.lang === "ar" ? "ar" : "he",
+  };
+  const key = `orders/${biz.slug}/${ilNow(o.created).date.slice(0, 7)}`;
+  const doc = (await kv.get(key, { type: "json" })) || { items: [] };
+  doc.items.push(o); await kv.setJSON(key, doc);
+  await touchClient(kv, biz.slug, phone, () => { }, name, o.lang);
+  return o;
+}
+const monthKeys = (n: number) => {
+  const out: string[] = []; let [y, m] = ilNow().date.slice(0, 7).split("-").map(Number);
+  for (let i = 0; i < n; i++) { out.push(`${y}-${String(m).padStart(2, "0")}`); m--; if (!m) { m = 12; y-- } }
+  return out;
+};
+export async function adminOrders(kv: KV, slug: string, months = 3): Promise<Order[]> {
+  const docs = await Promise.all(monthKeys(Math.min(12, months)).map(k => kv.get(`orders/${slug}/${k}`, { type: "json" })));
+  return docs.flatMap(d => d?.items || []).sort((a: Order, b: Order) => b.created - a.created);
+}
+export async function adminOrderStatus(kv: KV, biz: Biz, id: string, status: string) {
+  if (!["new", "ready", "picked", "cancelled"].includes(status)) throw new HttpError(400, "bad_status");
+  for (const k of monthKeys(12)) {
+    const key = `orders/${biz.slug}/${k}`;
+    const doc = await kv.get(key, { type: "json" });
+    const o: Order | undefined = doc?.items?.find((x: Order) => x.id === id);
+    if (!o) continue;
+    const prev = o.status; o.status = status as Order["status"];
+    await kv.setJSON(key, doc);
+    if (prev !== "cancelled" && status === "cancelled" || prev === "cancelled" && status !== "cancelled") {
+      const sign = status === "cancelled" ? 1 : -1; // return to stock / take again
+      o.items.forEach(it => { const p = biz.products.find(x => x.id === it.id); if (p) p.stock = Math.max(0, p.stock + sign * it.qty) });
+      await saveBiz(kv, biz);
+    }
+    if ((prev === "picked") !== (status === "picked"))
+      await touchClient(kv, biz.slug, o.phone, c => { c.productSpend = Math.max(0, c.productSpend + (status === "picked" ? o.total : -o.total)) }, o.name);
+    return o;
+  }
+  throw new HttpError(404, "not_found");
 }
 export const saveBiz = (kv: KV, b: Biz) => kv.setJSON(`biz/${b.slug}`, b);
 export async function getDay(kv: KV, slug: string, date: string): Promise<Booking[]> {
@@ -111,7 +265,8 @@ export async function getDay(kv: KV, slug: string, date: string): Promise<Bookin
 export const saveDay = (kv: KV, slug: string, date: string, bookings: Booking[]) => kv.setJSON(`day/${slug}/${date}`, { bookings });
 
 export function publicBiz(b: Biz) {
-  const { pin, blocked, ...rest } = b; return rest;
+  const { pin, blocked, ...rest } = b;
+  return { ...rest, products: b.products.filter(p => p.active).map(p => ({ ...p, stock: Math.min(p.stock, 10) })) };
 }
 export function publicBooking(b: Booking) {
   const { phone, ...rest } = b; return { ...rest, phoneTail: phone.slice(-4) };
@@ -234,8 +389,9 @@ export async function createBooking(kv: KV, env: Env, biz: Biz, input: any, site
   day.push(b);
   await saveDay(kv, biz.slug, b.date, day);
   await kv.setJSON(`tok/${b.id}`, { slug: biz.slug, date: b.date });
+  const c = await touchClient(kv, biz.slug, phone, c => { c.bookings++; if (!c.name) c.name = name }, name, b.lang);
   const message = await notify(kv, env, b, biz, "confirm", siteUrl, fetchImpl);
-  return { booking: publicBooking(b), message };
+  return { booking: publicBooking(b), message, club: clubCard(biz, c) };
 }
 
 export async function findByToken(kv: KV, token: string) {
@@ -285,6 +441,7 @@ export async function cancelByClient(kv: KV, env: Env, token: string, siteUrl: s
   if (!st.canChange) throw new HttpError(403, st.reason);
   b.status = "cancelled"; (b.history ||= []).push({ type: "cancelled", at: Date.now() });
   await saveDay(kv, biz.slug, b.date, day);
+  await touchClient(kv, biz.slug, b.phone, c => applyStatus(c, b, null, "cancelled"), b.name);
   const message = await notify(kv, env, b, biz, "cancelled", siteUrl, fetchImpl);
   return { booking: publicBooking(b), message };
 }
@@ -304,6 +461,7 @@ export async function adminSetStatus(kv: KV, env: Env, biz: Biz, date: string, i
   if (!b) throw new HttpError(404, "not_found");
   const prev = b.status;
   b.status = status as Booking["status"];
+  if (prev !== status) await touchClient(kv, biz.slug, b.phone, c => applyStatus(c, b, prev === "confirmed" ? null : prev, status === "confirmed" ? null : status), b.name);
   let message = null;
   if (status === "cancelled" && prev !== "cancelled") {
     (b.history ||= []).push({ type: "cancelled", at: Date.now() });
@@ -316,13 +474,36 @@ export function sanitizeConfig(biz: Biz, c: any): Biz {
   const L = (o: any): L => ({ he: String(o?.he || "").slice(0, 60), ar: String(o?.ar || "").slice(0, 60) });
   const out = { ...biz };
   if (c.name) out.name = L(c.name);
-  if (Array.isArray(c.services) && c.services.length) out.services = c.services.slice(0, 40).map((s: any) => ({ id: /^[A-Za-z0-9]{3,12}$/.test(s.id) ? s.id : rid(6), name: L(s.name), dur: Math.min(480, Math.max(5, Math.round(+s.dur / 5) * 5 || 30)), price: Math.max(0, Math.round(+s.price || 0)) }));
+  const okId = (id: any) => /^[A-Za-z0-9]{3,12}$/.test(id) ? id : rid(6);
+  if (Array.isArray(c.services) && c.services.length) out.services = c.services.slice(0, 40).map((s: any) => ({ id: okId(s.id), name: L(s.name), dur: Math.min(480, Math.max(5, Math.round(+s.dur / 5) * 5 || 30)), price: Math.max(0, Math.round(+s.price || 0)), icon: safeIcon(s.icon, "scissors") }));
+  if (Array.isArray(c.products)) out.products = c.products.slice(0, 60).map((p: any) => ({ id: okId(p.id), name: L(p.name), desc: L(p.desc), price: Math.max(0, Math.round(+p.price || 0)), stock: Math.max(0, Math.floor(+p.stock || 0)), icon: safeIcon(p.icon), active: p.active !== false }));
+  if (c.club) out.club = { enabled: c.club.enabled !== false, rewardEvery: Math.min(50, Math.max(2, Math.floor(+c.club.rewardEvery || 10))), reward: L(c.club.reward) };
+  if (typeof c.address === "string") out.address = c.address.slice(0, 120);
+  if (typeof c.phone === "string") out.phone = c.phone.replace(/[^\d-]/g, "").slice(0, 15);
   if (Array.isArray(c.staff) && c.staff.length) out.staff = c.staff.slice(0, 20).map((s: any) => ({ id: /^[A-Za-z0-9]{3,12}$/.test(s.id) ? s.id : rid(6), name: L(s.name) }));
   if (Array.isArray(c.hours) && c.hours.length === 7) out.hours = c.hours.map((h: any) => ({ open: !!h.open, from: isTime(h.from) ? h.from : "09:00", to: isTime(h.to) ? h.to : "18:00" }));
   if (c.cutoff != null) out.cutoff = Math.min(72, Math.max(0, +c.cutoff || 0));
   if (Array.isArray(c.blocked)) out.blocked = c.blocked.map(cleanPhone).filter((p: string) => /^05\d{8}$/.test(p)).slice(0, 500);
   if (typeof c.pin === "string" && /^\d{4,8}$/.test(c.pin)) out.pin = c.pin;
   return out;
+}
+export async function adminUpdateClient(kv: KV, slug: string, input: any) {
+  const phone = cleanPhone(input.phone);
+  const items = await getClients(kv, slug);
+  const c = items[phone];
+  if (!c) throw new HttpError(404, "not_found");
+  if (typeof input.name === "string" && input.name.trim()) c.name = input.name.trim().slice(0, 60);
+  if (typeof input.notes === "string") c.notes = input.notes.slice(0, 1000);
+  if (Array.isArray(input.tags)) c.tags = input.tags.map((x: any) => String(x).slice(0, 20)).slice(0, 10);
+  if (typeof input.birthday === "string") c.birthday = /^\d{2}-\d{2}$/.test(input.birthday) ? input.birthday : "";
+  if (input.redeem === true) {
+    // shop staff gives the reward: only if one is actually available
+    const biz = await getBiz(kv, slug);
+    if (!biz || clubCard(biz, c).available < 1) throw new HttpError(400, "no_reward");
+    c.rewardsUsed++;
+  }
+  await saveClients(kv, slug, items);
+  return c;
 }
 export async function adminMessages(kv: KV, slug: string) {
   const ym = ilNow().date.slice(0, 7);

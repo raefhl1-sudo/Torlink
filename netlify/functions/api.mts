@@ -3,7 +3,8 @@ import { getStore } from "@netlify/blobs";
 import {
   HttpError, getBiz, ensureDemo, saveBiz, getDay, publicBiz, publicBooking, slotsFor, createBooking, findByToken,
   changeState, reschedule, cancelByClient, adminBookings, adminSetStatus, sanitizeConfig, adminMessages,
-  sendWhatsApp, logMsg, buildBiz, ilNow, addDays, type KV, type Env, type Booking,
+  sendWhatsApp, logMsg, buildBiz, ilNow, addDays, getClients, clubCard, createOrder, adminOrders, adminOrderStatus,
+  adminUpdateClient, type KV, type Env, type Booking,
 } from "../lib/core.mts";
 
 const env: Env = k => Netlify.env.get(k);
@@ -44,10 +45,17 @@ export default async (req: Request, context: Context) => {
       if (!biz) return json({ error: "not_found" }, 404);
       return json(await createBooking(kv, env, biz, body, siteUrl));
     }
+    if (parts[0] === "order" && req.method === "POST") {
+      const biz = await getBiz(kv, String(body.slug || ""));
+      if (!biz) return json({ error: "not_found" }, 404);
+      const order = await createOrder(kv, biz, body);
+      return json({ order });
+    }
     if (parts[0] === "booking" && parts[1]) {
       if (req.method === "GET" && !parts[2]) {
         const { biz, b } = await findByToken(kv, parts[1]);
-        return json({ biz: publicBiz(biz), booking: publicBooking(b), ...changeState(biz, b), today: ilNow().date });
+        const club = clubCard(biz, (await getClients(kv, biz.slug))[b.phone]);
+        return json({ biz: publicBiz(biz), booking: publicBooking(b), ...changeState(biz, b), club, today: ilNow().date });
       }
       if (req.method === "POST" && parts[2] === "reschedule") return json(await reschedule(kv, env, parts[1], body, siteUrl));
       if (req.method === "POST" && parts[2] === "cancel") return json(await cancelByClient(kv, env, parts[1], siteUrl));
@@ -75,6 +83,10 @@ export default async (req: Request, context: Context) => {
       }
       if (action === "status" && req.method === "POST")
         return json(await adminSetStatus(kv, env, biz, String(body.date), String(body.id), String(body.status), siteUrl));
+      if (action === "clients" && req.method === "GET") return json({ clients: Object.values(await getClients(kv, biz.slug)) });
+      if (action === "client" && req.method === "PUT") return json({ client: await adminUpdateClient(kv, biz.slug, body) });
+      if (action === "orders" && req.method === "GET") return json({ orders: await adminOrders(kv, biz.slug, +(url.searchParams.get("months") || 3)) });
+      if (action === "order-status" && req.method === "POST") return json({ order: await adminOrderStatus(kv, biz, String(body.id), String(body.status)) });
       if (action === "messages" && req.method === "GET")
         return json({ messages: await adminMessages(kv, biz.slug), waConnected: !!(env("WA_TOKEN") && env("WA_PHONE_ID")) });
       if (action === "test-message" && req.method === "POST") {

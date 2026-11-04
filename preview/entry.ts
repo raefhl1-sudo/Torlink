@@ -2,7 +2,7 @@
 // so the app can be tried without a server. Built with esbuild into one inline script.
 import api from "../netlify/functions/api.mts";
 import { getStore } from "./blobs-stub";
-import { ensureDemo, saveDay, getDay, addDays, ilNow, weekday, toHM, toMin, type KV, type Booking } from "../netlify/lib/core.mts";
+import { ensureDemo, saveDay, getDay, addDays, ilNow, weekday, toHM, toMin, buildClients, saveClients, type KV, type Booking } from "../netlify/lib/core.mts";
 
 const ENV: Record<string, string> = { ADMIN_PIN: "7693", PUBLIC_URL: "https://torlink.netlify.app" };
 (globalThis as any).Netlify = { env: { get: (k: string) => ENV[k] } };
@@ -25,10 +25,18 @@ async function seed() {
   if (await kv.get("seeded", { type: "json" })) return;
   const env = (k: string) => ENV[k];
   const biz = await ensureDemo(kv, env);
-  const people: [string, string][] = [["יוסף", "0521234567"], ["סאמי", "0547654321"], ["ראמי", "0509876543"], ["כרים", "0532223344"], ["נדים", "0584445566"], ["עלי", "0521112233"], ["ג׳ורג׳", "0549998877"], ["מאג׳ד", "0503334455"]];
+  // weights: regulars come often, some customers stopped coming (to show "at risk" / "lost")
+  const people: [string, string, number, number][] = [["יוסף ח.", "0521234567", 3, 0], ["סאמי ע.", "0547654321", 3, 0], ["ראמי ס.", "0509876543", 3, 0], ["כרים ב.", "0532223344", 3, 0],
+    ["נדים ח.", "0584445566", 3, 0], ["עלי מ.", "0521112233", 3, -40], ["ג׳ורג׳ ח.", "0549998877", 3, -30], ["מאג׳ד ק.", "0503334455", 3, 0]];
+  const first = ["אחמד", "מוחמד", "חסן", "פאדי", "אמיר", "באסל", "וסים", "ח׳אלד", "סלים", "טארק", "נזאר", "איהאב", "רביע", "שאדי", "וליד", "מהדי", "האני", "עומר"];
+  const last = ["א.", "ב.", "ג.", "ד.", "ח.", "ט.", "כ."];
+  for (let i = 0; i < 110; i++) people.push([`${first[i % first.length]} ${last[i % last.length]}`, "05" + String(20000000 + i * 7919).slice(0, 8), 1, i % 9 === 0 ? -50 : 0]);
+  const wsum = people.reduce((a, p) => a + p[2], 0);
   let r = 7; const rnd = () => (r = (r * 16807) % 2147483647) / 2147483647;
+  const pick = (off: number) => { for (let i = 0; i < 6; i++) { let x = rnd() * wsum; for (const p of people) { x -= p[2]; if (x <= 0) { if (p[3] === 0 || off < p[3]) return p; break } } } return people[0] };
   const now = ilNow();
-  for (let off = -35; off <= 5; off++) {
+  const all: Booking[] = [];
+  for (let off = -90; off <= 5; off++) {
     const date = addDays(now.date, off), h = biz.hours[weekday(date)];
     if (!h.open) continue;
     const day: Booking[] = await getDay(kv, biz.slug, date);
@@ -36,22 +44,36 @@ async function seed() {
     while (true) {
       const sv = biz.services[Math.floor(rnd() * rnd() * biz.services.length)];
       if (m + sv.dur > toMin(h.to)) break;
-      const fill = off < 0 ? 0.55 : off === 0 ? 0.4 : 0.3;
+      const fill = off < 0 ? 0.42 : off === 0 ? 0.4 : 0.3;
       if (rnd() < fill) {
         const past = off < 0 || (off === 0 && m + sv.dur < now.min);
         if (off >= 0 && !past && m <= now.min + 10 && off === 0) { m += 30; continue }
         const x = rnd();
-        const [name, phone] = people[Math.floor(rnd() * people.length)];
+        const [name, phone] = pick(off);
         day.push({
           id: Math.random().toString(36).slice(2, 14).padEnd(12, "x"), slug: biz.slug, date, time: toHM(m), dur: sv.dur,
           serviceId: sv.id, serviceName: sv.name, staffId: biz.staff[0].id, name, phone, price: sv.price,
           status: past ? (x < 0.85 ? "arrived" : x < 0.94 ? "noshow" : "cancelled") : "confirmed",
-          lang: "he", created: Date.now() - 86400e3 * 3, reminderSent: true,
+          lang: "he", created: Date.now() + off * 86400e3 - 86400e3 * 3, reminderSent: true,
         });
         m += sv.dur + (rnd() < 0.6 ? 0 : 15);
       } else m += 30;
     }
     await saveDay(kv, biz.slug, date, day);
+    all.push(...day);
   }
+  const clients = buildClients(all);
+  clients["0521234567"].tags = ["vip", "regular"]; clients["0521234567"].notes = "פייד נמוך 0.5 בצדדים, מעדיף שעות בוקר";
+  clients["0547654321"].tags = ["regular"]; clients["0547654321"].birthday = "14-03";
+  await saveClients(kv, biz.slug, clients);
+  // a few store orders
+  const ym = now.date.slice(0, 7), P0 = biz.products;
+  const mk = (code: string, name: string, phone: string, items: [number, number][], status: string, hoursAgo: number) => ({
+    id: "o" + code, code, slug: biz.slug, name, phone, note: "", status, lang: "he", created: Date.now() - hoursAgo * 3600e3,
+    items: items.map(([i, qty]) => ({ id: P0[i].id, name: P0[i].name, price: P0[i].price, qty, icon: P0[i].icon })),
+    total: items.reduce((a, [i, q]) => a + P0[i].price * q, 0),
+  });
+  await kv.setJSON(`orders/${biz.slug}/${ym}`, { items: [mk("4821", "יוסף", "0521234567", [[1, 1], [0, 1]], "picked", 50), mk("5307", "סאמי", "0547654321", [[0, 2]], "ready", 20), mk("6142", "כרים", "0532223344", [[4, 1]], "new", 2)] });
+  clients["0521234567"].productSpend = P0[1].price + P0[0].price; await saveClients(kv, biz.slug, clients);
   await kv.setJSON("seeded", true);
 }
