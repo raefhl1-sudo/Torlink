@@ -1,7 +1,7 @@
 // Browser stand-in for @netlify/blobs, used only by the in-browser preview build.
 // Data is kept in localStorage (falls back to memory if storage is unavailable).
 const mem = new Map<string, string>();
-const P = "tlp2:";
+const P = "tlp3:";
 const ls = {
   get(k: string) { try { const v = localStorage.getItem(P + k); return v ?? (mem.get(k) ?? null) } catch { return mem.get(k) ?? null } },
   set(k: string, v: string) { mem.set(k, v); try { localStorage.setItem(P + k, v) } catch { } },

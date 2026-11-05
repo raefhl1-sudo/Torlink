@@ -75,5 +75,16 @@ async function seed() {
   });
   await kv.setJSON(`orders/${biz.slug}/${ym}`, { items: [mk("4821", "יוסף", "0521234567", [[1, 1], [0, 1]], "picked", 50), mk("5307", "סאמי", "0547654321", [[0, 2]], "ready", 20), mk("6142", "כרים", "0532223344", [[4, 1]], "new", 2)] });
   clients["0521234567"].productSpend = P0[1].price + P0[0].price; await saveClients(kv, biz.slug, clients);
+  // sample reviews + branding so the showcase sections aren't empty in the demo
+  const svcN = biz.services[0].name, svcB = biz.services[1].name;
+  const rv = [[5, "יוסף", "הכי מקצועי בצפון, תמיד יוצא מרוצה", svcN, 2], [5, "סאמי", "יחס אישי ותספורת מדויקת. ממליץ!", svcB, 5], [4, "כרים", "שירות מהיר, הגעתי בזמן ולא חיכיתי", svcN, 9],
+    [5, "נדים", "הזקן יצא מושלם", svcB, 14], [5, "ראמי", "מקום נקי, אווירה טובה ומחירים הוגנים", svcN, 20], [3, "עלי", "", svcN, 25]] as const;
+  const items = rv.map(([stars, name, text, service, d], i) => ({ id: "seed" + i, name, stars, text, service, at: Date.now() - d * 86400e3, ...(i === 0 ? { reply: "תודה יוסף, תמיד שמחים לראות אותך!" } : {}) }));
+  await kv.setJSON(`reviews/${biz.slug}`, { items });
+  const b2: any = await kv.get(`biz/${biz.slug}`, { type: "json" });
+  b2.rating = { avg: Math.round(items.reduce((a, x) => a + x.stars, 0) / items.length * 10) / 10, count: items.length };
+  b2.social = { instagram: "barber.studio", facebook: "", tiktok: "", whatsapp: "0521234567", waze: "" };
+  b2.address = "שפרעם"; b2.tagline = { he: "הסטייל שלך מתחיל כאן", ar: "ستايلك يبدأ هنا" };
+  await kv.setJSON(`biz/${biz.slug}`, b2);
   await kv.setJSON("seeded", true);
 }

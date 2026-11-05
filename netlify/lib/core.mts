@@ -23,7 +23,11 @@ export interface Biz {
   slug: string; type: string; icon: string; name: L; pin: string; cutoff: number;
   services: Service[]; staff: Staff[]; hours: Hours[]; blocked: string[]; created: number;
   products: Product[]; club: Club; address?: string; phone?: string;
+  theme: Theme; social: Social; tagline: L; logoV: number; gallery: string[]; rating: { avg: number; count: number };
 }
+export interface Theme { accent: string; mode: "dark" | "light"; logoBg?: "light" | "dark" | "" }
+export interface Social { instagram: string; facebook: string; tiktok: string; whatsapp: string; waze: string }
+export interface Review { id: string; name: string; stars: number; text: string; at: number; service: L; reply?: string }
 /** Customer-club record, kept up to date as bookings/orders change status */
 export interface Client {
   phone: string; name: string; first: number; lang: "he" | "ar";
@@ -90,6 +94,12 @@ export function normalizeBiz(b: Biz): Biz {
   const p = PRESETS[b.type] || PRESETS.barber;
   if (!Array.isArray(b.products)) b.products = [];
   if (!b.club) b.club = defaultClub(b.type);
+  if (!b.theme) b.theme = { accent: b.type === "nails" ? "#d58fa6" : "#c9a45c", mode: "dark" };
+  if (!b.social) b.social = { instagram: "", facebook: "", tiktok: "", whatsapp: "", waze: "" };
+  if (!b.tagline) b.tagline = { he: "", ar: "" };
+  if (typeof b.logoV !== "number") b.logoV = 0;
+  if (!Array.isArray(b.gallery)) b.gallery = [];
+  if (!b.rating) b.rating = { avg: 0, count: 0 };
   if (!ICONS.includes(b.icon)) b.icon = p.icon;
   b.services.forEach((s, i) => { if (!s.icon) s.icon = p.services[i]?.[4] || "scissors" });
   return b;
@@ -99,14 +109,14 @@ const DEFAULT_HOURS: Hours[] = [0, 1, 2, 3, 4].map(() => ({ open: true, from: "0
 
 export function buildBiz(slug: string, type: string, pin: string, name?: L): Biz {
   const p = PRESETS[type] || PRESETS.barber;
-  return {
+  return normalizeBiz({
     slug, type: PRESETS[type] ? type : "barber", icon: p.icon, name: name || { ...p.name }, pin, cutoff: 3,
     services: p.services.map(([he, ar, dur, price, icon]) => ({ id: rid(6), name: { he, ar }, dur, price, icon })),
     staff: p.staff.map(([he, ar]) => ({ id: rid(6), name: { he, ar } })),
     hours: DEFAULT_HOURS.map(h => ({ ...h })), blocked: [], created: Date.now(),
     products: p.products.map(([he, ar, dhe, dar, price, stock, icon]) => ({ id: rid(6), name: { he, ar }, desc: { he: dhe, ar: dar }, price, stock, icon, active: true })),
     club: defaultClub(type),
-  };
+  } as Biz);
 }
 
 /* ---------------- Israel time helpers ---------------- */
@@ -199,6 +209,60 @@ export function buildClients(bookings: Booking[]): Record<string, Client> {
   }
   return items;
 }
+
+/* ---------------- media: logo + work gallery (data URLs kept as separate blobs) ---------------- */
+const IMG_RE = /^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/;
+export async function setLogo(kv: KV, biz: Biz, dataUrl: string) {
+  if (dataUrl === "") { await kv.delete(`media/${biz.slug}/logo`); biz.logoV = 0 }
+  else {
+    if (!IMG_RE.test(dataUrl) || dataUrl.length > 700_000) throw new HttpError(400, "bad_image");
+    await kv.setJSON(`media/${biz.slug}/logo`, { src: dataUrl }); biz.logoV = Date.now();
+  }
+  await saveBiz(kv, biz); return biz;
+}
+export async function addGalleryImage(kv: KV, biz: Biz, dataUrl: string) {
+  if (!IMG_RE.test(dataUrl) || dataUrl.length > 700_000) throw new HttpError(400, "bad_image");
+  if (biz.gallery.length >= 12) throw new HttpError(400, "gallery_full");
+  const id = rid(10);
+  await kv.setJSON(`media/${biz.slug}/g/${id}`, { src: dataUrl });
+  biz.gallery.unshift(id); await saveBiz(kv, biz); return biz;
+}
+export async function removeGalleryImage(kv: KV, biz: Biz, id: string) {
+  biz.gallery = biz.gallery.filter(x => x !== id);
+  await kv.delete(`media/${biz.slug}/g/${id}`); await saveBiz(kv, biz); return biz;
+}
+export async function getImage(kv: KV, slug: string, which: string): Promise<string | null> {
+  if (!/^(logo|g\/[A-Za-z0-9]{6,14})$/.test(which)) return null;
+  return (await kv.get(`media/${slug}/${which}`, { type: "json" }))?.src || null;
+}
+export function decodeDataUrl(src: string) {
+  const m = src.match(/^data:(image\/[a-z]+);base64,(.*)$/)!;
+  const bin = atob(m[2]); const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return { type: m[1], bytes };
+}
+
+/* ---------------- reviews ---------------- */
+export async function getReviews(kv: KV, slug: string): Promise<Review[]> {
+  return (await kv.get(`reviews/${slug}`, { type: "json" }))?.items || [];
+}
+export async function addReview(kv: KV, token: string, input: any) {
+  const { biz, day, b } = await findByToken(kv, token);
+  if (b.status !== "arrived") throw new HttpError(403, "not_visited");
+  if ((b as any).reviewed) throw new HttpError(409, "already_reviewed");
+  const stars = Math.round(+input.stars);
+  if (!(stars >= 1 && stars <= 5)) throw new HttpError(400, "bad_stars");
+  const items = await getReviews(kv, biz.slug);
+  const r: Review = { id: b.id, name: b.name.split(" ")[0], stars, text: String(input.text || "").trim().slice(0, 400), at: Date.now(), service: b.serviceName };
+  items.unshift(r);
+  await kv.setJSON(`reviews/${biz.slug}`, { items: items.slice(0, 1000) });
+  (b as any).reviewed = stars; await saveDay(kv, biz.slug, b.date, day);
+  const all = items.length, sum = items.reduce((a, x) => a + x.stars, 0);
+  biz.rating = { avg: Math.round(sum / all * 10) / 10, count: all }; await saveBiz(kv, biz);
+  return r;
+}
+/** what the public page shows: best recent reviews with text */
+export const publicReviews = (items: Review[]) => items.filter(r => r.text && r.stars >= 4).slice(0, 12).map(({ id, ...r }) => r);
 
 /* ---------------- store ---------------- */
 export async function createOrder(kv: KV, biz: Biz, input: any) {
@@ -406,7 +470,7 @@ export async function findByToken(kv: KV, token: string) {
   return { biz, day, b };
 }
 export function changeState(biz: Biz, b: Booking, nowTs = Date.now()) {
-  if (b.status !== "confirmed") return { canChange: false, reason: b.status };
+  if (b.status !== "confirmed") return { canChange: false, reason: b.status, canReview: b.status === "arrived" && !(b as any).reviewed };
   const left = (ilEpoch(b.date, b.time) - nowTs) / 3600e3;
   if (left <= 0) return { canChange: false, reason: "passed" };
   if (left < biz.cutoff) return { canChange: false, reason: "too_late" };
@@ -478,6 +542,13 @@ export function sanitizeConfig(biz: Biz, c: any): Biz {
   if (Array.isArray(c.services) && c.services.length) out.services = c.services.slice(0, 40).map((s: any) => ({ id: okId(s.id), name: L(s.name), dur: Math.min(480, Math.max(5, Math.round(+s.dur / 5) * 5 || 30)), price: Math.max(0, Math.round(+s.price || 0)), icon: safeIcon(s.icon, "scissors") }));
   if (Array.isArray(c.products)) out.products = c.products.slice(0, 60).map((p: any) => ({ id: okId(p.id), name: L(p.name), desc: L(p.desc), price: Math.max(0, Math.round(+p.price || 0)), stock: Math.max(0, Math.floor(+p.stock || 0)), icon: safeIcon(p.icon), active: p.active !== false }));
   if (c.club) out.club = { enabled: c.club.enabled !== false, rewardEvery: Math.min(50, Math.max(2, Math.floor(+c.club.rewardEvery || 10))), reward: L(c.club.reward) };
+  if (c.theme) out.theme = { accent: /^#[0-9a-fA-F]{6}$/.test(c.theme.accent) ? c.theme.accent.toLowerCase() : out.theme.accent, mode: c.theme.mode === "light" ? "light" : "dark", logoBg: ["light", "dark"].includes(c.theme.logoBg) ? c.theme.logoBg : "" };
+  if (c.tagline) out.tagline = L(c.tagline);
+  if (c.social) {
+    // keep only plain https links / handles; anything else is dropped
+    const url = (v: any) => { const s = String(v || "").trim().slice(0, 200); return !s ? "" : /^https:\/\/[^\s"'<>]+$/.test(s) ? s : /^@?[\w.]{1,40}$/.test(s) ? s.replace(/^@/, "") : "" };
+    out.social = { instagram: url(c.social.instagram), facebook: url(c.social.facebook), tiktok: url(c.social.tiktok), whatsapp: String(c.social.whatsapp || "").replace(/\D/g, "").slice(0, 13), waze: url(c.social.waze) };
+  }
   if (typeof c.address === "string") out.address = c.address.slice(0, 120);
   if (typeof c.phone === "string") out.phone = c.phone.replace(/[^\d-]/g, "").slice(0, 15);
   if (Array.isArray(c.staff) && c.staff.length) out.staff = c.staff.slice(0, 20).map((s: any) => ({ id: /^[A-Za-z0-9]{3,12}$/.test(s.id) ? s.id : rid(6), name: L(s.name) }));

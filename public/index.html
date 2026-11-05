@@ -20,7 +20,7 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{background:var(--bg)}
 body{margin:0;font-family:'Heebo','Cairo',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.5;min-height:100vh;
-  background-image:radial-gradient(900px 400px at 85% -10%,rgba(201,164,92,.10),transparent 60%),radial-gradient(700px 400px at 0% 0%,rgba(207,74,63,.06),transparent 60%)}
+  background-image:radial-gradient(900px 420px at 85% -10%,var(--glow),transparent 60%),radial-gradient(700px 400px at 0% 0%,var(--glow2),transparent 60%)}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
 a{color:inherit}
@@ -34,14 +34,15 @@ a{color:inherit}
 .sp{flex:1}
 .seg{display:flex;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:3px}
 .seg button,.seg a{background:none;border:0;color:var(--muted);padding:6px 11px;border-radius:9px;font-size:13px;font-weight:600;text-decoration:none}
-.seg .on{background:var(--gold);color:#17120a}
+.seg .on{background:var(--gold);color:var(--on)}
 .wrap{max-width:820px;margin:0 auto;padding:0 16px 90px}
 /* hero */
-.hero{position:relative;margin:16px 0 18px;border-radius:24px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(160deg,#1d1c20,#121214 60%)}
+.hero{position:relative;margin:16px 0 18px;border-radius:24px;overflow:hidden;border:1px solid var(--line);background:radial-gradient(600px 220px at 100% 0%,var(--gold-soft),transparent 70%),linear-gradient(160deg,var(--card2),var(--bg2) 60%)}
 .hero .pole{height:8px;background:repeating-linear-gradient(-45deg,#c0453b 0 12px,#f4efe6 12px 24px,#28406e 24px 36px,#f4efe6 36px 48px);opacity:.85}
+.hero .pole.accent{background:repeating-linear-gradient(-45deg,var(--gold) 0 12px,var(--gold2) 12px 24px,var(--gold-soft) 24px 36px,var(--gold2) 36px 48px);opacity:.9}
 .hero-in{padding:22px 20px 20px;display:flex;gap:16px;align-items:center}
 .logo{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;flex:none;color:var(--gold2);
-  background:radial-gradient(circle at 30% 25%,#2c2a2f,#141416);border:2px solid var(--gold-line);box-shadow:0 0 0 6px rgba(201,164,92,.06),0 10px 30px rgba(0,0,0,.5)}
+  background:radial-gradient(circle at 30% 25%,var(--card2),var(--bg2));border:2px solid var(--gold-line);box-shadow:0 0 0 6px var(--gold-soft),0 10px 30px rgba(0,0,0,.35);overflow:hidden}
 .logo .ic{width:34px;height:34px}
 .hero h1{margin:0;font-family:var(--display);font-weight:400;font-size:28px;line-height:1.15;letter-spacing:.3px}
 .meta{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;color:var(--muted);font-size:13px}
@@ -51,8 +52,8 @@ a{color:inherit}
 /* nav pills */
 .nav{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;scrollbar-width:none}
 .nav button{flex:none;display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px}
-.nav button.on{background:var(--ink);color:#111;border-color:var(--ink)}
-.nav .cnt{background:var(--gold);color:#111;border-radius:999px;font-size:11px;padding:0 7px;font-weight:800}
+.nav button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.nav .cnt{background:var(--gold);color:var(--on);border-radius:999px;font-size:11px;padding:0 7px;font-weight:800}
 /* cards */
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin-bottom:14px}
 .card.flat{background:var(--bg2)}
@@ -72,7 +73,7 @@ h3{font-size:14px;margin:18px 0 10px;color:var(--muted);font-weight:600;text-tra
 .chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 8px;scrollbar-width:none}
 .chip{flex:none;border:1px solid var(--line);background:var(--card2);border-radius:14px;padding:9px 10px;min-width:64px;text-align:center;color:var(--ink)}
 .chip b{display:block;font-size:19px;font-weight:800}.chip small{color:var(--muted);font-size:11px}
-.chip.on{background:var(--gold);border-color:var(--gold);color:#17120a}.chip.on small{color:#3b2e14}
+.chip.on{background:var(--gold);border-color:var(--gold);color:var(--on)}.chip.on small{color:var(--on);opacity:.7}
 .chip:disabled{opacity:.35;cursor:not-allowed}
 .slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:8px;margin-top:14px}
 .slot{border:1px solid var(--line);background:var(--card2);border-radius:12px;padding:10px 0;font-weight:700;direction:ltr;color:var(--ink)}
@@ -87,7 +88,7 @@ input[type=text],input[type=tel],input[type=number],input[type=time],input[type=
 textarea{min-height:80px;resize:vertical}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-soft)}
 input::placeholder,textarea::placeholder{color:var(--dim)}
-.btn{border:0;border-radius:14px;padding:13px 18px;font-weight:700;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#17120a;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 24px rgba(201,164,92,.18)}
+.btn{border:0;border-radius:14px;padding:13px 18px;font-weight:700;background:linear-gradient(135deg,var(--gold2),var(--gold));color:var(--on);text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 24px var(--gold-soft)}
 .btn.full{width:100%}
 .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line2);box-shadow:none}
 .btn.dark{background:var(--card2);color:var(--ink);border:1px solid var(--line);box-shadow:none}
@@ -102,7 +103,7 @@ input::placeholder,textarea::placeholder{color:var(--dim)}
 .sum{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:14px}
 .sum div{display:flex;justify-content:space-between;padding:5px 0;gap:10px}.sum div span:first-child{color:var(--muted);display:inline-flex;gap:6px;align-items:center}
 .sum .old{text-decoration:line-through;color:var(--dim)}
-.okc{width:76px;height:76px;border-radius:50%;margin:4px auto 12px;display:grid;place-items:center;color:#17120a;background:linear-gradient(135deg,var(--gold2),var(--gold));box-shadow:0 0 0 10px var(--gold-soft)}
+.okc{width:76px;height:76px;border-radius:50%;margin:4px auto 12px;display:grid;place-items:center;color:var(--on);background:linear-gradient(135deg,var(--gold2),var(--gold));box-shadow:0 0 0 10px var(--gold-soft)}
 .okc.x{background:var(--card2);color:var(--muted);box-shadow:none}
 .okc .ic{width:36px;height:36px;stroke-width:2.4}
 .center{text-align:center}
@@ -114,14 +115,14 @@ input::placeholder,textarea::placeholder{color:var(--dim)}
 .ok-box{background:rgba(76,179,125,.08);border:1px solid rgba(76,179,125,.3);border-radius:14px;padding:11px 13px;font-size:13px;color:#8fe0b4;margin-bottom:14px;display:flex;gap:8px}
 /* club card */
 .club{position:relative;border-radius:22px;padding:20px;overflow:hidden;color:#f8f1e2;border:1px solid var(--gold-line);
-  background:radial-gradient(500px 200px at 100% 0%,rgba(232,203,138,.25),transparent 60%),linear-gradient(135deg,#2a2418,#14120d 70%)}
-.club:after{content:"";position:absolute;inset:auto -40px -60px auto;width:200px;height:200px;border-radius:50%;border:30px solid rgba(232,203,138,.06)}
-.club .tier{display:inline-flex;gap:6px;align-items:center;font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold2)}
+  background:radial-gradient(500px 200px at 100% 0%,var(--club-glow),transparent 60%),linear-gradient(135deg,var(--club1),#111012 70%)}
+.club:after{content:"";position:absolute;inset:auto -40px -60px auto;width:200px;height:200px;border-radius:50%;border:30px solid rgba(255,255,255,.04)}
+.club .tier{display:inline-flex;gap:6px;align-items:center;font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--club-ink)}
 .club .nm{font-family:var(--display);font-size:24px;margin:6px 0 2px}
 .club .punch{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 10px}
-.club .punch i{width:26px;height:26px;border-radius:50%;border:1.5px dashed rgba(232,203,138,.45);display:grid;place-items:center}
-.club .punch i.on{background:linear-gradient(135deg,var(--gold2),var(--gold));border:0;color:#17120a}
-.club .punch i.gift{border-style:solid;border-color:var(--gold2)}
+.club .punch i{width:26px;height:26px;border-radius:50%;border:1.5px dashed rgba(255,255,255,.3);display:grid;place-items:center}
+.club .punch i.on{background:var(--club-ink);border:0;color:#141210}
+.club .punch i.gift{border-style:solid;border-color:var(--club-ink);color:var(--club-ink)}
 .club .hint{font-size:13px;color:#d9ccb0}
 /* shop */
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
@@ -147,7 +148,7 @@ input::placeholder,textarea::placeholder{color:var(--dim)}
 .kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;position:relative;overflow:hidden}
 .kpi .l{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px;font-weight:600}
 .kpi b{display:block;font-size:22px;font-weight:800;margin-top:4px;letter-spacing:-.3px}
-.kpi.hl{background:linear-gradient(135deg,#2a2418,#18150f);border-color:var(--gold-line)}.kpi.hl b{color:var(--gold2)}
+.kpi.hl{background:linear-gradient(135deg,var(--gold-soft),transparent),var(--card);border-color:var(--gold-line)}.kpi.hl b{color:var(--gold2)}
 .kpi .ic{color:var(--gold)}
 .bk{display:flex;gap:12px;border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin-bottom:10px;background:var(--card2);position:relative}
 .bk:before{content:"";position:absolute;inset-inline-start:0;top:12px;bottom:12px;width:3px;border-radius:3px;background:var(--gold)}
@@ -196,10 +197,61 @@ th{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;le
 .sect{display:flex;align-items:center;gap:8px;margin:0 0 12px}.sect h2{margin:0}
 .spin{width:30px;height:30px;border:3px solid var(--line);border-top-color:var(--gold);border-radius:50%;animation:s 1s linear infinite;margin:30px auto}
 @keyframes s{to{transform:rotate(360deg)}}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--ink);color:#111;padding:11px 18px;border-radius:12px;font-size:14px;font-weight:700;opacity:0;transition:.2s;pointer-events:none;z-index:40}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--ink);color:var(--bg);padding:11px 18px;border-radius:12px;font-size:14px;font-weight:700;opacity:0;transition:.2s;pointer-events:none;z-index:40}
 .toast.on{opacity:1;transform:translateX(-50%)}
 .login{max-width:400px;margin:40px auto}
 .login .logo{margin:0 auto 14px}
+
+/* ---- branding ---- */
+.ic.fill{fill:currentColor}
+.logo img{width:100%;height:100%;object-fit:contain;padding:9%}
+.logo.lbg{background:#fff}.logo.dbg{background:#151517}
+.tagline{color:var(--muted);font-size:14px;margin-top:3px}
+.rating{display:inline-flex;align-items:center;gap:4px;color:var(--gold2);font-weight:800}
+.socials{display:flex;gap:8px;flex-wrap:wrap;padding:0 20px 18px}
+.soc{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--card);border:1px solid var(--line);color:var(--ink);text-decoration:none;transition:.15s}
+.soc:hover{border-color:var(--gold);color:var(--gold2);transform:translateY(-1px)}
+.sect-h{display:flex;align-items:center;justify-content:space-between;margin:22px 2px 10px}
+.sect-h h2{margin:0;font-size:19px}
+.gal{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+.gal button{flex:none;width:132px;height:160px;border-radius:16px;overflow:hidden;border:1px solid var(--line);padding:0;background:var(--card2)}
+.gal img{width:100%;height:100%;object-fit:cover;display:block}
+.revs{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+.rev{flex:none;width:260px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
+.rev .st{color:var(--gold2);display:flex;gap:2px}
+.rev p{margin:8px 0;font-size:14px;line-height:1.55}
+.rev .who{font-size:12px;color:var(--muted)}
+.rev .rp{margin-top:8px;padding:8px 10px;border-radius:10px;background:var(--gold-soft);font-size:12px}
+.stars{display:flex;gap:6px;justify-content:center;margin:10px 0 14px}
+.stars button{background:none;border:0;color:var(--line2);padding:2px}
+.stars button.on{color:var(--gold)}
+.stars .ic{width:38px;height:38px}
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:50;display:grid;place-items:center;padding:20px}
+.lightbox img{max-width:100%;max-height:88vh;border-radius:14px}
+.sw-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.swatch{width:40px;height:40px;border-radius:50%;border:3px solid var(--card);box-shadow:0 0 0 1px var(--line2);cursor:pointer;padding:0}
+.swatch.on{box-shadow:0 0 0 2px var(--ink)}
+input[type=color]{width:44px;height:44px;border:0;background:none;padding:0;cursor:pointer}
+.up{display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+.up input{display:none}
+.bigLogo{width:110px;height:110px;margin:0 auto 12px}
+.bigLogo .ic{width:46px;height:46px}
+.ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.gcell{position:relative;aspect-ratio:1;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--card2)}
+.gcell img{width:100%;height:100%;object-fit:cover}
+.gcell .x{position:absolute;top:4px;inset-inline-end:4px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.65);color:#fff}
+.gadd{aspect-ratio:1;border-radius:12px;border:1.5px dashed var(--line2);display:grid;place-items:center;color:var(--muted);cursor:pointer;text-align:center;font-size:12px}
+.gadd input{display:none}
+.roww{display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line)}
+.roww .crow{border-bottom:0;flex:1}
+.cal-add{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:var(--gold2);text-decoration:none;margin-top:10px}
+/* light mode */
+body.light{--bg:#f6f4f0;--bg2:#efebe5;--card:#ffffff;--card2:#faf8f4;--line:#e7e1d7;--line2:#d6cfc3;--ink:#1c1a17;--muted:#6e685e;--dim:#a39c90}
+body.light .top{background:rgba(255,255,255,.85)}
+body.light .wa-box{background:#ebf8f0;border-color:#cdebd8}body.light .wa-box .lbl{color:#1d8248}body.light .bub{background:#fff;color:#1c1a17}
+body.light .info-box{color:#8a5a00}body.light .ok-box{color:#1d7a45}body.light .err{color:#c0392b}
+body.light .badge{filter:brightness(.6) saturate(1.3)}
+body.light .opt:hover,body.light .card{box-shadow:0 1px 2px rgba(0,0,0,.04)}
 @media (max-width:620px){
   .kpis{grid-template-columns:repeat(2,1fr)}.stgrid{grid-template-columns:repeat(2,1fr)}
   .hero h1{font-size:24px}.logo{width:62px;height:62px}
@@ -209,13 +261,13 @@ th{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;le
 </style>
 </head>
 <body>
-<div class="top"><div class="brand" dir="ltr"><div class="mk"><svg class="ic sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/></svg></div>Tor<b>Link</b></div><div class="sp"></div>
+<div class="top"><div class="brand" dir="ltr"><div class="mk"><svg class="ic sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/></svg></div><span>Tor<b>Link</b></span></div><div class="sp"></div>
   <div class="seg" id="langSeg"><button data-l="he">עב</button><button data-l="ar">عر</button></div></div>
 <div class="wrap" id="app"><div class="spin"></div></div>
 <div id="cartbar"></div>
 <div class="toast" id="toast"></div>
 <script>
-/*ICONS-START*/const ICON_SVG={"package":"<path d=\"M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z\"/><path d=\"M12 22V12\"/><path d=\"m3.3 7 7.703 4.734a2 2 0 0 0 1.994 0L20.7 7\"/><path d=\"m7.5 4.27 9 5.15\"/>","x":"<path d=\"M18 6 6 18\"/><path d=\"m6 6 12 12\"/>","scissors":"<circle cx=\"6\" cy=\"6\" r=\"3\"/><path d=\"M8.12 8.12 12 12\"/><path d=\"M20 4 8.12 15.88\"/><circle cx=\"6\" cy=\"18\" r=\"3\"/><path d=\"M14.8 14.8 20 20\"/>","crown":"<path d=\"M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z\"/><path d=\"M5 21h14\"/>","sparkles":"<path d=\"M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z\"/><path d=\"M20 3v4\"/><path d=\"M22 5h-4\"/><path d=\"M4 17v2\"/><path d=\"M5 18H3\"/>","smile":"<circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M8 14s1.5 2 4 2 4-2 4-2\"/><line x1=\"9\" x2=\"9.01\" y1=\"9\" y2=\"9\"/><line x1=\"15\" x2=\"15.01\" y1=\"9\" y2=\"9\"/>","wind":"<path d=\"M12.8 19.6A2 2 0 1 0 14 16H2\"/><path d=\"M17.5 8a2.5 2.5 0 1 1 2 4H2\"/><path d=\"M9.8 4.4A2 2 0 1 1 11 8H2\"/>","gem":"<path d=\"M6 3h12l4 6-10 13L2 9Z\"/><path d=\"M11 3 8 9l4 13 4-13-3-6\"/><path d=\"M2 9h20\"/>","repeat":"<path d=\"m17 2 4 4-4 4\"/><path d=\"M3 11v-1a4 4 0 0 1 4-4h14\"/><path d=\"m7 22-4-4 4-4\"/><path d=\"M21 13v1a4 4 0 0 1-4 4H3\"/>","droplet":"<path d=\"M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z\"/>","hand":"<path d=\"M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2\"/><path d=\"M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2\"/><path d=\"M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8\"/><path d=\"M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15\"/>","footprints":"<path d=\"M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0Z\"/><path d=\"M20 20v-2.38c0-2.12 1.03-3.12 1-5.62-.03-2.72-1.49-6-4.5-6C14.63 6 14 7.8 14 9.5c0 3.11 2 5.66 2 8.68V20a2 2 0 1 0 4 0Z\"/><path d=\"M16 17h4\"/><path d=\"M4 13h4\"/>","flask-conical":"<path d=\"M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2\"/><path d=\"M8.5 2h7\"/><path d=\"M7 16h10\"/>","align-justify":"<path d=\"M3 12h18\"/><path d=\"M3 18h18\"/><path d=\"M3 6h18\"/>","spray-can":"<path d=\"M3 3h.01\"/><path d=\"M7 5h.01\"/><path d=\"M11 7h.01\"/><path d=\"M3 7h.01\"/><path d=\"M7 9h.01\"/><path d=\"M3 11h.01\"/><rect width=\"4\" height=\"4\" x=\"15\" y=\"5\"/><path d=\"m19 9 2 2v10c0 .6-.4 1-1 1h-6c-.6 0-1-.4-1-1V11l2-2\"/><path d=\"m13 14 8-2\"/><path d=\"m13 19 8-2\"/>","palette":"<circle cx=\"13.5\" cy=\"6.5\" r=\".5\" fill=\"currentColor\"/><circle cx=\"17.5\" cy=\"10.5\" r=\".5\" fill=\"currentColor\"/><circle cx=\"8.5\" cy=\"7.5\" r=\".5\" fill=\"currentColor\"/><circle cx=\"6.5\" cy=\"12.5\" r=\".5\" fill=\"currentColor\"/><path d=\"M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z\"/>","brush":"<path d=\"m9.06 11.9 8.07-8.06a2.85 2.85 0 1 1 4.03 4.03l-8.06 8.08\"/><path d=\"M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1.08 1.1 2.49 2.02 4 2.02 2.2 0 4-1.8 4-4.04a3.01 3.01 0 0 0-3-3.02z\"/>","star":"<path d=\"M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z\"/>","heart":"<path d=\"M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z\"/>","flame":"<path d=\"M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z\"/>","leaf":"<path d=\"M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z\"/><path d=\"M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12\"/>","zap":"<path d=\"M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z\"/>","shield":"<path d=\"M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z\"/>","network":"<rect x=\"16\" y=\"16\" width=\"6\" height=\"6\" rx=\"1\"/><rect x=\"2\" y=\"16\" width=\"6\" height=\"6\" rx=\"1\"/><rect x=\"9\" y=\"2\" width=\"6\" height=\"6\" rx=\"1\"/><path d=\"M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3\"/><path d=\"M12 12V8\"/>","book":"<path d=\"M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20\"/>","list":"<path d=\"M3 12h.01\"/><path d=\"M3 18h.01\"/><path d=\"M3 6h.01\"/><path d=\"M8 12h13\"/><path d=\"M8 18h13\"/><path d=\"M8 6h13\"/>","map-pin":"<path d=\"M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0\"/><circle cx=\"12\" cy=\"10\" r=\"3\"/>","phone":"<path d=\"M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z\"/>","alert-triangle":"<path d=\"m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3\"/><path d=\"M12 9v4\"/><path d=\"M12 17h.01\"/>","calendar-days":"<path d=\"M8 2v4\"/><path d=\"M16 2v4\"/><rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\"/><path d=\"M3 10h18\"/><path d=\"M8 14h.01\"/><path d=\"M12 14h.01\"/><path d=\"M16 14h.01\"/><path d=\"M8 18h.01\"/><path d=\"M12 18h.01\"/><path d=\"M16 18h.01\"/>","shopping-bag":"<path d=\"M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z\"/><path d=\"M3 6h18\"/><path d=\"M16 10a4 4 0 0 1-8 0\"/>","club":"<path d=\"M17.28 9.05a5.5 5.5 0 1 0-10.56 0A5.5 5.5 0 1 0 12 17.66a5.5 5.5 0 1 0 5.28-8.6Z\"/><path d=\"M12 17.66L12 22\"/>","user":"<path d=\"M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2\"/><circle cx=\"12\" cy=\"7\" r=\"4\"/>","history":"<path d=\"M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8\"/><path d=\"M3 3v5h5\"/><path d=\"M12 7v5l4 2\"/>","calendar-check":"<path d=\"M8 2v4\"/><path d=\"M16 2v4\"/><rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\"/><path d=\"M3 10h18\"/><path d=\"m9 16 2 2 4-4\"/>","clock":"<circle cx=\"12\" cy=\"12\" r=\"10\"/><polyline points=\"12 6 12 12 16 14\"/>","wallet":"<path d=\"M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1\"/><path d=\"M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4\"/>","message-circle":"<path d=\"M7.9 20A9 9 0 1 0 4 16.1L2 22Z\"/>","gift":"<rect x=\"3\" y=\"8\" width=\"18\" height=\"4\" rx=\"1\"/><path d=\"M12 8v13\"/><path d=\"M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7\"/><path d=\"M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5\"/>","check":"<path d=\"M20 6 9 17l-5-5\"/>","settings-2":"<path d=\"M20 7h-9\"/><path d=\"M14 17H5\"/><circle cx=\"17\" cy=\"17\" r=\"3\"/><circle cx=\"7\" cy=\"7\" r=\"3\"/>","plus":"<path d=\"M5 12h14\"/><path d=\"M12 5v14\"/>","chevron-right":"<path d=\"m9 18 6-6-6-6\"/>","calendar-x":"<path d=\"M8 2v4\"/><path d=\"M16 2v4\"/><rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\"/><path d=\"M3 10h18\"/><path d=\"m14 14-4 4\"/><path d=\"m10 14 4 4\"/>","text":"<path d=\"M17 6.1H3\"/><path d=\"M21 12.1H3\"/><path d=\"M15.1 18H3\"/>","info":"<circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 16v-4\"/><path d=\"M12 8h.01\"/>","calendar-clock":"<path d=\"M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5\"/><path d=\"M16 2v4\"/><path d=\"M8 2v4\"/><path d=\"M3 10h5\"/><path d=\"M17.5 17.5 16 16.3V14\"/><circle cx=\"16\" cy=\"16\" r=\"6\"/>","minus":"<path d=\"M5 12h14\"/>","store":"<path d=\"m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7\"/><path d=\"M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8\"/><path d=\"M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4\"/><path d=\"M2 7h20\"/><path d=\"M22 7v3a2 2 0 0 1-2 2a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12a2 2 0 0 1-2-2V7\"/>","send":"<path d=\"M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z\"/><path d=\"m21.854 2.147-10.94 10.939\"/>","shopping-cart":"<circle cx=\"8\" cy=\"21\" r=\"1\"/><circle cx=\"19\" cy=\"21\" r=\"1\"/><path d=\"M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12\"/>","chevron-left":"<path d=\"m15 18-6-6 6-6\"/>","lock":"<rect width=\"18\" height=\"11\" x=\"3\" y=\"11\" rx=\"2\" ry=\"2\"/><path d=\"M7 11V7a5 5 0 0 1 10 0v4\"/>","pin":"<path d=\"M12 17v5\"/><path d=\"M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z\"/>","log-in":"<path d=\"M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4\"/><polyline points=\"10 17 15 12 10 7\"/><line x1=\"15\" x2=\"3\" y1=\"12\" y2=\"12\"/>","users":"<path d=\"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2\"/><circle cx=\"9\" cy=\"7\" r=\"4\"/><path d=\"M22 21v-2a4 4 0 0 0-3-3.87\"/><path d=\"M16 3.13a4 4 0 0 1 0 7.75\"/>","trending-up":"<polyline points=\"22 7 13.5 15.5 8.5 10.5 2 17\"/><polyline points=\"16 7 22 7 22 13\"/>","settings":"<path d=\"M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/>","log-out":"<path d=\"M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4\"/><polyline points=\"16 17 21 12 16 7\"/><line x1=\"21\" x2=\"9\" y1=\"12\" y2=\"12\"/>","refresh-cw":"<path d=\"M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8\"/><path d=\"M21 3v5h-5\"/><path d=\"M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16\"/><path d=\"M8 16H3v5\"/>","coffee":"<path d=\"M10 2v2\"/><path d=\"M14 2v2\"/><path d=\"M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1\"/><path d=\"M6 2v2\"/>","user-x":"<path d=\"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2\"/><circle cx=\"9\" cy=\"7\" r=\"4\"/><line x1=\"17\" x2=\"22\" y1=\"8\" y2=\"13\"/><line x1=\"22\" x2=\"17\" y1=\"8\" y2=\"13\"/>","undo-2":"<path d=\"M9 14 4 9l5-5\"/><path d=\"M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11\"/>","activity":"<path d=\"M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2\"/>","search":"<circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"m21 21-4.3-4.3\"/>","user-search":"<circle cx=\"10\" cy=\"7\" r=\"4\"/><path d=\"M10.3 15H7a4 4 0 0 0-4 4v2\"/><circle cx=\"17\" cy=\"17\" r=\"3\"/><path d=\"m21 21-1.9-1.9\"/>","badge":"<path d=\"M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z\"/>","ghost":"<path d=\"M9 10h.01\"/><path d=\"M15 10h.01\"/><path d=\"M12 2a8 8 0 0 0-8 8v12l3-3 2.5 2.5L12 19l2.5 2.5L17 19l3 3V10a8 8 0 0 0-8-8z\"/>","ban":"<circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"m4.9 4.9 14.2 14.2\"/>","tags":"<path d=\"m15 5 6.3 6.3a2.4 2.4 0 0 1 0 3.4L17 19\"/><path d=\"M9.586 5.586A2 2 0 0 0 8.172 5H3a1 1 0 0 0-1 1v5.172a2 2 0 0 0 .586 1.414L8.29 18.29a2.426 2.426 0 0 0 3.42 0l3.58-3.58a2.426 2.426 0 0 0 0-3.42z\"/><circle cx=\"6.5\" cy=\"9.5\" r=\".5\" fill=\"currentColor\"/>","tag":"<path d=\"M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z\"/><circle cx=\"7.5\" cy=\"7.5\" r=\".5\" fill=\"currentColor\"/>","receipt":"<path d=\"M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z\"/><path d=\"M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8\"/><path d=\"M12 17.5v-11\"/>","trash-2":"<path d=\"M3 6h18\"/><path d=\"M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6\"/><path d=\"M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2\"/><line x1=\"10\" x2=\"10\" y1=\"11\" y2=\"17\"/><line x1=\"14\" x2=\"14\" y1=\"11\" y2=\"17\"/>","code":"<polyline points=\"16 18 22 12 16 6\"/><polyline points=\"8 6 2 12 8 18\"/>","package-check":"<path d=\"m16 16 2 2 4-4\"/><path d=\"M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14\"/><path d=\"m7.5 4.27 9 5.15\"/><polyline points=\"3.29 7 12 12 20.71 7\"/><line x1=\"12\" x2=\"12\" y1=\"22\" y2=\"12\"/>","copy":"<rect width=\"14\" height=\"14\" x=\"8\" y=\"8\" rx=\"2\" ry=\"2\"/><path d=\"M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2\"/>","badge-check":"<path d=\"M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z\"/><path d=\"m9 12 2 2 4-4\"/>","link":"<path d=\"M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71\"/><path d=\"M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71\"/>","external-link":"<path d=\"M15 3h6v6\"/><path d=\"M10 14 21 3\"/><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"/>","user-plus":"<path d=\"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2\"/><circle cx=\"9\" cy=\"7\" r=\"4\"/><line x1=\"19\" x2=\"19\" y1=\"8\" y2=\"14\"/><line x1=\"22\" x2=\"16\" y1=\"11\" y2=\"11\"/>"};/*ICONS-END*/
+/*ICONS-START*/const ICON_SVG={"package":"<path d=\"M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z\"/><path d=\"M12 22V12\"/><path d=\"m3.3 7 7.703 4.734a2 2 0 0 0 1.994 0L20.7 7\"/><path d=\"m7.5 4.27 9 5.15\"/>","x":"<path d=\"M18 6 6 18\"/><path d=\"m6 6 12 12\"/>","scissors":"<circle cx=\"6\" cy=\"6\" r=\"3\"/><path d=\"M8.12 8.12 12 12\"/><path d=\"M20 4 8.12 15.88\"/><circle cx=\"6\" cy=\"18\" r=\"3\"/><path d=\"M14.8 14.8 20 20\"/>","crown":"<path d=\"M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z\"/><path d=\"M5 21h14\"/>","sparkles":"<path d=\"M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z\"/><path d=\"M20 3v4\"/><path d=\"M22 5h-4\"/><path d=\"M4 17v2\"/><path d=\"M5 18H3\"/>","smile":"<circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M8 14s1.5 2 4 2 4-2 4-2\"/><line x1=\"9\" x2=\"9.01\" y1=\"9\" y2=\"9\"/><line x1=\"15\" x2=\"15.01\" y1=\"9\" y2=\"9\"/>","wind":"<path d=\"M12.8 19.6A2 2 0 1 0 14 16H2\"/><path d=\"M17.5 8a2.5 2.5 0 1 1 2 4H2\"/><path d=\"M9.8 4.4A2 2 0 1 1 11 8H2\"/>","gem":"<path d=\"M6 3h12l4 6-10 13L2 9Z\"/><path d=\"M11 3 8 9l4 13 4-13-3-6\"/><path d=\"M2 9h20\"/>","repeat":"<path d=\"m17 2 4 4-4 4\"/><path d=\"M3 11v-1a4 4 0 0 1 4-4h14\"/><path d=\"m7 22-4-4 4-4\"/><path d=\"M21 13v1a4 4 0 0 1-4 4H3\"/>","droplet":"<path d=\"M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z\"/>","hand":"<path d=\"M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2\"/><path d=\"M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2\"/><path d=\"M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8\"/><path d=\"M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15\"/>","footprints":"<path d=\"M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0Z\"/><path d=\"M20 20v-2.38c0-2.12 1.03-3.12 1-5.62-.03-2.72-1.49-6-4.5-6C14.63 6 14 7.8 14 9.5c0 3.11 2 5.66 2 8.68V20a2 2 0 1 0 4 0Z\"/><path d=\"M16 17h4\"/><path d=\"M4 13h4\"/>","flask-conical":"<path d=\"M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2\"/><path d=\"M8.5 2h7\"/><path d=\"M7 16h10\"/>","align-justify":"<path d=\"M3 12h18\"/><path d=\"M3 18h18\"/><path d=\"M3 6h18\"/>","spray-can":"<path d=\"M3 3h.01\"/><path d=\"M7 5h.01\"/><path d=\"M11 7h.01\"/><path d=\"M3 7h.01\"/><path d=\"M7 9h.01\"/><path d=\"M3 11h.01\"/><rect width=\"4\" height=\"4\" x=\"15\" y=\"5\"/><path d=\"m19 9 2 2v10c0 .6-.4 1-1 1h-6c-.6 0-1-.4-1-1V11l2-2\"/><path d=\"m13 14 8-2\"/><path d=\"m13 19 8-2\"/>","palette":"<circle cx=\"13.5\" cy=\"6.5\" r=\".5\" fill=\"currentColor\"/><circle cx=\"17.5\" cy=\"10.5\" r=\".5\" fill=\"currentColor\"/><circle cx=\"8.5\" cy=\"7.5\" r=\".5\" fill=\"currentColor\"/><circle cx=\"6.5\" cy=\"12.5\" r=\".5\" fill=\"currentColor\"/><path d=\"M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z\"/>","brush":"<path d=\"m9.06 11.9 8.07-8.06a2.85 2.85 0 1 1 4.03 4.03l-8.06 8.08\"/><path d=\"M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1.08 1.1 2.49 2.02 4 2.02 2.2 0 4-1.8 4-4.04a3.01 3.01 0 0 0-3-3.02z\"/>","star":"<path d=\"M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z\"/>","heart":"<path d=\"M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z\"/>","flame":"<path d=\"M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z\"/>","leaf":"<path d=\"M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z\"/><path d=\"M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12\"/>","zap":"<path d=\"M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z\"/>","shield":"<path d=\"M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z\"/>","instagram":"<rect width=\"20\" height=\"20\" x=\"2\" y=\"2\" rx=\"5\" ry=\"5\"/><path d=\"M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z\"/><line x1=\"17.5\" x2=\"17.51\" y1=\"6.5\" y2=\"6.5\"/>","facebook":"<path d=\"M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z\"/>","video":"<path d=\"m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5\"/><rect x=\"2\" y=\"6\" width=\"14\" height=\"12\" rx=\"2\"/>","message-circle":"<path d=\"M7.9 20A9 9 0 1 0 4 16.1L2 22Z\"/>","navigation":"<polygon points=\"3 11 22 2 13 21 11 13 3 11\"/>","phone":"<path d=\"M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z\"/>","network":"<rect x=\"16\" y=\"16\" width=\"6\" height=\"6\" rx=\"1\"/><rect x=\"2\" y=\"16\" width=\"6\" height=\"6\" rx=\"1\"/><rect x=\"9\" y=\"2\" width=\"6\" height=\"6\" rx=\"1\"/><path d=\"M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3\"/><path d=\"M12 12V8\"/>","book":"<path d=\"M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20\"/>","list":"<path d=\"M3 12h.01\"/><path d=\"M3 18h.01\"/><path d=\"M3 6h.01\"/><path d=\"M8 12h13\"/><path d=\"M8 18h13\"/><path d=\"M8 6h13\"/>","map-pin":"<path d=\"M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0\"/><circle cx=\"12\" cy=\"10\" r=\"3\"/>","alert-triangle":"<path d=\"m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3\"/><path d=\"M12 9v4\"/><path d=\"M12 17h.01\"/>","calendar-days":"<path d=\"M8 2v4\"/><path d=\"M16 2v4\"/><rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\"/><path d=\"M3 10h18\"/><path d=\"M8 14h.01\"/><path d=\"M12 14h.01\"/><path d=\"M16 14h.01\"/><path d=\"M8 18h.01\"/><path d=\"M12 18h.01\"/><path d=\"M16 18h.01\"/>","shopping-bag":"<path d=\"M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z\"/><path d=\"M3 6h18\"/><path d=\"M16 10a4 4 0 0 1-8 0\"/>","club":"<path d=\"M17.28 9.05a5.5 5.5 0 1 0-10.56 0A5.5 5.5 0 1 0 12 17.66a5.5 5.5 0 1 0 5.28-8.6Z\"/><path d=\"M12 17.66L12 22\"/>","user":"<path d=\"M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2\"/><circle cx=\"12\" cy=\"7\" r=\"4\"/>","history":"<path d=\"M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8\"/><path d=\"M3 3v5h5\"/><path d=\"M12 7v5l4 2\"/>","calendar-check":"<path d=\"M8 2v4\"/><path d=\"M16 2v4\"/><rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\"/><path d=\"M3 10h18\"/><path d=\"m9 16 2 2 4-4\"/>","clock":"<circle cx=\"12\" cy=\"12\" r=\"10\"/><polyline points=\"12 6 12 12 16 14\"/>","wallet":"<path d=\"M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1\"/><path d=\"M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4\"/>","gift":"<rect x=\"3\" y=\"8\" width=\"18\" height=\"4\" rx=\"1\"/><path d=\"M12 8v13\"/><path d=\"M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7\"/><path d=\"M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5\"/>","check":"<path d=\"M20 6 9 17l-5-5\"/>","calendar-plus":"<path d=\"M8 2v4\"/><path d=\"M16 2v4\"/><path d=\"M21 13V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8\"/><path d=\"M3 10h18\"/><path d=\"M16 19h6\"/><path d=\"M19 16v6\"/>","settings-2":"<path d=\"M20 7h-9\"/><path d=\"M14 17H5\"/><circle cx=\"17\" cy=\"17\" r=\"3\"/><circle cx=\"7\" cy=\"7\" r=\"3\"/>","plus":"<path d=\"M5 12h14\"/><path d=\"M12 5v14\"/>","chevron-right":"<path d=\"m9 18 6-6-6-6\"/>","calendar-x":"<path d=\"M8 2v4\"/><path d=\"M16 2v4\"/><rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\"/><path d=\"M3 10h18\"/><path d=\"m14 14-4 4\"/><path d=\"m10 14 4 4\"/>","text":"<path d=\"M17 6.1H3\"/><path d=\"M21 12.1H3\"/><path d=\"M15.1 18H3\"/>","send":"<path d=\"M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z\"/><path d=\"m21.854 2.147-10.94 10.939\"/>","info":"<circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 16v-4\"/><path d=\"M12 8h.01\"/>","calendar-clock":"<path d=\"M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5\"/><path d=\"M16 2v4\"/><path d=\"M8 2v4\"/><path d=\"M3 10h5\"/><path d=\"M17.5 17.5 16 16.3V14\"/><circle cx=\"16\" cy=\"16\" r=\"6\"/>","minus":"<path d=\"M5 12h14\"/>","store":"<path d=\"m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7\"/><path d=\"M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8\"/><path d=\"M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4\"/><path d=\"M2 7h20\"/><path d=\"M22 7v3a2 2 0 0 1-2 2a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12a2 2 0 0 1-2-2V7\"/>","shopping-cart":"<circle cx=\"8\" cy=\"21\" r=\"1\"/><circle cx=\"19\" cy=\"21\" r=\"1\"/><path d=\"M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12\"/>","chevron-left":"<path d=\"m15 18-6-6 6-6\"/>","lock":"<rect width=\"18\" height=\"11\" x=\"3\" y=\"11\" rx=\"2\" ry=\"2\"/><path d=\"M7 11V7a5 5 0 0 1 10 0v4\"/>","pin":"<path d=\"M12 17v5\"/><path d=\"M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z\"/>","log-in":"<path d=\"M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4\"/><polyline points=\"10 17 15 12 10 7\"/><line x1=\"15\" x2=\"3\" y1=\"12\" y2=\"12\"/>","users":"<path d=\"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2\"/><circle cx=\"9\" cy=\"7\" r=\"4\"/><path d=\"M22 21v-2a4 4 0 0 0-3-3.87\"/><path d=\"M16 3.13a4 4 0 0 1 0 7.75\"/>","trending-up":"<polyline points=\"22 7 13.5 15.5 8.5 10.5 2 17\"/><polyline points=\"16 7 22 7 22 13\"/>","settings":"<path d=\"M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/>","log-out":"<path d=\"M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4\"/><polyline points=\"16 17 21 12 16 7\"/><line x1=\"21\" x2=\"9\" y1=\"12\" y2=\"12\"/>","refresh-cw":"<path d=\"M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8\"/><path d=\"M21 3v5h-5\"/><path d=\"M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16\"/><path d=\"M8 16H3v5\"/>","coffee":"<path d=\"M10 2v2\"/><path d=\"M14 2v2\"/><path d=\"M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1\"/><path d=\"M6 2v2\"/>","user-x":"<path d=\"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2\"/><circle cx=\"9\" cy=\"7\" r=\"4\"/><line x1=\"17\" x2=\"22\" y1=\"8\" y2=\"13\"/><line x1=\"22\" x2=\"17\" y1=\"8\" y2=\"13\"/>","undo-2":"<path d=\"M9 14 4 9l5-5\"/><path d=\"M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11\"/>","activity":"<path d=\"M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2\"/>","search":"<circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"m21 21-4.3-4.3\"/>","user-search":"<circle cx=\"10\" cy=\"7\" r=\"4\"/><path d=\"M10.3 15H7a4 4 0 0 0-4 4v2\"/><circle cx=\"17\" cy=\"17\" r=\"3\"/><path d=\"m21 21-1.9-1.9\"/>","heart-handshake":"<path d=\"M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z\"/><path d=\"M12 5 9.04 7.96a2.17 2.17 0 0 0 0 3.08c.82.82 2.13.85 3 .07l2.07-1.9a2.82 2.82 0 0 1 3.79 0l2.96 2.66\"/><path d=\"m18 15-2-2\"/><path d=\"m15 18-2-2\"/>","badge":"<path d=\"M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z\"/>","ghost":"<path d=\"M9 10h.01\"/><path d=\"M15 10h.01\"/><path d=\"M12 2a8 8 0 0 0-8 8v12l3-3 2.5 2.5L12 19l2.5 2.5L17 19l3 3V10a8 8 0 0 0-8-8z\"/>","ban":"<circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"m4.9 4.9 14.2 14.2\"/>","tags":"<path d=\"m15 5 6.3 6.3a2.4 2.4 0 0 1 0 3.4L17 19\"/><path d=\"M9.586 5.586A2 2 0 0 0 8.172 5H3a1 1 0 0 0-1 1v5.172a2 2 0 0 0 .586 1.414L8.29 18.29a2.426 2.426 0 0 0 3.42 0l3.58-3.58a2.426 2.426 0 0 0 0-3.42z\"/><circle cx=\"6.5\" cy=\"9.5\" r=\".5\" fill=\"currentColor\"/>","tag":"<path d=\"M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z\"/><circle cx=\"7.5\" cy=\"7.5\" r=\".5\" fill=\"currentColor\"/>","receipt":"<path d=\"M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z\"/><path d=\"M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8\"/><path d=\"M12 17.5v-11\"/>","trash-2":"<path d=\"M3 6h18\"/><path d=\"M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6\"/><path d=\"M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2\"/><line x1=\"10\" x2=\"10\" y1=\"11\" y2=\"17\"/><line x1=\"14\" x2=\"14\" y1=\"11\" y2=\"17\"/>","code":"<polyline points=\"16 18 22 12 16 6\"/><polyline points=\"8 6 2 12 8 18\"/>","package-check":"<path d=\"m16 16 2 2 4-4\"/><path d=\"M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14\"/><path d=\"m7.5 4.27 9 5.15\"/><polyline points=\"3.29 7 12 12 20.71 7\"/><line x1=\"12\" x2=\"12\" y1=\"22\" y2=\"12\"/>","copy":"<rect width=\"14\" height=\"14\" x=\"8\" y=\"8\" rx=\"2\" ry=\"2\"/><path d=\"M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2\"/>","badge-check":"<path d=\"M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z\"/><path d=\"m9 12 2 2 4-4\"/>","upload":"<path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/><polyline points=\"17 8 12 3 7 8\"/><line x1=\"12\" x2=\"12\" y1=\"3\" y2=\"15\"/>","file":"<path d=\"M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z\"/><path d=\"M14 2v4a2 2 0 0 0 2 2h4\"/>","moon":"<path d=\"M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z\"/>","sun":"<circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M12 2v2\"/><path d=\"M12 20v2\"/><path d=\"m4.93 4.93 1.41 1.41\"/><path d=\"m17.66 17.66 1.41 1.41\"/><path d=\"M2 12h2\"/><path d=\"M20 12h2\"/><path d=\"m6.34 17.66-1.41 1.41\"/><path d=\"m19.07 4.93-1.41 1.41\"/>","image-plus":"<path d=\"M16 5h6\"/><path d=\"M19 2v6\"/><path d=\"M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5\"/><path d=\"m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21\"/><circle cx=\"9\" cy=\"9\" r=\"2\"/>","eye":"<path d=\"M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/>","link":"<path d=\"M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71\"/><path d=\"M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71\"/>","external-link":"<path d=\"M15 3h6v6\"/><path d=\"M10 14 21 3\"/><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"/>","user-plus":"<path d=\"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2\"/><circle cx=\"9\" cy=\"7\" r=\"4\"/><line x1=\"19\" x2=\"19\" y1=\"8\" y2=\"14\"/><line x1=\"22\" x2=\"16\" y1=\"11\" y2=\"11\"/>"};/*ICONS-END*/
 /* ===================== i18n ===================== */
 const T={
 he:{bookNow:'קביעת תור',shop:'חנות',myClub:'המועדון שלי',openToday:'פתוח היום',closedToday:'סגור היום',
@@ -259,7 +311,16 @@ nameHe:'שם בעברית',nameAr:'שם בערבית',dur:'דק׳',hoursNote:'ה
 clubOn:'מועדון פעיל',rewardEvery:'הטבה כל כמה ביקורים',rewardHe:'ההטבה (עברית)',rewardAr:'ההטבה (ערבית)',clubNote:'הדרגות מחושבות לבד: כסף מ-5 ביקורים, זהב מ-15, VIP מ-30.',
 cutoff:'עד כמה שעות לפני התור הלקוח יכול לשנות או לבטל',newPin:'קוד ניהול חדש (4–8 ספרות)',savePin:'שמור קוד',saved:'נשמר',
 days:['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'],daysS:['א׳','ב׳','ג׳','ד׳','ה׳','ו׳','ש׳'],
-months:['ינו׳','פבר׳','מרץ','אפר׳','מאי','יוני','יולי','אוג׳','ספט׳','אוק׳','נוב׳','דצמ׳'],sure:'בטוח? לחץ שוב'},
+months:['ינו׳','פבר׳','מרץ','אפר׳','מאי','יוני','יולי','אוג׳','ספט׳','אוק׳','נוב׳','דצמ׳'],sure:'בטוח? לחץ שוב',
+ourWork:'העבודות שלנו',reviewsT:'מה הלקוחות אומרים',reviewsN:'ביקורות',addCal:'הוסף ליומן Google',
+thanksReview:'תודה על הדירוג! זה עוזר לנו להשתפר.',rateTitle:'איך היה?',rateSub:'דרג את הביקור שלך',ratePh:'ספר לנו במילה או שתיים (לא חובה)',rateSend:'שלח דירוג',
+gBrand:'מיתוג',replaceLogo:'החלפת לוגו',uploadLogo:'העלאת לוגו',logoNote:'PNG עם רקע שקוף נראה הכי טוב. הצבעים של האתר יותאמו ללוגו אוטומטית.',
+brandColor:'צבע המותג',fromLogo:'הצבעים הראשונים נלקחו מהלוגו שלך',custom:'צבע אחר',look:'מראה',dark:'כהה',light:'בהיר',logoBgT:'רקע מאחורי הלוגו',auto:'אוטומטי',
+taglineT:'משפט קצר מתחת לשם',taglinePh:'למשל: הסטייל שלך מתחיל כאן',socialT:'רשתות חברתיות',wazePh:'קישור Waze (או שיחושב לפי הכתובת)',
+galleryT:'גלריית עבודות',addPhotos:'הוסף תמונות',seePage:'צפה בדף שהלקוחות רואים',processing:'מעבד תמונה…',logoDone:'הלוגו עודכן והצבעים הותאמו',
+winback:'היי {n} 👋 מתגעגעים אליך ב{b}! עבר קצת זמן מאז הביקור האחרון. רוצה לקבוע תור? {l}',winbackInfo:'{n} לקוחות לא חזרו בזמן הרגיל שלהם. לחץ על כפתור השליחה ליד כל לקוח והודעה אישית תיפתח בוואטסאפ.',winbackBtn:'הודעת "מתגעגעים"',
+noReviews:'עדיין אין ביקורות. לקוחות מדרגים דרך הקישור האישי אחרי הביקור.',replyPh:'תגובה של העסק (תוצג בדף)…',
+e_bad_image:'לא הצלחנו לקרוא את התמונה',e_gallery_full:'הגלריה מלאה (12 תמונות)',e_not_visited:'אפשר לדרג רק אחרי הביקור',e_already_reviewed:'כבר דירגת את הביקור הזה',e_bad_stars:'בחר מספר כוכבים'},
 ar:{bookNow:'حجز دور',shop:'المتجر',myClub:'ناديّ',openToday:'مفتوح اليوم',closedToday:'مغلق اليوم',
 chooseService:'اختر الخدمة',chooseStaff:'اختر الحلاق',anyStaff:'أي حلاق متاح',anyStaffD:'أقرب موعد',chooseDate:'متى يناسبك؟',chooseNewDate:'اختر موعدًا جديدًا',
 noSlots:'لا توجد ساعات متاحة في هذا اليوم',closed:'مغلق',details:'خطوة أخيرة',name:'الاسم الكامل',phone:'رقم الهاتف',confirm:'احجز لي',confirmChange:'تأكيد التغيير',
@@ -301,7 +362,16 @@ nameHe:'الاسم بالعبرية',nameAr:'الاسم بالعربية',dur:'�
 clubOn:'النادي فعّال',rewardEvery:'مكافأة كل كم زيارة',rewardHe:'المكافأة (عبري)',rewardAr:'المكافأة (عربي)',clubNote:'الدرجات تُحسب تلقائيًا: فضي من 5 زيارات، ذهبي من 15، VIP من 30.',
 cutoff:'حتى كم ساعة قبل الموعد يمكن للزبون التغيير أو الإلغاء',newPin:'رمز إدارة جديد (4–8 أرقام)',savePin:'حفظ الرمز',saved:'تم الحفظ',
 days:['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'],daysS:['أحد','إثن','ثلا','أرب','خمي','جمع','سبت'],
-months:['ينا','فبر','مار','أبر','ماي','يون','يول','أغس','سبت','أكت','نوف','ديس'],sure:'متأكد؟ اضغط مرة أخرى'}};
+months:['ينا','فبر','مار','أبر','ماي','يون','يول','أغس','سبت','أكت','نوف','ديس'],sure:'متأكد؟ اضغط مرة أخرى',
+ourWork:'أعمالنا',reviewsT:'ماذا يقول الزبائن',reviewsN:'تقييمات',addCal:'أضف إلى تقويم Google',
+thanksReview:'شكرًا على التقييم! هذا يساعدنا على التحسن.',rateTitle:'كيف كانت؟',rateSub:'قيّم زيارتك',ratePh:'أخبرنا بكلمة أو اثنتين (اختياري)',rateSend:'أرسل التقييم',
+gBrand:'الهوية',replaceLogo:'تغيير الشعار',uploadLogo:'رفع الشعار',logoNote:'PNG بخلفية شفافة يظهر بأفضل شكل. ألوان الموقع ستتلاءم مع الشعار تلقائيًا.',
+brandColor:'لون العلامة',fromLogo:'الألوان الأولى مأخوذة من شعارك',custom:'لون آخر',look:'المظهر',dark:'داكن',light:'فاتح',logoBgT:'الخلفية خلف الشعار',auto:'تلقائي',
+taglineT:'جملة قصيرة تحت الاسم',taglinePh:'مثلًا: ستايلك يبدأ هنا',socialT:'شبكات التواصل',wazePh:'رابط Waze (أو يُحسب من العنوان)',
+galleryT:'معرض الأعمال',addPhotos:'أضف صورًا',seePage:'معاينة الصفحة التي يراها الزبائن',processing:'جارٍ معالجة الصورة…',logoDone:'تم تحديث الشعار وملاءمة الألوان',
+winback:'مرحبا {n} 👋 اشتقنا لك في {b}! مر وقت منذ زيارتك الأخيرة. بدك تحجز دور؟ {l}',winbackInfo:'{n} زبائن لم يعودوا في موعدهم المعتاد. اضغط زر الإرسال بجانب كل زبون لتُفتح رسالة شخصية في واتساب.',winbackBtn:'رسالة "اشتقنا لك"',
+noReviews:'لا توجد تقييمات بعد. الزبائن يقيّمون عبر الرابط الشخصي بعد الزيارة.',replyPh:'رد المصلحة (يظهر في الصفحة)…',
+e_bad_image:'لم نتمكن من قراءة الصورة',e_gallery_full:'المعرض ممتلئ (12 صورة)',e_not_visited:'يمكن التقييم فقط بعد الزيارة',e_already_reviewed:'لقد قيّمت هذه الزيارة',e_bad_stars:'اختر عدد النجوم'}};
 const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}},
   sget(k){try{return sessionStorage.getItem(k)}catch(e){return null}},sset(k,v){try{v==null?sessionStorage.removeItem(k):sessionStorage.setItem(k,v)}catch(e){}}};
 let lang=store.get('tl-lang')==='ar'?'ar':'he';
@@ -331,6 +401,96 @@ const fmtStamp=ts=>{const d=new Date(ts);return `${d.getDate()}/${d.getMonth()+1
 const ago=k=>{if(!k)return t('never');const n=dayNo(S.today)-dayNo(k);return n<=0?t('today'):tf('daysAgo',{n})};
 const money=n=>`${Math.round(n).toLocaleString()} ₪`;
 
+/* ===================== theme engine: whole palette from one brand color ===================== */
+const hexRgb=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+const rgbHex=a=>'#'+a.map(v=>Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,'0')).join('');
+const mix=(h,to,k)=>{const a=hexRgb(h),b=hexRgb(to);return rgbHex(a.map((v,i)=>v+(b[i]-v)*k))};
+const rgba=(h,a)=>{const [r,g,b]=hexRgb(h);return `rgba(${r},${g},${b},${a})`};
+const lum=h=>{const c=hexRgb(h).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*c[0]+.7152*c[1]+.0722*c[2]};
+function applyTheme(th){
+  th=th||{accent:'#c9a45c',mode:'dark'};
+  const a=/^#[0-9a-f]{6}$/i.test(th.accent)?th.accent:'#c9a45c',light=th.mode==='light';
+  document.body.classList.toggle('light',light);
+  const r=document.documentElement.style;
+  // in light mode the "bright" accent must be darker so text stays readable
+  const a2=light?mix(a,'#000000',.28):mix(a,'#ffffff',.32);
+  const set={'--gold':a,'--gold2':a2,'--gold-soft':rgba(a,light?.10:.13),'--gold-line':rgba(a,.38),'--on':lum(a)>.42?'#141210':'#ffffff',
+    '--glow':rgba(a,light?.10:.11),'--glow2':rgba(mix(a,'#ff3355',.5),light?.04:.05),
+    '--club1':mix(a,'#000000',.72),'--club-glow':rgba(mix(a,'#ffffff',.3),.32),'--club-ink':mix(a,'#ffffff',.45)};
+  for(const k in set)r.setProperty(k,set[k]);
+  const m=document.querySelector('meta[name=theme-color]');if(m)m.content=light?'#f6f4f0':'#0e0e10';
+}
+/* logo color extraction: most frequent saturated hues, weighted by saturation */
+function paletteFrom(img){
+  const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d');
+  x.drawImage(img,0,0,64,64);const d=x.getImageData(0,0,64,64).data;
+  const bins={};let lumSum=0,n=0;
+  for(let i=0;i<d.length;i+=4){
+    if(d[i+3]<200)continue;
+    const r=d[i]/255,g=d[i+1]/255,b=d[i+2]/255,mx=Math.max(r,g,b),mn=Math.min(r,g,b),l=(mx+mn)/2;
+    lumSum+=.2126*r+.7152*g+.0722*b;n++;
+    const s=mx===mn?0:(l>.5?(mx-mn)/(2-mx-mn):(mx-mn)/(mx+mn));
+    if(s<.22||l<.14||l>.88)continue;
+    let h=mx===r?(g-b)/(mx-mn)+(g<b?6:0):mx===g?(b-r)/(mx-mn)+2:(r-g)/(mx-mn)+4;
+    const k=Math.floor(h/6*24)%24,w=s*(1-Math.abs(l-.5));
+    const o=bins[k]||(bins[k]={w:0,r:0,g:0,b:0,c:0});o.w+=w;o.r+=d[i];o.g+=d[i+1];o.b+=d[i+2];o.c++;
+  }
+  const cols=Object.values(bins).sort((p,q)=>q.w-p.w).slice(0,5).map(o=>rgbHex([o.r/o.c,o.g/o.c,o.b/o.c]));
+  return {colors:cols,darkLogo:n?lumSum/n<.4:false};
+}
+const PRESET_COLORS=['#c9a45c','#b8862f','#cf4a3f','#2f6fd6','#2e9e6a','#8a5cd1','#d58fa6','#9aa3ad'];
+async function fileToImg(file){
+  const url=await new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>res(fr.result);fr.onerror=rej;fr.readAsDataURL(file)});
+  return await new Promise((res,rej)=>{const im=new Image();im.onload=()=>res(im);im.onerror=rej;im.src=url});
+}
+function logoDataUrl(img){
+  const S2=512,c=document.createElement('canvas');c.width=c.height=S2;const x=c.getContext('2d');
+  const k=Math.min(S2/img.width,S2/img.height),w=img.width*k,h=img.height*k;
+  x.imageSmoothingQuality='high';x.drawImage(img,(S2-w)/2,(S2-h)/2,w,h);
+  let u=c.toDataURL('image/png');if(u.length>600000)u=c.toDataURL('image/webp',.9);return u;
+}
+function photoDataUrl(img){
+  const M=1080,k=Math.min(1,M/Math.max(img.width,img.height)),c=document.createElement('canvas');
+  c.width=Math.round(img.width*k);c.height=Math.round(img.height*k);c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+  let q=.84,u=c.toDataURL('image/jpeg',q);while(u.length>600000&&q>.4){q-=.12;u=c.toDataURL('image/jpeg',q)}return u;
+}
+/* images: real site uses cacheable URLs; the in-browser preview fetches them through the API */
+const IMG={};
+function img(slug,which,v,cls=''){
+  if(!PREVIEW)return `<img class="${cls}" src="/api/img/${slug}/${which}?v=${v||0}" alt="" loading="lazy">`;
+  const k=slug+'/'+which;
+  if(IMG[k])return `<img class="${cls}" src="${IMG[k]}" alt="">`;
+  hydrate(k);return `<img class="${cls}" data-pending="${k}" alt="">`;
+}
+async function hydrate(k){
+  if(IMG[k]!==undefined)return;IMG[k]='';
+  try{const r=await api('GET','/img/'+k+'?json=1');IMG[k]=r.src;document.querySelectorAll(`img[data-pending="${k}"]`).forEach(i=>{i.src=r.src;i.removeAttribute('data-pending')})}catch(e){delete IMG[k]}
+}
+function logoHtml(b,cls=''){
+  const bg=b.theme?.logoBg==='light'?'lbg':b.theme?.logoBg==='dark'?'dbg':'';
+  return `<div class="logo ${bg} ${cls}">${b.logoV?img(b.slug,'logo',b.logoV):ic(b.icon||'scissors')}</div>`;
+}
+function socialLinks(b){
+  const s=b.social||{},L=[];
+  const h=(v,base)=>/^https:\/\//.test(v)?v:base+v;
+  if(s.instagram)L.push(['instagram',h(s.instagram,'https://instagram.com/'),'Instagram']);
+  if(s.facebook)L.push(['facebook',h(s.facebook,'https://facebook.com/'),'Facebook']);
+  if(s.tiktok)L.push(['video',h(s.tiktok,'https://www.tiktok.com/@'),'TikTok']);
+  if(s.whatsapp)L.push(['message-circle','https://wa.me/'+s.whatsapp.replace(/^0/,'972'),'WhatsApp']);
+  const nav=s.waze||(b.address?'https://waze.com/ul?q='+encodeURIComponent(b.address)+'&navigate=yes':'');
+  if(nav)L.push(['navigation',nav,'Waze']);
+  if(b.phone)L.push(['phone','tel:'+b.phone.replace(/[^\d+]/g,''),b.phone]);
+  return L;
+}
+const starsHtml=(n,cls='sm')=>[1,2,3,4,5].map(i=>ic('star',cls+(i<=Math.round(n)?' fill':''))).join('');
+function gcalLink(b){
+  const st=b.date.replace(/-/g,'')+'T'+b.time.replace(':','')+'00',e=toMin(b.time)+b.dur;
+  const en=b.date.replace(/-/g,'')+'T'+pad(Math.floor(e/60))+pad(e%60)+'00';
+  const q=new URLSearchParams({action:'TEMPLATE',text:`${tx(b.serviceName)} · ${tx(S.biz.name)}`,dates:st+'/'+en,ctz:'Asia/Jerusalem',location:S.biz.address||'',details:SITE+'/m/'+b.id});
+  return 'https://calendar.google.com/calendar/render?'+q;
+}
+function lightbox(src){const d=document.createElement('div');d.className='lightbox';d.innerHTML=`<img src="${src}" alt="">`;d.onclick=()=>d.remove();document.body.appendChild(d)}
+
 /* ===================== API ===================== */
 async function api(method,url,body,pin){
   let res;
@@ -356,7 +516,7 @@ let S,cb,mg,shop,A,tabData;
 function resetState(){
   S={biz:null,today:null,loadErr:null,view:'book'};cb=null;mg={data:null,confirm:false,err:'',msg:null};tabData=null;
   shop={cart:{},step:'list',name:store.get('tl-name')||'',phone:store.get('tl-phone')||'',note:'',err:'',busy:false,order:null};
-  A={pin:null,biz:null,wa:false,tab:'cal',date:null,period:'month',cache:{},confirm:null,loading:false,err:'',clients:null,client:null,filter:'all',q:'',storeSub:'orders',orders:null,set:'general'};
+  A={pin:null,biz:null,wa:false,tab:'cal',date:null,period:'month',cache:{},confirm:null,loading:false,err:'',clients:null,client:null,filter:'all',q:'',storeSub:'orders',orders:null,set:'brand',swatches:null,reviews:null};
 }
 resetState();
 const freshCb=()=>({step:0,serviceId:null,staffId:null,date:null,time:null,name:store.get('tl-name')||'',phone:store.get('tl-phone')||'',err:'',busy:false,slots:null,done:null,resched:null});
@@ -368,10 +528,13 @@ const spin='<div class="spin"></div>';
 const emptyBox=(icn,txt)=>`<div class="empty">${ic(icn)}${txt}</div>`;
 function hero(){
   const h=S.biz.hours[wd(S.today)];
-  return `<header class="hero"><div class="pole"></div><div class="hero-in"><div class="logo">${ic(S.biz.icon||'scissors')}</div><div>
-    <h1>${esc(tx(S.biz.name))}</h1><div class="meta">
+  const B=S.biz,soc=socialLinks(B);
+  return `<header class="hero"><div class="pole ${B.type==='barber'?'':'accent'}"></div><div class="hero-in">${logoHtml(B)}<div style="min-width:0">
+    <h1>${esc(tx(B.name))}</h1>${tx(B.tagline)?`<div class="tagline">${esc(tx(B.tagline))}</div>`:''}<div class="meta">
+    ${B.rating?.count?`<span class="rating">${ic('star','sm fill')}${B.rating.avg.toFixed(1)} <span class="note">(${B.rating.count})</span></span>`:''}
     <span><i class="dot ${h.open?'':'off'}"></i>${h.open?`${t('openToday')} <b dir="ltr">${h.from}–${h.to}</b>`:t('closedToday')}</span>
-    ${S.biz.address?`<span>${ic('map-pin','sm')}${esc(S.biz.address)}</span>`:''}${S.biz.phone?`<span dir="ltr">${ic('phone','sm')} ${esc(S.biz.phone)}</span>`:''}</div></div></div></header>`;
+    ${B.address?`<span>${ic('map-pin','sm')}${esc(B.address)}</span>`:''}</div></div></div>
+    ${soc.length?`<div class="socials">${soc.map(([i,u,l])=>`<a class="soc" href="${esc(u)}" target="_blank" rel="noopener" title="${esc(l)}" aria-label="${esc(l)}">${ic(i)}</a>`).join('')}</div>`:''}</header>`;
 }
 
 function render(){
@@ -389,6 +552,7 @@ function render(){
     html=hero()+(tabs.length>1?`<div class="nav">${tabs.map(([k,i,l])=>`<button data-view="${k}" class="${S.view===k?'on':''}">${ic(i,'sm')}${l}${k==='shop'&&ncart?`<span class="cnt">${ncart}</span>`:''}</button>`).join('')}</div>`:'');
     html+=S.view==='shop'?renderShop():S.view==='club'?`<div class="card">${clubCardHtml(mg.data.club)}</div>`:(MODE==='manage'&&!cb)?renderManage():renderBook();
   }
+  applyTheme((MODE==='admin'?A.biz:S.biz)?.theme);
   $app.innerHTML=html;
   renderCartBar();
   
@@ -418,7 +582,8 @@ function renderBook(){
   if(cb.done){
     const b=cb.done.booking;
     return `<div class="card"><div class="okc">${ic('check')}</div><h2 class="center">${cb.resched?t('changedOk'):t('booked')}</h2>
-      ${summary(b.serviceName,b.staffId,b.date,b.time,null,b.price)}${msgBox(cb.done.message)}
+      ${summary(b.serviceName,b.staffId,b.date,b.time,null,b.price)}
+      <a class="cal-add" href="${esc(gcalLink(b))}" target="_blank" rel="noopener">${ic('calendar-plus','sm')}${t('addCal')}</a>${msgBox(cb.done.message)}
       ${cb.done.club?`<div style="margin-top:14px">${clubCardHtml(cb.done.club)}</div>`:''}
       <a class="btn dark full" style="margin-top:14px" href="${href('/m/'+encodeURIComponent(b.id))}">${ic('settings-2','sm')}${t('manageLink')}</a>
       <a class="btn full" style="margin-top:8px" href="${href('/b/'+encodeURIComponent(S.biz.slug))}">${ic('plus','sm')}${t('another')}</a></div>`;
@@ -428,7 +593,13 @@ function renderBook(){
   if(cb.step>0)h+=`<button class="back" data-a="back">${ic('chevron-right','sm')}${t('back')}</button>`;
   if(cb.step===0){
     h+=`<h2>${t('chooseService')}</h2><div class="list">`+S.biz.services.map(x=>
-      `<button class="opt" data-svc="${x.id}"><div class="tile">${ic(x.icon||'scissors')}</div><div><div class="n">${esc(tx(x.name))}</div><div class="m">${ic('clock','sm')}${x.dur} ${t('min')}</div></div><div class="pr">${x.price} ₪</div></button>`).join('')+`</div>`;
+      `<button class="opt" data-svc="${x.id}"><div class="tile">${ic(x.icon||'scissors')}</div><div><div class="n">${esc(tx(x.name))}</div><div class="m">${ic('clock','sm')}${x.dur} ${t('min')}</div></div><div class="pr">${x.price} ₪</div></button>`).join('')+`</div></div>`;
+    // showcase under the services: work gallery + reviews
+    const G=S.biz.gallery||[],R=S.reviews||[];
+    if(G.length)h+=`<div class="sect-h"><h2>${t('ourWork')}</h2></div><div class="gal">${G.map(id=>`<button data-gal="${id}">${img(S.biz.slug,'g/'+id,1)}</button>`).join('')}</div>`;
+    if(R.length)h+=`<div class="sect-h"><h2>${t('reviewsT')}</h2><span class="rating">${ic('star','sm fill')}${S.biz.rating.avg.toFixed(1)} <span class="note">· ${S.biz.rating.count} ${t('reviewsN')}</span></span></div>
+      <div class="revs">${R.map(r=>`<div class="rev"><div class="st">${starsHtml(r.stars)}</div><p>${esc(r.text)}</p><div class="who">${esc(r.name)} · ${esc(tx(r.service))}</div>${r.reply?`<div class="rp"><b>${esc(tx(S.biz.name))}:</b> ${esc(r.reply)}</div>`:''}</div>`).join('')}</div>`;
+    return h;
   }else if(cb.step===1){
     h+=`<h2>${t('chooseStaff')}</h2><div class="list"><button class="opt" data-stf="any"><div class="tile">${ic('zap')}</div><div><div class="n">${t('anyStaff')}</div><div class="m">${t('anyStaffD')}</div></div></button>`+
       S.biz.staff.map(p=>`<button class="opt" data-stf="${p.id}"><div class="av">${esc(tx(p.name).slice(0,1))}</div><div class="n">${esc(tx(p.name))}</div></button>`).join('')+`</div>`;
@@ -505,7 +676,13 @@ function renderManage(){
   if(b.status==='cancelled')return `<div class="card center"><div class="okc x">${ic('x')}</div><h2>${t('cancelledOk')}</h2>${summary(b.serviceName,b.staffId,b.date,b.time,null,b.price)}${msgBox(mg.msg)}
     <a class="btn full" style="margin-top:14px" href="${href('/b/'+encodeURIComponent(S.biz.slug))}">${ic('plus','sm')}${t('bookNew')}</a></div>`;
   let h=`<div class="card"><h2>${t('yourBooking')} · ${esc(b.name)}</h2>${summary(b.serviceName,b.staffId,b.date,b.time,null,b.price)}`;
-  if(!d.canChange)h+=`<div class="info-box">${ic('info','sm')}<span>${errMsg(d.reason,S.biz.cutoff)}</span></div>`;
+  if(d.canReview||mg.reviewed){
+    h+=mg.reviewed?`<div class="ok-box">${ic('heart','sm')}<span>${t('thanksReview')}</span></div>`
+    :`<div class="card flat center" style="margin:0"><h2 style="margin-bottom:4px">${t('rateTitle')}</h2><div class="note">${t('rateSub')}</div>
+      <div class="stars">${[1,2,3,4,5].map(i=>`<button data-star="${i}" class="${i<=(mg.stars||0)?'on':''}">${ic('star',i<=(mg.stars||0)?'fill':'')}</button>`).join('')}</div>
+      <textarea id="revText" placeholder="${t('ratePh')}">${esc(mg.revText||'')}</textarea>${mg.err?`<div class="err">${mg.err}</div>`:''}
+      <button class="btn full" style="margin-top:10px" data-a="sendReview" ${mg.stars?'':'disabled'}>${ic('send','sm')}${t('rateSend')}</button></div>`;
+  }else if(!d.canChange)h+=`<div class="info-box">${ic('info','sm')}<span>${errMsg(d.reason,S.biz.cutoff)}</span></div>`;
   else h+=`${mg.err?`<div class="err">${mg.err}</div>`:''}<div class="row"><button class="btn" style="flex:1" data-a="resched">${ic('calendar-clock','sm')}${t('changeBtn')}</button><button class="btn ghost" style="flex:1" data-a="cancelMine">${ic('x','sm')}${mg.confirm?t('sure'):t('cancelBtn')}</button></div>`;
   h+=`</div>`;
   if(d.club?.enabled)h+=clubCardHtml(d.club);
@@ -571,7 +748,7 @@ function renderAdmin(){
   }
   S.biz=A.biz;
   const tabs=[['cal','calendar-days','tCal'],['clients','users','tClients'],['store','store','tStore'],['report','trending-up','tReport'],['msgs','message-circle','tMsgs'],['settings','settings','tSettings']];
-  let h=`<div class="ahead"><div class="logo">${ic(A.biz.icon||'scissors')}</div><div style="flex:1"><h1>${esc(tx(A.biz.name))}</h1><div class="note">${t('adminTitle')}</div></div><button class="btn sm ghost" data-a="logout">${ic('log-out','sm')}</button></div>`;
+  let h=`<div class="ahead">${logoHtml(A.biz)}<div style="flex:1"><h1>${esc(tx(A.biz.name))}</h1><div class="note">${t('adminTitle')}</div></div><button class="btn sm ghost" data-a="logout">${ic('log-out','sm')}</button></div>`;
   h+=`<div class="tabs">${tabs.map(([k,i,l])=>`<button data-tab="${k}" class="${A.tab===k?'on':''}">${ic(i,'sm')}${t(l)}</button>`).join('')}</div>`;
   return h+({cal:admCal,clients:admClients,store:admStore,report:admReport,msgs:admMsgs,settings:admSettings}[A.tab])();
 }
@@ -596,7 +773,7 @@ async function loadTab(force){
   tabData=null;render();
   try{
     if(A.tab==='cal'){const [b]=await Promise.all([getRange(...calRange(),force),(force||!A.clients)?loadClients():0,(force||!A.orders)?loadOrders():0]);tabData=b}
-    else if(A.tab==='report'){const [b]=await Promise.all([getRange(...periodRange(A.period),force),loadOrders()]);tabData=b}
+    else if(A.tab==='report'){const [b,rv]=await Promise.all([getRange(...periodRange(A.period),force),api('GET',`/admin/${A.biz.slug}/reviews`,null,A.pin),loadOrders()]);A.reviews=rv.reviews;A.biz.rating=rv.rating;tabData=b}
     else if(A.tab==='clients'){await loadClients();tabData=[]}
     else if(A.tab==='store'){await loadOrders();tabData=[]}
     else if(A.tab==='msgs'){const r=await api('GET',`/admin/${A.biz.slug}/messages`,null,A.pin);A.wa=r.waConnected;tabData=r.messages}
@@ -678,9 +855,10 @@ function clientRows(rows){
     return f==='all'||(f==='vip'&&(a.tier==='vip'||a.tier==='gold'||(c.tags||[]).includes('vip')))||(f==='risk'&&(a.status==='risk'||a.status==='lost'))||(f==='new'&&a.isNew)||(f==='reward'&&a.avail>0)||(f==='blocked'&&A.biz.blocked.includes(c.phone));
   }).sort((x,y)=>y.a.ltv-x.a.ltv||y.c.bookings-x.c.bookings);
   if(!list.length)return emptyBox('user-search',t('noClients'));
-  return list.slice(0,200).map(({c,a})=>`<button class="crow" data-client="${esc(c.phone)}"><div class="av ${a.tier}">${esc((c.name||'?').slice(0,1))}</div>
+  const wb=A.filter==='risk';
+  return (wb&&list.length?`<div class="info-box">${ic('heart-handshake','sm')}<span>${tf('winbackInfo',{n:list.length})}</span></div>`:'')+list.slice(0,200).map(({c,a})=>`${wb?'<div class="roww">':''}<button class="crow" data-client="${esc(c.phone)}"><div class="av ${a.tier}">${esc((c.name||'?').slice(0,1))}</div>
     <div class="mid"><div class="nm">${esc(c.name||'—')}${a.tier!=='member'?`<span class="badge">${ic('crown','sm')}${t('tier_'+a.tier)}</span>`:''}<span class="badge ${a.status}">${t('s_'+a.status)}</span>${a.avail?`<span class="badge">${ic('gift','sm')}</span>`:''}${A.biz.blocked.includes(c.phone)?`<span class="badge blocked">${t('blocked')}</span>`:''}</div>
-    <div class="sm"><span dir="ltr">${esc(c.phone)}</span> · ${c.visits} ${t('visits')} · ${ago(c.last)}</div></div><div class="val"><b>${money(a.ltv)}</b></div></button>`).join('');
+    <div class="sm"><span dir="ltr">${esc(c.phone)}</span> · ${c.visits} ${t('visits')} · ${ago(c.last)}</div></div><div class="val"><b>${money(a.ltv)}</b></div></button>${wb?`<a class="btn sm wa" href="${esc(waLink(c.phone,winText(c)))}" target="_blank" rel="noopener">${ic('send','sm')}</a></div>`:''}`).join('');
 }
 function clientProfile(c){
   if(!c){A.client=null;return admClients()}
@@ -691,6 +869,7 @@ function clientProfile(c){
   <div class="card"><div class="prof"><div class="av ${a.tier}">${esc((c.name||'?').slice(0,1))}</div><div style="flex:1;min-width:0"><h2>${esc(c.name||'—')}</h2>
     <div class="row" style="flex-wrap:wrap;margin-top:6px"><span class="badge">${ic('crown','sm')}${t('tier_'+a.tier)}</span><span class="badge ${a.status}">${t('s_'+a.status)}</span>${bl?`<span class="badge blocked">${t('blocked')}</span>`:''}<span class="note" dir="ltr">${esc(c.phone)}</span></div></div></div>
     <div class="row" style="margin-top:14px;flex-wrap:wrap"><a class="btn sm wa" href="https://wa.me/972${esc(c.phone.replace(/^0/,''))}" target="_blank" rel="noopener">${ic('message-circle','sm')}WhatsApp</a>
+    ${a.status==='risk'||a.status==='lost'?`<a class="btn sm" href="${esc(waLink(c.phone,winText(c)))}" target="_blank" rel="noopener">${ic('heart-handshake','sm')}${t('winbackBtn')}</a>`:''}
     <a class="btn sm dark" href="tel:${esc(c.phone)}">${ic('phone','sm')}${t('call')}</a><button class="btn sm ${bl?'ghost':'danger'}" data-blk="${esc(c.phone)}">${ic('ban','sm')}${bl?t('unblock'):t('block')}</button></div>
     <div class="stgrid">
      <div class="kpi hl"><div class="l">${t('spend')}</div><b>${money(a.ltv)}</b></div><div class="kpi"><div class="l">${t('visits')}</div><b>${c.visits}</b></div>
@@ -765,7 +944,12 @@ function admReport(){
   const mx=Math.max(1,...R.byDay);
   h+=`<h3>${t('rByDay')}</h3>`+R.byDay.map((n,i)=>A.biz.hours[i].open||n?`<div class="bar"><span>${t('days')[i]}</span><div class="tr"><i style="width:${n*100/mx}%"></i></div><b class="num">${n}</b></div>`:'').join('');
   if(R.top.length)h+=`<h3>${t('rTop')}</h3>`+R.top.map((c,i)=>`<button class="crow" data-client="${esc(c.phone)}"><div class="av">${i+1}</div><div class="mid"><div class="nm">${esc(c.name)}</div><div class="sm">${c.n} ${t('visits')}</div></div><div class="val"><b>${money(c.rev)}</b></div></button>`).join('');
-  return h+`<button class="btn wa full" style="margin-top:16px" data-a="copyReport">${ic('copy','sm')}${t('rCopy')}</button></div>`;
+  h+=`<button class="btn wa full" style="margin-top:16px" data-a="copyReport">${ic('copy','sm')}${t('rCopy')}</button></div>`;
+  const RV=A.reviews;
+  h+=`<div class="card"><div class="row between"><h2 style="margin:0">${t('reviewsT')}</h2>${A.biz.rating.count?`<span class="rating">${ic('star','sm fill')}${A.biz.rating.avg.toFixed(1)} <span class="note">· ${A.biz.rating.count}</span></span>`:''}</div>
+   ${!RV?spin:!RV.length?emptyBox('star',t('noReviews')):RV.slice(0,40).map(r=>`<div class="msg" style="margin-top:10px"><div class="hd"><span class="rating">${starsHtml(r.stars)}</span><b>${esc(r.name)}</b><span class="note">${esc(tx(r.service))} · ${fmtStamp(r.at)}</span></div>
+     ${r.text?`<div>${esc(r.text)}</div>`:''}<div class="row" style="margin-top:8px"><input type="text" data-reply="${r.id}" value="${esc(r.reply||'')}" placeholder="${t('replyPh')}"></div></div>`).join('')}</div>`;
+  return h;
 }
 function reportText(){
   const R=reportData(tabData||[]);
@@ -784,10 +968,30 @@ function admMsgs(){
     <div class="bub">${esc(m.text)}</div>${m.error?`<div class="err">${esc(m.error)}</div>`:''}</div>`).join('');
 }
 function admSettings(){
-  const groups=[['general','store','gGeneral'],['services','scissors','gServices'],['hours','clock','gHours'],['team','users','gTeam'],['club','crown','gClub']];
+  const groups=[['brand','palette','gBrand'],['general','store','gGeneral'],['services','scissors','gServices'],['hours','clock','gHours'],['team','users','gTeam'],['club','crown','gClub']];
   let h=`<div class="pills">${groups.map(([k,i,l])=>`<button class="pill ${A.set===k?'on':''}" data-set="${k}">${ic(i,'sm')}${t(l)}</button>`).join('')}</div><div class="card">`;
   const B=A.biz;
-  if(A.set==='general'){
+  if(A.set==='brand'){
+    if(B.logoV&&!A.swatches)loadSwatches();
+    const sw=[...new Set([...(A.swatches||[]),...PRESET_COLORS])];
+    const so=B.social;
+    h+=`<div class="center">${logoHtml(B,'bigLogo')}<div class="row" style="justify-content:center">
+      <label class="btn sm up">${ic('upload','sm')}${B.logoV?t('replaceLogo'):t('uploadLogo')}<input type="file" accept="image/png,image/jpeg,image/webp" id="logoFile"></label>
+      ${B.logoV?`<button class="btn sm ghost" data-a="rmLogo">${ic('trash-2','sm')}</button>`:''}</div><p class="note">${t('logoNote')}</p></div>
+     <h3>${t('brandColor')}</h3>${A.swatches?.length?`<div class="note" style="margin:-4px 0 8px">${t('fromLogo')}</div>`:''}
+     <div class="sw-row">${sw.map(c=>`<button class="swatch ${B.theme.accent===c?'on':''}" style="background:${c}" data-color="${c}" title="${c}"></button>`).join('')}<input type="color" id="colorPick" value="${B.theme.accent}" title="${t('custom')}"></div>
+     <h3>${t('look')}</h3><div class="pills"><button class="pill ${B.theme.mode!=='light'?'on':''}" data-mode="dark">${ic('moon','sm')}${t('dark')}</button><button class="pill ${B.theme.mode==='light'?'on':''}" data-mode="light">${ic('sun','sm')}${t('light')}</button></div>
+     ${B.logoV?`<div class="note" style="margin-bottom:6px">${t('logoBgT')}</div><div class="pills"><button class="pill ${!B.theme.logoBg?'on':''}" data-lbg="">${t('auto')}</button><button class="pill ${B.theme.logoBg==='light'?'on':''}" data-lbg="light">${t('light')}</button><button class="pill ${B.theme.logoBg==='dark'?'on':''}" data-lbg="dark">${t('dark')}</button></div>`:''}
+     <h3>${t('taglineT')}</h3>
+     <div class="ed" style="grid-template-columns:1fr 1fr"><input type="text" data-tag2="he" value="${esc(B.tagline.he)}" placeholder="${t('taglinePh')}"><input type="text" data-tag2="ar" value="${esc(B.tagline.ar)}" placeholder="العربية"></div>
+     <h3>${t('socialT')}</h3>
+     ${[['instagram','instagram','Instagram','@barber.studio'],['facebook','facebook','Facebook','https://facebook.com/...'],['tiktok','video','TikTok','@barber.studio'],['whatsapp','message-circle','WhatsApp','05X-XXXXXXX'],['waze','navigation','Waze',t('wazePh')]].map(([k,i,l,ph])=>
+      `<div class="row" style="margin-bottom:8px"><div class="tile" style="width:42px;height:42px">${ic(i)}</div><input type="text" data-soc="${k}" value="${esc(so[k]||'')}" placeholder="${esc(l)}: ${esc(ph)}" dir="ltr"></div>`).join('')}
+     <h3>${t('galleryT')} <span class="note">(${B.gallery.length}/12)</span></h3><div class="ggrid">
+     ${B.gallery.length<12?`<label class="gadd">${ic('image-plus')}<span>${t('addPhotos')}</span><input type="file" accept="image/*" multiple id="galFile"></label>`:''}
+     ${B.gallery.map(id=>`<div class="gcell">${img(B.slug,'g/'+id,1)}<button class="x" data-gdel="${id}">${ic('x','sm')}</button></div>`).join('')}</div>
+     <a class="btn dark full" style="margin-top:16px" href="${PREVIEW?href('/b/'+B.slug):esc(SITE+'/b/'+B.slug)}" ${PREVIEW?'':'target="_blank" rel="noopener"'}>${ic('eye','sm')}${t('seePage')}</a>`;
+  }else if(A.set==='general'){
     const link=SITE+'/b/'+B.slug;
     h+=`<div class="ed" style="grid-template-columns:44px 1fr 1fr"><button class="icbtn" data-bicon="1">${ic(B.icon)}</button><input type="text" data-biz="he" value="${esc(B.name.he)}" placeholder="${t('bizName')} (עב)"><input type="text" data-biz="ar" value="${esc(B.name.ar)}" placeholder="${t('bizName')} (عر)"></div>
      <label class="f"><span>${t('address')}</span><input type="text" data-bf="address" value="${esc(B.address||'')}"></label>
@@ -814,12 +1018,43 @@ function admSettings(){
   }
   return h+`</div>`;
 }
+async function loadSwatches(){
+  A.swatches=[];
+  try{
+    const src=PREVIEW?(IMG[A.biz.slug+'/logo']||(await api('GET',`/img/${A.biz.slug}/logo?json=1`)).src):`/api/img/${A.biz.slug}/logo?v=${A.biz.logoV}`;
+    const im=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=src});
+    A.swatches=paletteFrom(im).colors;render();
+  }catch(e){}
+}
+async function uploadLogo(file){
+  try{
+    toast(t('processing'));
+    const im=await fileToImg(file),src=logoDataUrl(im),pal=paletteFrom(im);
+    const r=await api('PUT',`/admin/${A.biz.slug}/logo`,{src},A.pin);
+    IMG[A.biz.slug+'/logo']=src;
+    A.biz=r.biz;A.swatches=pal.colors;
+    // brand color + logo background follow the logo automatically (can be changed after)
+    if(pal.colors[0])A.biz.theme.accent=pal.colors[0];
+    A.biz.theme.logoBg=pal.darkLogo&&A.biz.theme.mode!=='light'?'light':'';
+    render();saveConfig(true);toast(t('logoDone'));
+  }catch(e){toast(errMsg(e.code||'bad_image'))}
+}
+async function uploadGallery(files){
+  for(const f of [...files].slice(0,12-A.biz.gallery.length)){
+    try{toast(t('processing'));const src=photoDataUrl(await fileToImg(f));
+      const r=await api('POST',`/admin/${A.biz.slug}/gallery`,{src},A.pin);IMG[A.biz.slug+'/g/'+r.biz.gallery[0]]=src;A.biz=r.biz;render()}
+    catch(e){toast(errMsg(e.code||'bad_image'));break}
+  }
+  toast(t('saved'));
+}
+const winText=c=>tf('winback',{n:(c.name||'').split(' ')[0],b:tx(A.biz.name),l:SITE+'/b/'+A.biz.slug});
+const waLink=(phone,text)=>`https://wa.me/972${phone.replace(/^0/,'')}${text?'?text='+encodeURIComponent(text):''}`;
 let saveTimer=null;
 function saveConfig(now){
   clearTimeout(saveTimer);
   saveTimer=setTimeout(async()=>{
-    try{const {name,services,staff,hours,cutoff,blocked,products,club,address,phone}=A.biz;
-      const r=await api('PUT',`/admin/${A.biz.slug}/config`,{name,services,staff,hours,cutoff,blocked,products,club,address:address||'',phone:phone||''},A.pin);
+    try{const {name,services,staff,hours,cutoff,blocked,products,club,address,phone,theme,social,tagline}=A.biz;
+      const r=await api('PUT',`/admin/${A.biz.slug}/config`,{name,services,staff,hours,cutoff,blocked,products,club,address:address||'',phone:phone||'',theme,social,tagline},A.pin);
       const keepIcons=r.biz;A.biz=keepIcons;S.biz=keepIcons;toast(t('saved'))}
     catch(e){if(e.code==='bad_pin')return logout();toast(errMsg(e.code))}
   },now?0:900);
@@ -841,6 +1076,12 @@ document.addEventListener('click',async e=>{
   const el=e.target.closest('button');if(!el)return;
   const d=el.dataset;
   if(d.l){lang=d.l;store.set('tl-lang',lang);render();return}
+  if(d.gal){const im=el.querySelector('img');if(im&&im.src)lightbox(im.src);return}
+  if(d.star){mg.stars=+d.star;mg.revText=(document.getElementById('revText')||{}).value||mg.revText||'';render();return}
+  if(d.a==='sendReview'){
+    mg.revText=document.getElementById('revText').value;el.disabled=true;
+    try{await api('POST',`/booking/${KEY}/review`,{stars:mg.stars,text:mg.revText});mg.reviewed=true;mg.data.canReview=false}catch(err){mg.err=errMsg(err.code)}
+    render();return}
   if(d.view){S.view=d.view;if(d.view==='shop'&&shop.order){shop.order=null;shop.step='list'}render();window.scrollTo(0,0);return}
   // booking
   if(d.svc){cb.serviceId=d.svc;if(single()){cb.staffId=S.biz.staff[0].id;cb.step=2;const au=!cb.date;cb.date=cb.date||firstOpen();loadSlots(au?1:0)}else{cb.step=1;render()}return}
@@ -896,6 +1137,11 @@ document.addEventListener('click',async e=>{
   if(d.delp){A.biz.products=A.biz.products.filter(x=>x.id!==d.delp);render();saveConfig();return}
   if(d.a==='addProd'){A.biz.products.push({id:rid(),name:{he:'',ar:''},desc:{he:'',ar:''},price:50,stock:10,icon:'package',active:true});render();saveConfig();return}
   if(d.set){A.set=d.set;render();return}
+  if(d.color){A.biz.theme.accent=d.color;render();saveConfig();return}
+  if(d.mode){A.biz.theme.mode=d.mode;render();saveConfig(true);return}
+  if(d.lbg!==undefined){A.biz.theme.logoBg=d.lbg;render();saveConfig(true);return}
+  if(d.a==='rmLogo'){try{const r=await api('PUT',`/admin/${A.biz.slug}/logo`,{src:''},A.pin);A.biz=r.biz;A.swatches=null;render()}catch(err){toast(errMsg(err.code))}return}
+  if(d.gdel){try{const r=await api('POST',`/admin/${A.biz.slug}/gallery-del`,{id:d.gdel},A.pin);A.biz=r.biz;render()}catch(err){toast(errMsg(err.code))}return}
   if(d.a==='copyReport'){copyText(reportText());return}
   if(d.a==='copyLink'){copyText(SITE+'/b/'+A.biz.slug);return}
   if(d.a==='test'){
@@ -932,6 +1178,9 @@ document.addEventListener('input',e=>{
   if(d.biz){A.biz.name[d.biz]=el.value;saveConfig();return}
   if(d.bf){A.biz[d.bf]=el.value;saveConfig();return}
   if(d.club){A.biz.club.reward[d.club]=el.value;saveConfig();return}
+  if(d.tag2){A.biz.tagline[d.tag2]=el.value;saveConfig();return}
+  if(d.soc){A.biz.social[d.soc]=el.value.trim();saveConfig();return}
+  if(el.id==='colorPick'){A.biz.theme.accent=el.value;applyTheme(A.biz.theme);saveConfig();return}
   if(el.id==='clubEvery'){A.biz.club.rewardEvery=Math.max(2,Math.min(50,+el.value||10));saveConfig();return}
 });
 document.addEventListener('change',e=>{
@@ -941,6 +1190,10 @@ document.addEventListener('change',e=>{
   if(el.id==='cutSel'){A.biz.cutoff=+el.value;saveConfig(true);return}
   if(el.id==='clubOn'){A.biz.club.enabled=el.checked;render();saveConfig(true);return}
   if(el.id==='clubEvery'){render();return}
+  if(el.id==='logoFile'&&el.files[0]){uploadLogo(el.files[0]);return}
+  if(el.id==='galFile'&&el.files.length){uploadGallery(el.files);return}
+  if(el.id==='colorPick'){render();return}
+  if(d.reply){api('POST',`/admin/${A.biz.slug}/review-reply`,{id:d.reply,reply:el.value},A.pin).then(()=>toast(t('saved')),err=>toast(errMsg(err.code)));return}
   if(el.id==='cNotes'){updClient(d.cphone,{notes:el.value});return}
   if(el.id==='cBday'){const v=el.value.trim();if(v&&!/^\d{2}-\d{2}$/.test(v)){toast('DD-MM');return}updClient(d.cphone,{birthday:v});return}
 });
@@ -963,6 +1216,13 @@ async function boot(){
     }else{
       const r=await api('GET','/biz/'+encodeURIComponent(KEY));
       S.biz=r.biz;S.today=r.today;cb=freshCb();
+      api('GET','/extras/'+encodeURIComponent(KEY)).then(x=>{S.reviews=x.reviews;if(cb&&cb.step===0&&!cb.done)render()}).catch(()=>{});
+    }
+    if(!PREVIEW&&S.biz){
+      // "install as app" with the business' own name, colors and logo
+      const add=(rel,href)=>{const l=document.createElement('link');l.rel=rel;l.href=href;document.head.appendChild(l)};
+      add('manifest','/api/manifest/'+S.biz.slug);
+      if(S.biz.logoV){add('icon','/api/img/'+S.biz.slug+'/logo?v='+S.biz.logoV);add('apple-touch-icon','/api/img/'+S.biz.slug+'/logo?v='+S.biz.logoV)}
     }
   }catch(e){S.loadErr=e.code}
   render();
