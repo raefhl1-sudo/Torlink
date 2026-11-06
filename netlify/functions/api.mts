@@ -4,7 +4,7 @@ import {
   HttpError, getBiz, ensureDemo, saveBiz, getDay, publicBiz, publicBooking, slotsFor, createBooking, findByToken,
   changeState, reschedule, cancelByClient, adminBookings, adminSetStatus, sanitizeConfig, adminMessages,
   sendWhatsApp, logMsg, buildBiz, ilNow, addDays, getClients, clubCard, createOrder, adminOrders, adminOrderStatus,
-  adminUpdateClient, setLogo, addGalleryImage, removeGalleryImage, getImage, decodeDataUrl, getReviews, addReview, publicReviews,
+  adminUpdateClient, setLogo, setItemImage, addGalleryImage, removeGalleryImage, getImage, decodeDataUrl, getReviews, addReview, publicReviews,
   getInbox, inboxDone,
   type KV, type Env, type Booking,
 } from "../lib/core.mts";
@@ -146,6 +146,7 @@ export default async (req: Request, context: Context) => {
       if (action === "status" && req.method === "POST")
         return json(await adminSetStatus(kv, env, biz, String(body.date), String(body.id), String(body.status), siteUrl));
       if (action === "logo" && req.method === "PUT") return json({ biz: await setLogo(kv, biz, String(body.src ?? "")) });
+      if (action === "item-img" && req.method === "PUT") return json({ biz: await setItemImage(kv, biz, String(body.kind), String(body.id), String(body.src ?? "")) });
       if (action === "gallery" && req.method === "POST") return json({ biz: await addGalleryImage(kv, biz, String(body.src || "")) });
       if (action === "gallery-del" && req.method === "POST") return json({ biz: await removeGalleryImage(kv, biz, String(body.id || "")) });
       if (action === "reviews" && req.method === "GET") return json({ reviews: await getReviews(kv, biz.slug), rating: biz.rating });

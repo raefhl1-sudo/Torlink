@@ -14,12 +14,12 @@ export interface KV {
 export type Env = (k: string) => string | undefined;
 type L = { he: string; ar: string };
 
-export interface Service { id: string; name: L; dur: number; price: number; icon?: string }
+export interface Service { id: string; name: L; dur: number; price: number; icon?: string; img?: number }
 export interface Staff { id: string; name: L; hours?: Hours[] | null }
 export interface Hours { open: boolean; from: string; to: string; bFrom?: string; bTo?: string }
 export interface Closure { id: string; from: string; to: string; staff: string; note: string }
 export interface Notify { phone: string; lang: "he" | "ar"; onBook: boolean; onCancel: boolean; daily: boolean }
-export interface Product { id: string; name: L; desc: L; price: number; stock: number; icon: string; active: boolean }
+export interface Product { id: string; name: L; desc: L; price: number; stock: number; icon: string; active: boolean; img?: number }
 export interface Club { enabled: boolean; rewardEvery: number; reward: L }
 export interface Biz {
   slug: string; type: string; icon: string; name: L; pin: string; cutoff: number;
@@ -243,8 +243,21 @@ export async function removeGalleryImage(kv: KV, biz: Biz, id: string) {
   biz.gallery = biz.gallery.filter(x => x !== id);
   await kv.delete(`media/${biz.slug}/g/${id}`); await saveBiz(kv, biz); return biz;
 }
+/** photo of a product (kind "p") or service (kind "s"); best as a transparent PNG cut-out for the 3D catalog */
+export async function setItemImage(kv: KV, biz: Biz, kind: string, id: string, dataUrl: string) {
+  const list: (Product | Service)[] = kind === "p" ? biz.products : kind === "s" ? biz.services : [];
+  const it = list.find(x => x.id === id);
+  if (!it) throw new HttpError(404, "not_found");
+  const key = `media/${biz.slug}/${kind}/${id}`;
+  if (dataUrl === "") { await kv.delete(key); it.img = 0 }
+  else {
+    if (!IMG_RE.test(dataUrl) || dataUrl.length > 900_000) throw new HttpError(400, "bad_image");
+    await kv.setJSON(key, { src: dataUrl }); it.img = Date.now();
+  }
+  await saveBiz(kv, biz); return biz;
+}
 export async function getImage(kv: KV, slug: string, which: string): Promise<string | null> {
-  if (!/^(logo|g\/[A-Za-z0-9]{6,14})$/.test(which)) return null;
+  if (!/^(logo|g\/[A-Za-z0-9]{6,14}|[ps]\/[A-Za-z0-9]{3,12})$/.test(which)) return null;
   return (await kv.get(`media/${slug}/${which}`, { type: "json" }))?.src || null;
 }
 export function decodeDataUrl(src: string) {
@@ -623,8 +636,8 @@ export function sanitizeConfig(biz: Biz, c: any): Biz {
   const out = { ...biz };
   if (c.name) out.name = L(c.name);
   const okId = (id: any) => /^[A-Za-z0-9]{3,12}$/.test(id) ? id : rid(6);
-  if (Array.isArray(c.services) && c.services.length) out.services = c.services.slice(0, 40).map((s: any) => ({ id: okId(s.id), name: L(s.name), dur: Math.min(480, Math.max(5, Math.round(+s.dur / 5) * 5 || 30)), price: Math.max(0, Math.round(+s.price || 0)), icon: safeIcon(s.icon, "scissors") }));
-  if (Array.isArray(c.products)) out.products = c.products.slice(0, 60).map((p: any) => ({ id: okId(p.id), name: L(p.name), desc: L(p.desc), price: Math.max(0, Math.round(+p.price || 0)), stock: Math.max(0, Math.floor(+p.stock || 0)), icon: safeIcon(p.icon), active: p.active !== false }));
+  if (Array.isArray(c.services) && c.services.length) out.services = c.services.slice(0, 40).map((s: any) => ({ id: okId(s.id), name: L(s.name), dur: Math.min(480, Math.max(5, Math.round(+s.dur / 5) * 5 || 30)), price: Math.max(0, Math.round(+s.price || 0)), icon: safeIcon(s.icon, "scissors"), img: biz.services.find(o => o.id === s.id)?.img || 0 }));
+  if (Array.isArray(c.products)) out.products = c.products.slice(0, 60).map((p: any) => ({ id: okId(p.id), name: L(p.name), desc: L(p.desc), price: Math.max(0, Math.round(+p.price || 0)), stock: Math.max(0, Math.floor(+p.stock || 0)), icon: safeIcon(p.icon), active: p.active !== false, img: biz.products.find(o => o.id === p.id)?.img || 0 }));
   if (c.club) out.club = { enabled: c.club.enabled !== false, rewardEvery: Math.min(50, Math.max(2, Math.floor(+c.club.rewardEvery || 10))), reward: L(c.club.reward) };
   if (c.theme) out.theme = { accent: /^#[0-9a-fA-F]{6}$/.test(c.theme.accent) ? c.theme.accent.toLowerCase() : out.theme.accent, mode: c.theme.mode === "light" ? "light" : "dark", logoBg: ["light", "dark"].includes(c.theme.logoBg) ? c.theme.logoBg : "" };
   if (c.tagline) out.tagline = L(c.tagline);
