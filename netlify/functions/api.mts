@@ -4,7 +4,7 @@ import {
   HttpError, getBiz, ensureDemo, saveBiz, getDay, publicBiz, publicBooking, slotsFor, createBooking, findByToken,
   changeState, reschedule, cancelByClient, adminBookings, adminSetStatus, sanitizeConfig, adminMessages,
   sendWhatsApp, logMsg, buildBiz, ilNow, addDays, getClients, clubCard, createOrder, adminOrders, adminOrderStatus,
-  adminUpdateClient, setLogo, setItemImage, addGalleryImage, removeGalleryImage, getImage, decodeDataUrl, getReviews, addReview, publicReviews,
+  adminUpdateClient, setLogo, setItemImage, setSpin, getSpin, addGalleryImage, removeGalleryImage, getImage, decodeDataUrl, getReviews, addReview, publicReviews,
   getInbox, inboxDone,
   type KV, type Env, type Booking,
 } from "../lib/core.mts";
@@ -51,6 +51,11 @@ export default async (req: Request, context: Context) => {
       if (url.searchParams.get("json")) return json({ src });
       const { type, bytes } = decodeDataUrl(src);
       return new Response(bytes, { headers: { "content-type": type, "cache-control": "public, max-age=31536000, immutable" } });
+    }
+    if (parts[0] === "spin" && parts[1] && parts[2] && req.method === "GET") {
+      const frames = await getSpin(kv, parts[1], parts[2]);
+      if (!frames) return json({ error: "not_found" }, 404);
+      return new Response(JSON.stringify({ frames }), { headers: { "content-type": "application/json", "cache-control": "public, max-age=31536000, immutable" } });
     }
     if (parts[0] === "manifest" && parts[1] && req.method === "GET") {
       const biz = await getBiz(kv, parts[1]);
@@ -146,6 +151,7 @@ export default async (req: Request, context: Context) => {
       if (action === "status" && req.method === "POST")
         return json(await adminSetStatus(kv, env, biz, String(body.date), String(body.id), String(body.status), siteUrl));
       if (action === "logo" && req.method === "PUT") return json({ biz: await setLogo(kv, biz, String(body.src ?? "")) });
+      if (action === "spin" && req.method === "PUT") return json({ biz: await setSpin(kv, biz, String(body.id), body.frames) });
       if (action === "item-img" && req.method === "PUT") return json({ biz: await setItemImage(kv, biz, String(body.kind), String(body.id), String(body.src ?? "")) });
       if (action === "gallery" && req.method === "POST") return json({ biz: await addGalleryImage(kv, biz, String(body.src || "")) });
       if (action === "gallery-del" && req.method === "POST") return json({ biz: await removeGalleryImage(kv, biz, String(body.id || "")) });
