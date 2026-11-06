@@ -9,6 +9,8 @@ import {
   type KV, type Env, type Booking,
 } from "../lib/core.mts";
 import { handleIncoming } from "../lib/bot.mts";
+import { getPlatform, hasBot, planOf, signup, slugFree, superList, superAction, sanitizePlatform } from "../lib/platform.mts";
+import { isLive } from "../lib/core.mts";
 
 const env: Env = k => Netlify.env.get(k);
 const json = (data: unknown, status = 200) => Response.json(data, { status, headers: { "cache-control": "no-store" } });
@@ -25,9 +27,18 @@ export default async (req: Request, context: Context) => {
     if (parts[0] === "biz" && parts[1] && req.method === "GET") {
       const biz = parts[1] === "demo" ? await ensureDemo(kv, env) : await getBiz(kv, parts[1]);
       if (!biz) return json({ error: "not_found" }, 404);
-      const waBot = biz.bot.enabled ? (env("WA_DISPLAY_NUMBER") || "").replace(/\D/g, "") : "";
+      const waBot = biz.bot.enabled && isLive(biz) && hasBot(await getPlatform(kv), biz) ? (env("WA_DISPLAY_NUMBER") || "").replace(/\D/g, "") : "";
       return json({ biz: publicBiz(biz), today: ilNow().date, waBot });
     }
+    // ---------- sales page & sign-up ----------
+    if (parts[0] === "platform" && req.method === "GET") {
+      const p = await getPlatform(kv);
+      return json({ plans: p.plans, payInfo: p.payInfo, contact: p.contact });
+    }
+    if (parts[0] === "join" && parts[1] === "check" && req.method === "GET")
+      return json({ free: await slugFree(kv, String(url.searchParams.get("slug") || "").toLowerCase()) });
+    if (parts[0] === "join" && !parts[1] && req.method === "POST") return json(await signup(kv, env, body));
+
     if (parts[0] === "extras" && parts[1] && req.method === "GET") {
       const biz = await getBiz(kv, parts[1]);
       if (!biz) return json({ error: "not_found" }, 404);
@@ -97,7 +108,13 @@ export default async (req: Request, context: Context) => {
       if (!pin || pin !== biz.pin) return json({ error: "bad_pin" }, 401);
       const action = parts[2];
       if (action === "login" || (action === "config" && req.method === "GET"))
-        return json({ biz, waConnected: !!(env("WA_TOKEN") && env("WA_PHONE_ID")), today: ilNow().date, waBot: (env("WA_DISPLAY_NUMBER") || "").replace(/\D/g, ""), botAi: !!env("ANTHROPIC_API_KEY") });
+      {
+        const p = await getPlatform(kv), plan = planOf(p, biz.plan);
+        return json({
+          biz, waConnected: !!(env("WA_TOKEN") && env("WA_PHONE_ID")), today: ilNow().date, waBot: (env("WA_DISPLAY_NUMBER") || "").replace(/\D/g, ""), botAi: !!env("ANTHROPIC_API_KEY"),
+          sub: { status: biz.status, paidUntil: biz.paidUntil, live: isLive(biz), plan: plan ? { id: plan.id, name: plan.name, price: plan.price, bot: plan.bot } : null, payInfo: p.payInfo, contact: p.contact, plans: p.plans.map(x => ({ id: x.id, name: x.name, price: x.price, bot: x.bot })) },
+        });
+      }
       // chat simulator in the dashboard: runs the real bot without sending anything to WhatsApp
       if (action === "bot-sim" && req.method === "POST") {
         const phone = String(body.phone || "0500000000").replace(/\D/g, "");
@@ -153,6 +170,15 @@ export default async (req: Request, context: Context) => {
         await logMsg(kv, biz.slug, m);
         return json({ message: m });
       }
+    }
+
+    // ---------- platform owner dashboard ----------
+    if (parts[0] === "super" && ["list", "biz", "settings"].includes(parts[1])) {
+      const key = env("SUPER_KEY");
+      if (!key || req.headers.get("x-super-key") !== key) return json({ error: "forbidden" }, 403);
+      if (parts[1] === "list" && req.method === "GET") return json(await superList(kv));
+      if (parts[1] === "biz" && req.method === "POST") return json(await superAction(kv, body));
+      if (parts[1] === "settings" && req.method === "PUT") { const p = sanitizePlatform(body); await kv.setJSON("platform/settings", p); return json({ platform: p }) }
     }
 
     // ---------- give a business its own WhatsApp number (phone_number_id from Meta) ----------

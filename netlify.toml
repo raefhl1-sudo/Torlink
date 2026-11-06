@@ -21,6 +21,11 @@
   status = 200
 
 [[redirects]]
-  from = "/"
-  to = "/b/demo"
-  status = 302
+  from = "/join"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/super"
+  to = "/index.html"
+  status = 200

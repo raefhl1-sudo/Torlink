@@ -1,10 +1,11 @@
 // TorLink WhatsApp bot — books, shows, moves and cancels appointments inside the WhatsApp chat.
 // Buttons and lists drive the flow; when the business enables AI and ANTHROPIC_API_KEY is set,
 // free text ("بدي دور بكرا بعد الظهر", "יש משהו מחר בערב?") is understood and jumps straight to the right step.
+import { getPlatform, hasBot } from "./platform.mts";
 import {
   HttpError, getBiz, getDay, slotsFor, createBooking, findByToken, changeState, reschedule, cancelByClient,
   clientBookings, getClients, msgParams, renderText, logMsg, addInbox, dateText, ilNow, ilEpoch, addDays,
-  weekday, toMin, isDate, isTime, rid,
+  weekday, toMin, isDate, isTime, rid, dayOpen, isLive,
   type KV, type Env, type Biz, type Booking, type MsgType,
 } from "./core.mts";
 
@@ -186,7 +187,7 @@ async function askDay(c: Ctx, intro?: string) {
   const dates: string[] = [];
   for (let i = 0; i <= 45 && dates.length < 21; i++) {
     const d = addDays(today, i);
-    if (c.biz.hours[weekday(d)]?.open) dates.push(d);
+    if (dayOpen(c.biz, d)) dates.push(d);
   }
   const counts = await Promise.all(dates.map(async d => (await slots(c, d)).length));
   dates.forEach((d, i) => { if (counts[i] > 0 && rows.length < 10) rows.push({ id: `d|${d}`, title: dText(c, d), description: t(c).slotsN(counts[i]) }) });
@@ -518,8 +519,9 @@ export async function handleIncoming(kv: KV, env: Env, siteUrl: string, m: Incom
     await text(c, T[c.lang].unknown);
     await kv.setJSON(key, sess); return out;
   }
-  if (!/^05\d{8}$/.test(phone) || !biz.bot.enabled) {
-    await text(c, `${!biz.bot.enabled ? t(c).off : t(c).foreign}\n${siteUrl}/b/${biz.slug}`);
+  const botOk = biz.bot.enabled && isLive(biz) && hasBot(await getPlatform(kv), biz);
+  if (!/^05\d{8}$/.test(phone) || !botOk) {
+    await text(c, `${!botOk ? t(c).off : t(c).foreign}\n${siteUrl}/b/${biz.slug}`);
     await kv.setJSON(key, sess); return out;
   }
 

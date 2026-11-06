@@ -4,7 +4,7 @@ import api from "../netlify/functions/api.mts";
 import { getStore } from "./blobs-stub";
 import { ensureDemo, buildBiz, saveBiz, saveDay, getDay, addDays, ilNow, weekday, toHM, toMin, buildClients, saveClients, type KV, type Booking } from "../netlify/lib/core.mts";
 
-const ENV: Record<string, string> = { ADMIN_PIN: "7693", PUBLIC_URL: "https://torlink.netlify.app" };
+const ENV: Record<string, string> = { ADMIN_PIN: "7693", PUBLIC_URL: "https://torlink.netlify.app", SUPER_KEY: "7693" };
 (globalThis as any).Netlify = { env: { get: (k: string) => ENV[k] } };
 (window as any).__TL_PREVIEW = true;
 

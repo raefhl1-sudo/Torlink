@@ -15,8 +15,10 @@ export type Env = (k: string) => string | undefined;
 type L = { he: string; ar: string };
 
 export interface Service { id: string; name: L; dur: number; price: number; icon?: string }
-export interface Staff { id: string; name: L }
-export interface Hours { open: boolean; from: string; to: string }
+export interface Staff { id: string; name: L; hours?: Hours[] | null }
+export interface Hours { open: boolean; from: string; to: string; bFrom?: string; bTo?: string }
+export interface Closure { id: string; from: string; to: string; staff: string; note: string }
+export interface Notify { phone: string; lang: "he" | "ar"; onBook: boolean; onCancel: boolean; daily: boolean }
 export interface Product { id: string; name: L; desc: L; price: number; stock: number; icon: string; active: boolean }
 export interface Club { enabled: boolean; rewardEvery: number; reward: L }
 export interface Biz {
@@ -25,6 +27,8 @@ export interface Biz {
   products: Product[]; club: Club; address?: string; phone?: string;
   theme: Theme; social: Social; tagline: L; logoV: number; gallery: string[]; rating: { avg: number; count: number };
   bot: { enabled: boolean; ai: boolean }; waPhoneId?: string;
+  status: "pending" | "active" | "suspended"; paidUntil: string; plan: string; owner: { name: string; phone: string };
+  closed: Closure[]; notify: Notify;
 }
 export interface Theme { accent: string; mode: "dark" | "light"; logoBg?: "light" | "dark" | "" }
 export interface Social { instagram: string; facebook: string; tiktok: string; whatsapp: string; waze: string }
@@ -44,7 +48,7 @@ export interface Booking {
   status: "confirmed" | "arrived" | "noshow" | "cancelled"; lang: "he" | "ar";
   created: number; reminderSent?: boolean; history?: { type: string; at: number }[];
 }
-export type MsgType = "confirm" | "reminder" | "changed" | "cancelled";
+export type MsgType = "confirm" | "reminder" | "changed" | "cancelled" | "owner" | "daily";
 export interface MsgLog { id: string; at: number; type: MsgType; bookingId: string; name: string; phone: string; status: "sent" | "demo" | "failed"; text: string; error?: string }
 
 export class HttpError extends Error { constructor(public status: number, public code: string) { super(code) } }
@@ -102,6 +106,12 @@ export function normalizeBiz(b: Biz): Biz {
   if (!Array.isArray(b.gallery)) b.gallery = [];
   if (!b.rating) b.rating = { avg: 0, count: 0 };
   if (!b.bot) b.bot = { enabled: true, ai: true };
+  if (!b.status) b.status = "active"; // businesses created before subscriptions existed
+  if (typeof b.paidUntil !== "string") b.paidUntil = "";
+  if (typeof b.plan !== "string") b.plan = "";
+  if (!b.owner) b.owner = { name: "", phone: b.phone || "" };
+  if (!Array.isArray(b.closed)) b.closed = [];
+  if (!b.notify) b.notify = { phone: (b.phone || "").replace(/\D/g, ""), lang: "he", onBook: true, onCancel: true, daily: true };
   if (!ICONS.includes(b.icon)) b.icon = p.icon;
   b.services.forEach((s, i) => { if (!s.icon) s.icon = p.services[i]?.[4] || "scissors" });
   return b;
@@ -331,21 +341,35 @@ export async function getDay(kv: KV, slug: string, date: string): Promise<Bookin
 export const saveDay = (kv: KV, slug: string, date: string, bookings: Booking[]) => kv.setJSON(`day/${slug}/${date}`, { bookings });
 
 export function publicBiz(b: Biz) {
-  const { pin, blocked, waPhoneId, ...rest } = b;
-  return { ...rest, products: b.products.filter(p => p.active).map(p => ({ ...p, stock: Math.min(p.stock, 10) })) };
+  const { pin, blocked, waPhoneId, owner, notify, paidUntil, ...rest } = b;
+  return { ...rest, live: isLive(b), closed: b.closed.map(c => ({ from: c.from, to: c.to, staff: c.staff })), products: b.products.filter(p => p.active).map(p => ({ ...p, stock: Math.min(p.stock, 10) })) };
 }
 export function publicBooking(b: Booking) {
   const { phone, ...rest } = b; return { ...rest, phoneTail: phone.slice(-4) };
 }
 
 /* ---------------- availability ---------------- */
+/** working hours of one staff member on a date (their own hours if set, else the business'), or null when off */
+export function workHours(biz: Biz, date: string, staffId: string): Hours | null {
+  const st = biz.staff.find(s => s.id === staffId);
+  const h = (st?.hours && st.hours.length === 7 ? st.hours : biz.hours)[weekday(date)];
+  if (!h || !h.open) return null;
+  if (biz.closed.some(c => date >= c.from && date <= c.to && (c.staff === "all" || c.staff === staffId))) return null;
+  return h;
+}
+/** is anyone working on this date? */
+export const dayOpen = (biz: Biz, date: string) => biz.staff.some(s => workHours(biz, date, s.id));
+export function isLive(biz: Biz, today = ilNow().date) {
+  return biz.status === "active" && (!biz.paidUntil || biz.paidUntil >= addDays(today, -3)); // 3 days grace
+}
 export function freeSlots(biz: Biz, dayBookings: Booking[], date: string, staffId: string, dur: number, ignoreId?: string, nowTs = Date.now()) {
-  const h = biz.hours[weekday(date)];
-  if (!h || !h.open) return [];
+  const h = workHours(biz, date, staffId);
+  if (!h) return [];
   const now = ilNow(nowTs);
   if (date < now.date) return [];
   const start = toMin(h.from), end = toMin(h.to);
   const busy = dayBookings.filter(b => b.staffId === staffId && b.status !== "cancelled" && b.id !== ignoreId).map(b => [toMin(b.time), toMin(b.time) + b.dur]);
+  if (h.bFrom && h.bTo && isTime(h.bFrom) && isTime(h.bTo) && toMin(h.bTo) > toMin(h.bFrom)) busy.push([toMin(h.bFrom), toMin(h.bTo)]); // break
   const out: number[] = [];
   for (let m = start; m + dur <= end; m += 15) {
     if (date === now.date && m <= now.min + 10) continue;
@@ -416,6 +440,42 @@ export async function sendWhatsApp(env: Env, b: Booking, biz: Biz, type: MsgType
   } catch (e: any) { log.status = "failed"; log.error = String(e?.message || e) }
   return log;
 }
+/* ---------- messages to the business owner ---------- */
+// Meta templates: torlink_owner {{1}} what happened {{2}} client {{3}} service {{4}} date {{5}} time {{6}} client phone
+//                 torlink_daily {{1}} date {{2}} business {{3}} count {{4}} list {{5}} dashboard link
+export const OWNER_TEMPLATES: Record<"he" | "ar", { owner: string; daily: string }> = {
+  he: { owner: "🔔 {{1}}\n{{2}} · {{3}}\n{{4}} בשעה {{5}}\nטלפון: {{6}}", daily: "📋 מחר, {{1}}, יש ב{{2}} {{3}} תורים:\n{{4}}\nליומן: {{5}}" },
+  ar: { owner: "🔔 {{1}}\n{{2}} · {{3}}\n{{4}} الساعة {{5}}\nهاتف: {{6}}", daily: "📋 بكرا، {{1}}، في {{2}} عندك {{3}} مواعيد:\n{{4}}\nلليومية: {{5}}" },
+};
+const OWNER_KIND = { he: { new: "תור חדש", changed: "תור הוזז", cancelled: "תור בוטל", signup: "עסק חדש נרשם ל-TorLink" }, ar: { new: "دور جديد", changed: "تم تغيير موعد", cancelled: "تم إلغاء موعد", signup: "محل جديد سجّل بـ TorLink" } };
+const intl = (p: string) => { const d = p.replace(/\D/g, ""); return d.startsWith("0") ? "972" + d.slice(1) : d };
+const cleanParam = (s: any) => String(s ?? "").replace(/[\n\t]+/g, " ").replace(/ {4,}/g, " ").trim() || "-";
+export async function sendTemplate(env: Env, phoneId: string | undefined, to: string, name: string, lang: "he" | "ar", params: string[], fetchImpl: typeof fetch = fetch) {
+  const token = env("WA_TOKEN"); phoneId ||= env("WA_PHONE_ID");
+  if (!token || !phoneId) return { status: "demo" as const };
+  try {
+    const res = await fetchImpl(`https://graph.facebook.com/${env("WA_API_VERSION") || "v23.0"}/${phoneId}/messages`, {
+      method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ messaging_product: "whatsapp", to: intl(to), type: "template", template: { name, language: { code: lang }, components: [{ type: "body", parameters: params.map(text => ({ type: "text", text })) }] } }),
+    });
+    const j: any = await res.json().catch(() => ({}));
+    return res.ok ? { status: "sent" as const } : { status: "failed" as const, error: j?.error?.message || `HTTP ${res.status}` };
+  } catch (e: any) { return { status: "failed" as const, error: String(e?.message || e) } }
+}
+export async function notifyOwner(kv: KV, env: Env, biz: Biz, kind: "new" | "changed" | "cancelled", b: Booking, fetchImpl?: typeof fetch) {
+  const n = biz.notify;
+  if (!n?.phone || (kind === "new" ? !n.onBook : !n.onCancel)) return;
+  const lang = n.lang === "ar" ? "ar" : "he";
+  const params = [OWNER_KIND[lang][kind], b.name, b.serviceName[lang] || b.serviceName.he, dateText(b.date, lang), b.time, b.phone].map(cleanParam);
+  const r = await sendTemplate(env, biz.waPhoneId, n.phone, env("WA_TPL_OWNER") || "torlink_owner", lang, params, fetchImpl);
+  await logMsg(kv, biz.slug, { id: rid(8), at: Date.now(), type: "owner", bookingId: b.id, name: b.name, phone: n.phone, status: r.status, text: OWNER_TEMPLATES[lang].owner.replace(/\{\{(\d)\}\}/g, (_, i) => params[+i - 1]), error: (r as any).error });
+}
+/** tells the platform owner (PLATFORM_PHONE) that a new business signed up */
+export async function notifyPlatform(env: Env, biz: Biz, planName: string, price: number, fetchImpl?: typeof fetch) {
+  const to = env("PLATFORM_PHONE"); if (!to) return;
+  const params = [OWNER_KIND.he.signup, biz.owner.name, biz.name.he || biz.name.ar, planName, `₪${price}`, biz.owner.phone].map(cleanParam);
+  await sendTemplate(env, undefined, to, env("WA_TPL_OWNER") || "torlink_owner", "he", params, fetchImpl);
+}
 export async function logMsg(kv: KV, slug: string, m: MsgLog) {
   const key = `msgs/${slug}/${ilNow(m.at).date.slice(0, 7)}`;
   const doc = (await kv.get(key, { type: "json" })) || { items: [] };
@@ -433,6 +493,7 @@ async function notify(kv: KV, env: Env, b: Booking, biz: Biz, type: MsgType, sit
 export const cleanPhone = (p: any) => String(p || "").replace(/\D/g, "").replace(/^972/, "0");
 
 export async function createBooking(kv: KV, env: Env, biz: Biz, input: any, siteUrl: string, fetchImpl?: typeof fetch) {
+  if (!isLive(biz)) throw new HttpError(403, "inactive");
   const svc = biz.services.find(s => s.id === input.serviceId);
   if (!svc) throw new HttpError(400, "bad_service");
   if (!isDate(input.date) || !isTime(input.time)) throw new HttpError(400, "bad_time");
@@ -459,6 +520,7 @@ export async function createBooking(kv: KV, env: Env, biz: Biz, input: any, site
   const c = await touchClient(kv, biz.slug, phone, c => { c.bookings++; if (!c.name) c.name = name }, name, b.lang);
   // the WhatsApp bot answers inside the open chat itself, so no template is needed
   const message = input.via === "bot" ? null : await notify(kv, env, b, biz, "confirm", siteUrl, fetchImpl);
+  await notifyOwner(kv, env, biz, "new", b, fetchImpl);
   return { booking: publicBooking(b), message, club: clubCard(biz, c) };
 }
 
@@ -517,6 +579,7 @@ export async function reschedule(kv: KV, env: Env, token: string, input: any, si
     await kv.setJSON(`tok/${b.id}`, { slug: biz.slug, date: b.date });
   }
   const message = input.via === "bot" ? null : await notify(kv, env, b, biz, "changed", siteUrl, fetchImpl);
+  await notifyOwner(kv, env, biz, "changed", b, fetchImpl);
   return { booking: publicBooking(b), message };
 }
 export async function cancelByClient(kv: KV, env: Env, token: string, siteUrl: string, fetchImpl?: typeof fetch, silent = false) {
@@ -527,6 +590,7 @@ export async function cancelByClient(kv: KV, env: Env, token: string, siteUrl: s
   await saveDay(kv, biz.slug, b.date, day);
   await touchClient(kv, biz.slug, b.phone, c => applyStatus(c, b, null, "cancelled"), b.name);
   const message = silent ? null : await notify(kv, env, b, biz, "cancelled", siteUrl, fetchImpl);
+  await notifyOwner(kv, env, biz, "cancelled", b, fetchImpl);
   return { booking: publicBooking(b), message };
 }
 
@@ -571,8 +635,13 @@ export function sanitizeConfig(biz: Biz, c: any): Biz {
   }
   if (typeof c.address === "string") out.address = c.address.slice(0, 120);
   if (typeof c.phone === "string") out.phone = c.phone.replace(/[^\d-]/g, "").slice(0, 15);
-  if (Array.isArray(c.staff) && c.staff.length) out.staff = c.staff.slice(0, 20).map((s: any) => ({ id: /^[A-Za-z0-9]{3,12}$/.test(s.id) ? s.id : rid(6), name: L(s.name) }));
-  if (Array.isArray(c.hours) && c.hours.length === 7) out.hours = c.hours.map((h: any) => ({ open: !!h.open, from: isTime(h.from) ? h.from : "09:00", to: isTime(h.to) ? h.to : "18:00" }));
+  const hrs = (arr: any) => arr.map((h: any) => ({ open: !!h.open, from: isTime(h.from) ? h.from : "09:00", to: isTime(h.to) ? h.to : "18:00", bFrom: isTime(h.bFrom) ? h.bFrom : "", bTo: isTime(h.bTo) ? h.bTo : "" }));
+  if (Array.isArray(c.staff) && c.staff.length) out.staff = c.staff.slice(0, 20).map((s: any) => ({ id: /^[A-Za-z0-9]{3,12}$/.test(s.id) ? s.id : rid(6), name: L(s.name), hours: Array.isArray(s.hours) && s.hours.length === 7 ? hrs(s.hours) : null }));
+  if (Array.isArray(c.hours) && c.hours.length === 7) out.hours = hrs(c.hours);
+  if (Array.isArray(c.closed)) out.closed = c.closed.filter((x: any) => isDate(x.from) && isDate(x.to) && x.to >= x.from).slice(0, 100)
+    .map((x: any) => ({ id: /^[A-Za-z0-9]{3,12}$/.test(x.id) ? x.id : rid(6), from: x.from, to: x.to, staff: x.staff === "all" || out.staff.some(s => s.id === x.staff) ? x.staff : "all", note: String(x.note || "").slice(0, 60) }))
+    .filter((x: Closure) => x.to >= addDays(ilNow().date, -30));
+  if (c.notify) out.notify = { phone: String(c.notify.phone || "").replace(/\D/g, "").slice(0, 13), lang: c.notify.lang === "ar" ? "ar" : "he", onBook: c.notify.onBook !== false, onCancel: c.notify.onCancel !== false, daily: c.notify.daily !== false };
   if (c.bot) out.bot = { enabled: c.bot.enabled !== false, ai: c.bot.ai !== false };
   if (c.cutoff != null) out.cutoff = Math.min(72, Math.max(0, +c.cutoff || 0));
   if (Array.isArray(c.blocked)) out.blocked = c.blocked.map(cleanPhone).filter((p: string) => /^05\d{8}$/.test(p)).slice(0, 500);
@@ -621,24 +690,42 @@ export async function adminMessages(kv: KV, slug: string) {
 /* ---------------- reminders (run hourly) ---------------- */
 export async function runReminders(kv: KV, env: Env, siteUrl: string, nowTs = Date.now(), fetchImpl?: typeof fetch) {
   const now = ilNow(nowTs);
-  const hour = +(env("REMINDER_HOUR") || 18);
-  if (now.hour < hour) return { skipped: "before_hour", sent: 0 };
+  const remindHour = +(env("REMINDER_HOUR") || 18), dailyHour = +(env("OWNER_DAILY_HOUR") || 20);
+  if (now.hour < Math.min(remindHour, dailyHour)) return { skipped: "before_hour", sent: 0, daily: 0 };
   const tomorrow = addDays(now.date, 1);
   const { blobs } = await kv.list({ prefix: "biz/" });
-  let sent = 0;
+  let sent = 0, daily = 0;
   for (const { key } of blobs) {
-    const biz: Biz = await kv.get(key, { type: "json" });
-    if (!biz) continue;
+    const raw: Biz = await kv.get(key, { type: "json" });
+    if (!raw) continue;
+    const biz = normalizeBiz(raw);
+    if (!isLive(biz, now.date)) continue;
     const day = await getDay(kv, biz.slug, tomorrow);
-    let changed = false;
-    for (const b of day) {
-      if (b.status !== "confirmed" || b.reminderSent) continue;
-      b.reminderSent = true; changed = true;
-      if (nowTs - b.created < 3 * 3600e3) continue; // just booked — the confirmation is enough
-      const m = await sendWhatsApp(env, b, biz, "reminder", siteUrl, fetchImpl);
-      await logMsg(kv, biz.slug, m); sent++;
+    if (now.hour >= remindHour) {
+      let changed = false;
+      for (const b of day) {
+        if (b.status !== "confirmed" || b.reminderSent) continue;
+        b.reminderSent = true; changed = true;
+        if (nowTs - b.created < 3 * 3600e3) continue; // just booked — the confirmation is enough
+        const m = await sendWhatsApp(env, b, biz, "reminder", siteUrl, fetchImpl);
+        await logMsg(kv, biz.slug, m); sent++;
+      }
+      if (changed) await saveDay(kv, biz.slug, tomorrow, day);
     }
-    if (changed) await saveDay(kv, biz.slug, tomorrow, day);
+    // evening summary for the owner: tomorrow's list, once per day
+    const n = biz.notify;
+    if (now.hour >= dailyHour && n.daily && n.phone && !(await kv.get(`od/${biz.slug}/${tomorrow}`, { type: "json" }))) {
+      await kv.setJSON(`od/${biz.slug}/${tomorrow}`, { at: nowTs });
+      const lang = n.lang === "ar" ? "ar" : "he";
+      const list = day.filter(b => b.status === "confirmed").sort((a, b) => a.time.localeCompare(b.time));
+      if (!list.length && !dayOpen(biz, tomorrow)) continue;
+      let txt = list.map(b => `${b.time} ${b.name} (${b.serviceName[lang] || b.serviceName.he})`).join(" | ");
+      if (txt.length > 900) txt = txt.slice(0, 897) + "…";
+      const params = [dateText(tomorrow, lang), biz.name[lang] || biz.name.he, String(list.length), txt || (lang === "ar" ? "ما في مواعيد بعد" : "אין עדיין תורים"), `${siteUrl}/admin/${biz.slug}`].map(cleanParam);
+      const r = await sendTemplate(env, biz.waPhoneId, n.phone, env("WA_TPL_DAILY") || "torlink_daily", lang, params, fetchImpl);
+      await logMsg(kv, biz.slug, { id: rid(8), at: nowTs, type: "daily", bookingId: "", name: biz.name[lang] || biz.name.he, phone: n.phone, status: r.status, text: OWNER_TEMPLATES[lang].daily.replace(/\{\{(\d)\}\}/g, (_, i) => params[+i - 1]), error: (r as any).error });
+      daily++;
+    }
   }
-  return { sent };
+  return { sent, daily };
 }
