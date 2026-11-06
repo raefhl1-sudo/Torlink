@@ -24,6 +24,7 @@ export interface Biz {
   services: Service[]; staff: Staff[]; hours: Hours[]; blocked: string[]; created: number;
   products: Product[]; club: Club; address?: string; phone?: string;
   theme: Theme; social: Social; tagline: L; logoV: number; gallery: string[]; rating: { avg: number; count: number };
+  bot: { enabled: boolean; ai: boolean }; waPhoneId?: string;
 }
 export interface Theme { accent: string; mode: "dark" | "light"; logoBg?: "light" | "dark" | "" }
 export interface Social { instagram: string; facebook: string; tiktok: string; whatsapp: string; waze: string }
@@ -49,7 +50,7 @@ export interface MsgLog { id: string; at: number; type: MsgType; bookingId: stri
 export class HttpError extends Error { constructor(public status: number, public code: string) { super(code) } }
 
 /* ---------------- presets ---------------- */
-const rid = (n = 8) => {
+export const rid = (n = 8) => {
   const a = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789";
   const bytes = crypto.getRandomValues(new Uint8Array(n));
   return Array.from(bytes, b => a[b % a.length]).join("");
@@ -100,6 +101,7 @@ export function normalizeBiz(b: Biz): Biz {
   if (typeof b.logoV !== "number") b.logoV = 0;
   if (!Array.isArray(b.gallery)) b.gallery = [];
   if (!b.rating) b.rating = { avg: 0, count: 0 };
+  if (!b.bot) b.bot = { enabled: true, ai: true };
   if (!ICONS.includes(b.icon)) b.icon = p.icon;
   b.services.forEach((s, i) => { if (!s.icon) s.icon = p.services[i]?.[4] || "scissors" });
   return b;
@@ -144,8 +146,8 @@ export function ilEpoch(date: string, time: string) {
   const off = Date.UTC(py, pm - 1, pd, 0, p.min) - guess;
   return guess - off;
 }
-const isDate = (s: any) => typeof s === "string" && /^\d{4}-\d{2}-\d{2}$/.test(s);
-const isTime = (s: any) => typeof s === "string" && /^\d{2}:\d{2}$/.test(s);
+export const isDate = (s: any) => typeof s === "string" && /^\d{4}-\d{2}-\d{2}$/.test(s);
+export const isTime = (s: any) => typeof s === "string" && /^\d{2}:\d{2}$/.test(s);
 
 /* ---------------- storage helpers ---------------- */
 export async function getBiz(kv: KV, slug: string): Promise<Biz | null> {
@@ -185,7 +187,7 @@ export function applyStatus(c: Client, b: Booking, prev: string | null, next: st
   else if (next === "cancelled") c.cancels++;
   c.last = c.visitDates[c.visitDates.length - 1] || "";
 }
-async function touchClient(kv: KV, slug: string, phone: string, fn: (c: Client) => void, name?: string, lang?: "he" | "ar") {
+export async function touchClient(kv: KV, slug: string, phone: string, fn: (c: Client) => void, name?: string, lang?: "he" | "ar") {
   const items = await getClients(kv, slug);
   const c = items[phone] || (items[phone] = blankClient(phone, name || "", lang));
   if (name && !c.name) c.name = name;
@@ -329,7 +331,7 @@ export async function getDay(kv: KV, slug: string, date: string): Promise<Bookin
 export const saveDay = (kv: KV, slug: string, date: string, bookings: Booking[]) => kv.setJSON(`day/${slug}/${date}`, { bookings });
 
 export function publicBiz(b: Biz) {
-  const { pin, blocked, ...rest } = b;
+  const { pin, blocked, waPhoneId, ...rest } = b;
   return { ...rest, products: b.products.filter(p => p.active).map(p => ({ ...p, stock: Math.min(p.stock, 10) })) };
 }
 export function publicBooking(b: Booking) {
@@ -393,7 +395,7 @@ export async function sendWhatsApp(env: Env, b: Booking, biz: Biz, type: MsgType
   const lang = b.lang === "ar" ? "ar" : "he";
   const params = msgParams(b, biz, type, siteUrl);
   const log: MsgLog = { id: rid(8), at: Date.now(), type, bookingId: b.id, name: b.name, phone: b.phone, status: "demo", text: renderText(type, lang, params) };
-  const token = env("WA_TOKEN"), phoneId = env("WA_PHONE_ID");
+  const token = env("WA_TOKEN"), phoneId = biz.waPhoneId || env("WA_PHONE_ID");
   if (!token || !phoneId) return log; // demo mode: nothing is sent until Meta credentials are configured
   try {
     const res = await fetchImpl(`https://graph.facebook.com/${env("WA_API_VERSION") || "v23.0"}/${phoneId}/messages`, {
@@ -428,7 +430,7 @@ async function notify(kv: KV, env: Env, b: Booking, biz: Biz, type: MsgType, sit
 }
 
 /* ---------------- booking actions ---------------- */
-const cleanPhone = (p: any) => String(p || "").replace(/\D/g, "").replace(/^972/, "0");
+export const cleanPhone = (p: any) => String(p || "").replace(/\D/g, "").replace(/^972/, "0");
 
 export async function createBooking(kv: KV, env: Env, biz: Biz, input: any, siteUrl: string, fetchImpl?: typeof fetch) {
   const svc = biz.services.find(s => s.id === input.serviceId);
@@ -453,11 +455,29 @@ export async function createBooking(kv: KV, env: Env, biz: Biz, input: any, site
   day.push(b);
   await saveDay(kv, biz.slug, b.date, day);
   await kv.setJSON(`tok/${b.id}`, { slug: biz.slug, date: b.date });
+  await indexBooking(kv, biz.slug, phone, b.id);
   const c = await touchClient(kv, biz.slug, phone, c => { c.bookings++; if (!c.name) c.name = name }, name, b.lang);
-  const message = await notify(kv, env, b, biz, "confirm", siteUrl, fetchImpl);
+  // the WhatsApp bot answers inside the open chat itself, so no template is needed
+  const message = input.via === "bot" ? null : await notify(kv, env, b, biz, "confirm", siteUrl, fetchImpl);
   return { booking: publicBooking(b), message, club: clubCard(biz, c) };
 }
 
+/** per-client list of booking tokens (lets the bot find "my bookings") + which business the phone used last */
+export async function indexBooking(kv: KV, slug: string, phone: string, token: string) {
+  const key = `cb/${slug}/${phone}`;
+  const d = (await kv.get(key, { type: "json" })) || { items: [] };
+  d.items = [...d.items.filter((t: string) => t !== token), token].slice(-30);
+  await kv.setJSON(key, d);
+  await kv.setJSON(`who/${phone}`, { slug, at: Date.now() });
+}
+export async function clientBookings(kv: KV, slug: string, phone: string) {
+  const d = await kv.get(`cb/${slug}/${phone}`, { type: "json" });
+  const out: Booking[] = [];
+  for (const t of (d?.items || []).slice().reverse()) {
+    try { const { b } = await findByToken(kv, t); if (b.slug === slug) out.push(b) } catch { }
+  }
+  return out;
+}
 export async function findByToken(kv: KV, token: string) {
   if (!/^[A-Za-z0-9]{8,20}$/.test(token)) throw new HttpError(404, "not_found");
   const idx = await kv.get(`tok/${token}`, { type: "json" });
@@ -496,17 +516,17 @@ export async function reschedule(kv: KV, env: Env, token: string, input: any, si
     target.push(b); await saveDay(kv, biz.slug, b.date, target);
     await kv.setJSON(`tok/${b.id}`, { slug: biz.slug, date: b.date });
   }
-  const message = await notify(kv, env, b, biz, "changed", siteUrl, fetchImpl);
+  const message = input.via === "bot" ? null : await notify(kv, env, b, biz, "changed", siteUrl, fetchImpl);
   return { booking: publicBooking(b), message };
 }
-export async function cancelByClient(kv: KV, env: Env, token: string, siteUrl: string, fetchImpl?: typeof fetch) {
+export async function cancelByClient(kv: KV, env: Env, token: string, siteUrl: string, fetchImpl?: typeof fetch, silent = false) {
   const { biz, day, b } = await findByToken(kv, token);
   const st = changeState(biz, b);
   if (!st.canChange) throw new HttpError(403, st.reason);
   b.status = "cancelled"; (b.history ||= []).push({ type: "cancelled", at: Date.now() });
   await saveDay(kv, biz.slug, b.date, day);
   await touchClient(kv, biz.slug, b.phone, c => applyStatus(c, b, null, "cancelled"), b.name);
-  const message = await notify(kv, env, b, biz, "cancelled", siteUrl, fetchImpl);
+  const message = silent ? null : await notify(kv, env, b, biz, "cancelled", siteUrl, fetchImpl);
   return { booking: publicBooking(b), message };
 }
 
@@ -553,6 +573,7 @@ export function sanitizeConfig(biz: Biz, c: any): Biz {
   if (typeof c.phone === "string") out.phone = c.phone.replace(/[^\d-]/g, "").slice(0, 15);
   if (Array.isArray(c.staff) && c.staff.length) out.staff = c.staff.slice(0, 20).map((s: any) => ({ id: /^[A-Za-z0-9]{3,12}$/.test(s.id) ? s.id : rid(6), name: L(s.name) }));
   if (Array.isArray(c.hours) && c.hours.length === 7) out.hours = c.hours.map((h: any) => ({ open: !!h.open, from: isTime(h.from) ? h.from : "09:00", to: isTime(h.to) ? h.to : "18:00" }));
+  if (c.bot) out.bot = { enabled: c.bot.enabled !== false, ai: c.bot.ai !== false };
   if (c.cutoff != null) out.cutoff = Math.min(72, Math.max(0, +c.cutoff || 0));
   if (Array.isArray(c.blocked)) out.blocked = c.blocked.map(cleanPhone).filter((p: string) => /^05\d{8}$/.test(p)).slice(0, 500);
   if (typeof c.pin === "string" && /^\d{4,8}$/.test(c.pin)) out.pin = c.pin;
@@ -575,6 +596,19 @@ export async function adminUpdateClient(kv: KV, slug: string, input: any) {
   }
   await saveClients(kv, slug, items);
   return c;
+}
+/** messages the bot passed on to the business (questions it could not answer, "talk to a person") */
+export async function addInbox(kv: KV, slug: string, item: { phone: string; name: string; text: string; kind: string }) {
+  const d = (await kv.get(`inbox/${slug}`, { type: "json" })) || { items: [] };
+  d.items.unshift({ ...item, id: rid(8), at: Date.now(), done: false });
+  d.items = d.items.slice(0, 200);
+  await kv.setJSON(`inbox/${slug}`, d);
+}
+export async function getInbox(kv: KV, slug: string) { return (await kv.get(`inbox/${slug}`, { type: "json" }))?.items || [] }
+export async function inboxDone(kv: KV, slug: string, id: string) {
+  const d = (await kv.get(`inbox/${slug}`, { type: "json" })) || { items: [] };
+  const it = d.items.find((x: any) => x.id === id); if (it) it.done = true;
+  await kv.setJSON(`inbox/${slug}`, d);
 }
 export async function adminMessages(kv: KV, slug: string) {
   const ym = ilNow().date.slice(0, 7);

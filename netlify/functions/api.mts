@@ -5,8 +5,10 @@ import {
   changeState, reschedule, cancelByClient, adminBookings, adminSetStatus, sanitizeConfig, adminMessages,
   sendWhatsApp, logMsg, buildBiz, ilNow, addDays, getClients, clubCard, createOrder, adminOrders, adminOrderStatus,
   adminUpdateClient, setLogo, addGalleryImage, removeGalleryImage, getImage, decodeDataUrl, getReviews, addReview, publicReviews,
+  getInbox, inboxDone,
   type KV, type Env, type Booking,
 } from "../lib/core.mts";
+import { handleIncoming } from "../lib/bot.mts";
 
 const env: Env = k => Netlify.env.get(k);
 const json = (data: unknown, status = 200) => Response.json(data, { status, headers: { "cache-control": "no-store" } });
@@ -23,7 +25,8 @@ export default async (req: Request, context: Context) => {
     if (parts[0] === "biz" && parts[1] && req.method === "GET") {
       const biz = parts[1] === "demo" ? await ensureDemo(kv, env) : await getBiz(kv, parts[1]);
       if (!biz) return json({ error: "not_found" }, 404);
-      return json({ biz: publicBiz(biz), today: ilNow().date });
+      const waBot = biz.bot.enabled ? (env("WA_DISPLAY_NUMBER") || "").replace(/\D/g, "") : "";
+      return json({ biz: publicBiz(biz), today: ilNow().date, waBot });
     }
     if (parts[0] === "extras" && parts[1] && req.method === "GET") {
       const biz = await getBiz(kv, parts[1]);
@@ -94,7 +97,24 @@ export default async (req: Request, context: Context) => {
       if (!pin || pin !== biz.pin) return json({ error: "bad_pin" }, 401);
       const action = parts[2];
       if (action === "login" || (action === "config" && req.method === "GET"))
-        return json({ biz, waConnected: !!(env("WA_TOKEN") && env("WA_PHONE_ID")), today: ilNow().date });
+        return json({ biz, waConnected: !!(env("WA_TOKEN") && env("WA_PHONE_ID")), today: ilNow().date, waBot: (env("WA_DISPLAY_NUMBER") || "").replace(/\D/g, ""), botAi: !!env("ANTHROPIC_API_KEY") });
+      // chat simulator in the dashboard: runs the real bot without sending anything to WhatsApp
+      if (action === "bot-sim" && req.method === "POST") {
+        const phone = String(body.phone || "0500000000").replace(/\D/g, "");
+        if (!/^05\d{8}$/.test(phone)) return json({ error: "bad_phone" }, 400);
+        const out = await handleIncoming(kv, env, siteUrl, {
+          from: "972" + phone.slice(1), id: "sim-" + Date.now() + Math.random(), text: body.text ? String(body.text).slice(0, 500) : undefined,
+          replyId: body.replyId ? String(body.replyId).slice(0, 200) : undefined, profileName: body.profileName ? String(body.profileName).slice(0, 40) : undefined,
+        }, { sim: true, slug: biz.slug });
+        return json({ out });
+      }
+      if (action === "bot-sim-reset" && req.method === "POST") {
+        const phone = String(body.phone || "0500000000").replace(/\D/g, "");
+        await kv.delete(`botsim/972${phone.slice(1)}`);
+        return json({ ok: true });
+      }
+      if (action === "inbox" && req.method === "GET") return json({ items: await getInbox(kv, biz.slug) });
+      if (action === "inbox-done" && req.method === "POST") { await inboxDone(kv, biz.slug, String(body.id || "")); return json({ ok: true }) }
       if (action === "config" && req.method === "PUT") {
         const next = sanitizeConfig(biz, body);
         await saveBiz(kv, next);
@@ -133,6 +153,18 @@ export default async (req: Request, context: Context) => {
         await logMsg(kv, biz.slug, m);
         return json({ message: m });
       }
+    }
+
+    // ---------- give a business its own WhatsApp number (phone_number_id from Meta) ----------
+    if (parts[0] === "super" && parts[1] === "wa-link" && req.method === "POST") {
+      const key = env("SUPER_KEY");
+      if (!key || req.headers.get("x-super-key") !== key) return json({ error: "forbidden" }, 403);
+      const biz = await getBiz(kv, String(body.slug || ""));
+      const pid = String(body.phoneId || "").replace(/\D/g, "");
+      if (!biz || !pid) return json({ error: "bad_request" }, 400);
+      if (biz.waPhoneId && biz.waPhoneId !== pid) await kv.delete(`wapid/${biz.waPhoneId}`);
+      biz.waPhoneId = pid; await saveBiz(kv, biz); await kv.setJSON(`wapid/${pid}`, { slug: biz.slug });
+      return json({ ok: true, slug: biz.slug, phoneId: pid });
     }
 
     // ---------- create a new business (for onboarding customers) ----------

@@ -109,3 +109,28 @@
 | `REMINDER_HOUR` | השעה שממנה נשלחות התזכורות של מחר (ברירת מחדל 18) |
 | `WA_TPL_CONFIRM` / `WA_TPL_REMINDER` / `WA_TPL_CHANGED` / `WA_TPL_CANCELLED` | אם נתת לתבניות שמות אחרים |
 | `WA_API_VERSION` | גרסת ה-Graph API (ברירת מחדל v23.0) |
+
+## 6. הבוט – לקוחות קובעים תור בצ'אט
+הבוט עונה ללקוחות שכותבים למספר הוואטסאפ של המערכת. הוא קובע, מציג, מזיז ומבטל תורים, ובודק תמיד את התורים הפנויים באמת. הודעות של הבוט בתוך שיחה שהלקוח פתח לא דורשות תבניות.
+
+**א. Webhook ב-Meta**
+ב-developers.facebook.com → האפליקציה → WhatsApp → **Configuration** → Webhook → Edit:
+- Callback URL: `https://torlink.netlify.app/wa/webhook` (או הדומיין שלך + `/wa/webhook`)
+- Verify token: כל מילה סודית שתבחר, למשל `torlink-2026-xyz`
+- אחרי Verify and save → **Manage** → לסמן **messages** → Subscribe
+
+**ב. משתנים ב-Netlify** (ואז Trigger deploy)
+| שם | ערך |
+|---|---|
+| `WA_VERIFY_TOKEN` | אותה מילה סודית מסעיף א׳. **להזין לפני** ה-Verify ב-Meta |
+| `WA_APP_SECRET` | App settings → Basic → App secret (מגן שרק Meta יכולה לשלוח לבוט) |
+| `WA_DISPLAY_NUMBER` | מספר הוואטסאפ של המערכת בפורמט בינלאומי, למשל `972501234567`. מפעיל את הכפתור "קביעת תור בוואטסאפ" בדף העסק |
+| `ANTHROPIC_API_KEY` | לא חובה. מפעיל הבנה של טקסט חופשי ("بدي دور بكرا المسا"). מ-console.anthropic.com |
+| `WA_DEFAULT_SLUG` | לא חובה. אם כל המספר שייך לעסק אחד בלבד |
+
+**ג. איך הבוט יודע לאיזה עסק הלקוח כותב?**
+1. הקישור מהדף של העסק (ומהלשונית "בוט" בניהול) כבר כולל את קוד העסק, למשל `#ayah`.
+2. אחרי פעם אחת הוא זוכר את הלקוח.
+3. לעסק עם מספר וואטסאפ משלו: `POST /api/super/wa-link` עם `{slug, phoneId}` וכותרת `x-super-key`.
+
+**ד. בדיקה בלי Meta:** בניהול → לשונית **בוט** יש סימולטור. מדברים עם הבוט כמו לקוח.
