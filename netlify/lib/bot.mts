@@ -371,7 +371,7 @@ async function aiParse(c: Ctx, text: string): Promise<Parsed | null> {
   const cal = Array.from({ length: 14 }, (_, i) => { const d = addDays(today, i); return `${d} = ${dateText(d, "he")} / ${dateText(d, "ar")}${i === 0 ? " (today)" : i === 1 ? " (tomorrow)" : ""}` }).join("\n");
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const info = [
-    `Business: ${c.biz.name.he} / ${c.biz.name.ar} (${c.biz.type === "nails" ? "nail studio" : "barbershop"})`,
+    `Business: ${c.biz.name.he} / ${c.biz.name.ar} (${({ nails: "nail studio", beauty: "women's hair salon", cosmetics: "beauty / skin-care clinic", lashes: "lashes & brows studio" } as any)[c.biz.type] || "barbershop"})`,
     c.biz.address ? `Address: ${c.biz.address}` : "", c.biz.phone ? `Phone: ${c.biz.phone}` : "",
     `Opening hours: ${c.biz.hours.map((h, i) => `${days[i]} ${h.open ? h.from + "-" + h.to : "closed"}`).join(", ")}`,
     `Services:\n${c.biz.services.map(s => `- id=${s.id}: ${s.name.he} / ${s.name.ar}, ${s.dur} min, ₪${s.price}`).join("\n")}`,

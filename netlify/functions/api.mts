@@ -1,7 +1,7 @@
 import type { Config, Context } from "@netlify/functions";
 import { getStore } from "@netlify/blobs";
 import {
-  HttpError, getBiz, ensureDemo, saveBiz, getDay, publicBiz, publicBooking, slotsFor, createBooking, findByToken,
+  HttpError, getBiz, ensureDemo, DEMOS, saveBiz, getDay, publicBiz, publicBooking, slotsFor, createBooking, findByToken,
   changeState, reschedule, cancelByClient, adminBookings, adminSetStatus, sanitizeConfig, adminMessages,
   sendWhatsApp, logMsg, buildBiz, ilNow, addDays, getClients, clubCard, createOrder, adminOrders, adminOrderStatus,
   adminUpdateClient, setLogo, setItemImage, setSpin, getSpin, addGalleryImage, removeGalleryImage, getImage, decodeDataUrl, getReviews, addReview, publicReviews,
@@ -25,7 +25,7 @@ export default async (req: Request, context: Context) => {
   try {
     // ---------- public ----------
     if (parts[0] === "biz" && parts[1] && req.method === "GET") {
-      const biz = parts[1] === "demo" ? await ensureDemo(kv, env) : await getBiz(kv, parts[1]);
+      const biz = DEMOS[parts[1]] ? await ensureDemo(kv, env, parts[1]) : await getBiz(kv, parts[1]);
       if (!biz) return json({ error: "not_found" }, 404);
       const waBot = biz.bot.enabled && isLive(biz) && hasBot(await getPlatform(kv), biz) ? (env("WA_DISPLAY_NUMBER") || "").replace(/\D/g, "") : "";
       return json({ biz: publicBiz(biz), today: ilNow().date, waBot });
@@ -107,7 +107,7 @@ export default async (req: Request, context: Context) => {
 
     // ---------- admin (PIN per business) ----------
     if (parts[0] === "admin" && parts[1]) {
-      const biz = parts[1] === "demo" ? await ensureDemo(kv, env) : await getBiz(kv, parts[1]);
+      const biz = DEMOS[parts[1]] ? await ensureDemo(kv, env, parts[1]) : await getBiz(kv, parts[1]);
       if (!biz) return json({ error: "not_found" }, 404);
       const pin = req.headers.get("x-admin-pin") || body.pin;
       if (!pin || pin !== biz.pin) return json({ error: "bad_pin" }, 401);

@@ -30,7 +30,7 @@ export interface Biz {
   status: "pending" | "active" | "suspended"; paidUntil: string; plan: string; owner: { name: string; phone: string };
   closed: Closure[]; notify: Notify;
 }
-export interface Theme { accent: string; mode: "dark" | "light"; logoBg?: "light" | "dark" | "" }
+export interface Theme { accent: string; mode: "dark" | "light"; logoBg?: "light" | "dark" | ""; skin?: string }
 export interface Social { instagram: string; facebook: string; tiktok: string; whatsapp: string; waze: string }
 export interface Review { id: string; name: string; stars: number; text: string; at: number; service: L; reply?: string }
 /** Customer-club record, kept up to date as bookings/orders change status */
@@ -90,7 +90,44 @@ export const PRESETS: Record<string, { icon: string; name: L; services: PSvc[]; 
     ],
     reward: { he: "מניקור חינם", ar: "مانيكير مجاني" },
   },
+  beauty: {
+    icon: "wind", name: { he: "סלון שיער", ar: "صالون شعر" },
+    services: [["תספורת נשים", "قص شعر نسائي", 45, 120, "scissors"], ["פן", "سشوار", 30, 80, "wind"], ["צבע שורשים", "صبغة جذور", 90, 250, "palette"], ["גוונים", "هايلايت", 150, 450, "sparkles"], ["החלקה", "تمليس", 180, 700, "flame"]],
+    staff: [["רים", "ريم"]],
+    products: [
+      ["מסכה משקמת לשיער", "ماسك مرمم للشعر", "לשיער צבוע ויבש", "للشعر المصبوغ والجاف", 75, 10, "droplet"],
+      ["שמפו מקצועי", "شامبو احترافي", "ללא סולפטים", "بدون سلفات", 65, 12, "flask-conical"],
+      ["סרום ברק", "سيروم لمعان", "נגד קרזול", "ضد التجعد", 90, 8, "sparkles"],
+      ["ספריי הגנה מחום", "سبراي حماية من الحرارة", "לפני פן ומחליק", "قبل السشوار والمكواة", 55, 10, "spray-can"],
+    ],
+    reward: { he: "פן חינם", ar: "سشوار مجاني" },
+  },
+  cosmetics: {
+    icon: "leaf", name: { he: "קליניקה לקוסמטיקה", ar: "عيادة تجميل" },
+    services: [["טיפול פנים קלאסי", "علاج وجه كلاسيكي", 60, 250, "sparkles"], ["ניקוי עמוק", "تنظيف عميق", 75, 300, "droplet"], ["פילינג", "تقشير", 45, 220, "leaf"], ["עיצוב גבות", "تشقير حواجب", 20, 50, "brush"], ["הסרת שיער בשעווה", "إزالة شعر بالشمع", 30, 90, "flame"]],
+    staff: [["נור", "نور"]],
+    products: [
+      ["קרם לחות", "كريم مرطب", "לכל סוגי העור", "لكل أنواع البشرة", 120, 10, "droplet"],
+      ["סרום ויטמין C", "سيروم فيتامين C", "להבהרה וזוהר", "للتفتيح والنضارة", 160, 8, "sparkles"],
+      ["קרם הגנה SPF50", "واقي شمس SPF50", "קל ולא שומני", "خفيف وغير دهني", 95, 12, "shield"],
+      ["מי פנים", "تونر", "מאזן ומרענן", "يوازن وينعش", 70, 10, "leaf"],
+    ],
+    reward: { he: "עיצוב גבות חינם", ar: "تشقير حواجب مجاني" },
+  },
+  lashes: {
+    icon: "star", name: { he: "סטודיו ריסים וגבות", ar: "ستوديو رموش وحواجب" },
+    services: [["הרמת ריסים", "رفع رموش", 60, 180, "star"], ["הארכת ריסים", "تركيب رموش", 120, 350, "sparkles"], ["מילוי ריסים", "تعبئة رموش", 75, 200, "repeat"], ["עיצוב גבות", "تشقير حواجب", 20, 50, "brush"], ["הרמת גבות", "رفع حواجب", 45, 150, "crown"]],
+    staff: [["לין", "لين"]],
+    products: [
+      ["סרום לצמיחת ריסים", "سيروم لتطويل الرموش", "תוצאות תוך 6 שבועות", "نتائج خلال 6 أسابيع", 120, 10, "sparkles"],
+      ["סרום גבות", "سيروم حواجب", "לגבות מלאות", "لحواجب كثيفة", 110, 8, "brush"],
+      ["מברשות ריסים", "فراشي رموش", "סט של 10", "طقم 10 قطع", 15, 30, "align-justify"],
+    ],
+    reward: { he: "עיצוב גבות חינם", ar: "تشقير حواجب مجاني" },
+  },
 };
+/** which look each industry gets automatically */
+export const TYPE_ACCENT: Record<string, string> = { barber: "#c9a45c", nails: "#d58fa6", beauty: "#c8a27a", cosmetics: "#7fa58b", lashes: "#b07c9e" };
 export const ICONS = ["scissors", "crown", "sparkles", "smile", "wind", "gem", "repeat", "droplet", "hand", "footprints", "flask-conical", "align-justify", "spray-can", "palette", "brush", "package", "star", "heart", "flame", "leaf", "zap", "shield"];
 const safeIcon = (s: any, d = "package") => (ICONS.includes(s) ? s : d);
 const defaultClub = (type: string): Club => ({ enabled: true, rewardEvery: 10, reward: { ...(PRESETS[type] || PRESETS.barber).reward } });
@@ -99,7 +136,8 @@ export function normalizeBiz(b: Biz): Biz {
   const p = PRESETS[b.type] || PRESETS.barber;
   if (!Array.isArray(b.products)) b.products = [];
   if (!b.club) b.club = defaultClub(b.type);
-  if (!b.theme) b.theme = { accent: b.type === "nails" ? "#d58fa6" : "#c9a45c", mode: "dark" };
+  if (!b.theme) b.theme = { accent: TYPE_ACCENT[b.type] || "#c9a45c", mode: "dark" };
+  if (!b.theme.skin) b.theme.skin = "auto";
   if (!b.social) b.social = { instagram: "", facebook: "", tiktok: "", whatsapp: "", waze: "" };
   if (!b.tagline) b.tagline = { he: "", ar: "" };
   if (typeof b.logoV !== "number") b.logoV = 0;
@@ -165,9 +203,12 @@ export async function getBiz(kv: KV, slug: string): Promise<Biz | null> {
   const b = await kv.get(`biz/${slug}`, { type: "json" });
   return b ? normalizeBiz(b) : null;
 }
-export async function ensureDemo(kv: KV, env: Env) {
-  let b = await getBiz(kv, "demo");
-  if (!b) { b = buildBiz("demo", "barber", env("ADMIN_PIN") || "1234"); await kv.setJSON("biz/demo", b) }
+/** one live demo per industry: /b/demo, /b/demo-nails, /b/demo-beauty, /b/demo-cosmetics, /b/demo-lashes */
+export const DEMOS: Record<string, string> = { demo: "barber", "demo-nails": "nails", "demo-beauty": "beauty", "demo-cosmetics": "cosmetics", "demo-lashes": "lashes" };
+export async function ensureDemo(kv: KV, env: Env, slug = "demo") {
+  if (!DEMOS[slug]) slug = "demo";
+  let b = await getBiz(kv, slug);
+  if (!b) { b = buildBiz(slug, DEMOS[slug], env("ADMIN_PIN") || "1234"); await kv.setJSON(`biz/${slug}`, b) }
   return b;
 }
 
@@ -655,7 +696,7 @@ export function sanitizeConfig(biz: Biz, c: any): Biz {
   if (Array.isArray(c.services) && c.services.length) out.services = c.services.slice(0, 40).map((s: any) => ({ id: okId(s.id), name: L(s.name), dur: Math.min(480, Math.max(5, Math.round(+s.dur / 5) * 5 || 30)), price: Math.max(0, Math.round(+s.price || 0)), icon: safeIcon(s.icon, "scissors"), img: biz.services.find(o => o.id === s.id)?.img || 0 }));
   if (Array.isArray(c.products)) out.products = c.products.slice(0, 60).map((p: any) => ({ id: okId(p.id), name: L(p.name), desc: L(p.desc), price: Math.max(0, Math.round(+p.price || 0)), stock: Math.max(0, Math.floor(+p.stock || 0)), icon: safeIcon(p.icon), active: p.active !== false, img: biz.products.find(o => o.id === p.id)?.img || 0, spin: biz.products.find(o => o.id === p.id)?.spin || 0, spinN: biz.products.find(o => o.id === p.id)?.spinN || 0 }));
   if (c.club) out.club = { enabled: c.club.enabled !== false, rewardEvery: Math.min(50, Math.max(2, Math.floor(+c.club.rewardEvery || 10))), reward: L(c.club.reward) };
-  if (c.theme) out.theme = { accent: /^#[0-9a-fA-F]{6}$/.test(c.theme.accent) ? c.theme.accent.toLowerCase() : out.theme.accent, mode: c.theme.mode === "light" ? "light" : "dark", logoBg: ["light", "dark"].includes(c.theme.logoBg) ? c.theme.logoBg : "" };
+  if (c.theme) out.theme = { accent: /^#[0-9a-fA-F]{6}$/.test(c.theme.accent) ? c.theme.accent.toLowerCase() : out.theme.accent, mode: c.theme.mode === "light" ? "light" : "dark", logoBg: ["light", "dark"].includes(c.theme.logoBg) ? c.theme.logoBg : "", skin: ["auto", "noir", "blush", "luxe", "fresh"].includes(c.theme.skin) ? c.theme.skin : "auto" };
   if (c.tagline) out.tagline = L(c.tagline);
   if (c.social) {
     // keep only plain https links / handles; anything else is dropped

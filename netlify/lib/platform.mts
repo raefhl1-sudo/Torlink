@@ -50,14 +50,14 @@ export function sanitizePlatform(c: any): Platform {
 
 const RESERVED = new Set(["demo", "admin", "api", "super", "join", "www", "app", "torlink", "b", "m", "wa", "test"]);
 export async function slugFree(kv: KV, slug: string) {
-  return /^[a-z0-9-]{3,30}$/.test(slug) && !RESERVED.has(slug) && !(await getBiz(kv, slug));
+  return /^[a-z0-9-]{3,30}$/.test(slug) && !RESERVED.has(slug) && !slug.startsWith("demo") && !(await getBiz(kv, slug));
 }
 
 export async function signup(kv: KV, env: Env, input: any) {
   const p = await getPlatform(kv);
   const slug = String(input.slug || "").toLowerCase().trim();
   if (!(await slugFree(kv, slug))) throw new HttpError(409, "slug_taken");
-  const type = input.type === "nails" ? "nails" : "barber";
+  const type = ["barber", "nails", "beauty", "cosmetics", "lashes"].includes(input.type) ? input.type : "barber";
   const he = String(input.name?.he || "").trim().slice(0, 60), ar = String(input.name?.ar || "").trim().slice(0, 60);
   if (!he && !ar) throw new HttpError(400, "bad_name");
   const ownerName = String(input.ownerName || "").trim().slice(0, 60);
@@ -106,7 +106,7 @@ export async function superList(kv: KV) {
     };
   }));
   const list = items.filter(Boolean).sort((a: any, b: any) => b.created - a.created);
-  const mrr = list.filter((x: any) => x.live && x.slug !== "demo").reduce((s: number, x: any) => s + x.price, 0);
+  const mrr = list.filter((x: any) => x.live && !x.slug.startsWith("demo")).reduce((s: number, x: any) => s + x.price, 0);
   return { items: list, platform: p, mrr, today };
 }
 
