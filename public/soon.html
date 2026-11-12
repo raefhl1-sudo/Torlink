@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>TorLink · בקרוב</title>
+<meta name="description" content="TorLink – מערכת קביעת תורים חכמה למספרות, סטודיו לציפורניים ועסקי יופי. בקרוב.">
+<meta name="theme-color" content="#0e0e10">
+<meta property="og:title" content="TorLink · בקרוב">
+<meta property="og:description" content="מערכת תורים חכמה לעסקי יופי – תורים, וואטסאפ, מועדון לקוחות וכרטיס דיגיטלי. בקרוב.">
+<link rel="icon" href="/wallet-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=Suez+One&family=Reem+Kufi:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:#0b0b0d;color:#f4efe6;font-family:Heebo,system-ui,sans-serif;display:grid;place-items:center;overflow:hidden;
+  background:radial-gradient(900px 520px at 50% -10%,rgba(201,164,92,.22),transparent 60%),radial-gradient(700px 400px at 50% 120%,rgba(201,164,92,.10),transparent 60%),#0b0b0d}
+.grain{position:fixed;inset:0;pointer-events:none;opacity:.05;background-image:repeating-radial-gradient(circle at 17% 23%,#fff 0 1px,transparent 1px 3px)}
+.ring{position:fixed;left:50%;top:50%;width:min(130vw,900px);aspect-ratio:1;border-radius:50%;border:1px solid rgba(201,164,92,.12);transform:translate(-50%,-50%);animation:pulse 6s ease-in-out infinite}
+.ring.r2{width:min(95vw,640px);animation-delay:-2s}.ring.r3{width:min(60vw,400px);animation-delay:-4s}
+@keyframes pulse{0%,100%{opacity:.35;transform:translate(-50%,-50%) scale(.97)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.02)}}
+main{position:relative;text-align:center;padding:32px 24px;max-width:560px;animation:in 1s cubic-bezier(.2,.8,.2,1) both}
+@keyframes in{from{opacity:0;transform:translateY(18px)}}
+.mark{display:inline-flex;align-items:center;gap:12px;direction:ltr;margin-bottom:34px}
+.mark i{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(140deg,#e8cb8a,#b8913f);box-shadow:0 14px 34px -12px rgba(201,164,92,.7)}
+.mark i svg{width:26px;height:26px;stroke:#141210}
+.mark b{font:700 30px Heebo,sans-serif;letter-spacing:-.5px}.mark b span{color:#e8cb8a}
+.tag{display:inline-block;font-size:12px;letter-spacing:3px;color:#e8cb8a;border:1px solid rgba(201,164,92,.35);border-radius:99px;padding:6px 14px;margin-bottom:18px}
+h1{font:400 clamp(44px,12vw,76px)/1 'Suez One',serif;background:linear-gradient(180deg,#fff,#d9c39a);-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{font:700 clamp(26px,7vw,40px)/1.2 'Reem Kufi',sans-serif;color:#e8cb8a;margin-top:8px}
+p{color:#a9a294;font-size:17px;line-height:1.7;margin-top:22px}
+p+p{margin-top:6px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:28px}
+.chips span{font-size:13px;color:#d9ccb0;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:99px;padding:7px 13px}
+.dots{display:inline-flex;gap:6px;margin-top:34px}.dots i{width:7px;height:7px;border-radius:50%;background:#c9a45c;animation:d 1.4s infinite}
+.dots i:nth-child(2){animation-delay:.2s}.dots i:nth-child(3){animation-delay:.4s}
+@keyframes d{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}
+footer{position:fixed;bottom:18px;left:0;right:0;text-align:center;font-size:12px;color:#5f5a52;direction:ltr}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="grain"></div><div class="ring"></div><div class="ring r2"></div><div class="ring r3"></div>
+<main>
+  <div class="mark"><i><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18M9 16l2 2 4-4"/></svg></i><b>Tor<span>Link</span></b></div>
+  <div><span class="tag">COMING SOON</span></div>
+  <h1>בקרוב</h1>
+  <h2>قريبًا</h2>
+  <p>מערכת התורים החכמה למספרות, לסטודיו ציפורניים ולעסקי יופי.</p>
+  <p>نظام الدور الذكي للصالونات واستوديوهات الأظافر ومحلات التجميل.</p>
+  <div class="chips"><span>תורים אונליין</span><span>וואטסאפ אוטומטי</span><span>מועדון לקוחות</span><span>כרטיס דיגיטלי</span><span>חנות 3D</span></div>
+  <div class="dots"><i></i><i></i><i></i></div>
+</main>
+<footer>© TorLink · torlink.app</footer>
+</body>
+</html>

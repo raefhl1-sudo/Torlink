@@ -862,7 +862,7 @@ function parseRoute(){
   return i<0?[h,'demo']:[h.slice(0,i),h.slice(i+1)];
 }
 let P=parseRoute(),MODE,KEY;
-const setMode=()=>{MODE=P[0]==='c'?'card':P[0]==='m'?'manage':P[0]==='admin'?'admin':P[0]==='super'?'super':(P[0]==='join'||!P.length)?'join':'book';KEY=P[1]||'demo'};setMode();
+const setMode=()=>{MODE=P[0]==='c'?'card':P[0]==='m'?'manage':P[0]==='admin'?'admin':P[0]==='super'?'super':(P[0]==='join'||P[0]==='home'||!P.length)?'join':'book';KEY=P[1]||'demo'};setMode();
 let S,cb,mg,shop,A,tabData;
 function resetState(){
   S={biz:null,today:null,loadErr:null,view:'book'};cb=null;mg={data:null,confirm:false,err:'',msg:null};tabData=null;

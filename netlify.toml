@@ -25,8 +25,23 @@
   to = "/index.html"
   status = 200
 
+# --- coming-soon mode: the public homepage and sign-up show soon.html.
+# To launch: delete these two blocks (and /join goes back to index.html below).
+[[redirects]]
+  from = "/"
+  to = "/soon.html"
+  status = 200
+  force = true
+
 [[redirects]]
   from = "/join"
+  to = "/soon.html"
+  status = 200
+  force = true
+
+# private preview of the sales page while in coming-soon mode
+[[redirects]]
+  from = "/home"
   to = "/index.html"
   status = 200
 
