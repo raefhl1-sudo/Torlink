@@ -5,9 +5,10 @@ import {
   changeState, reschedule, cancelByClient, adminBookings, adminSetStatus, sanitizeConfig, adminMessages,
   sendWhatsApp, logMsg, buildBiz, ilNow, addDays, getClients, clubCard, createOrder, adminOrders, adminOrderStatus,
   adminUpdateClient, setLogo, setItemImage, setSpin, getSpin, addGalleryImage, removeGalleryImage, getImage, decodeDataUrl, getReviews, addReview, publicReviews,
-  getInbox, inboxDone, sellPack, redeemPack, cardLink, getCard,
+  getInbox, inboxDone, sellPack, redeemPack, cardLink, getCard, cardClient,
   type KV, type Env, type Booking,
 } from "../lib/core.mts";
+import { gwConfigured, saveUrl, syncPass } from "../lib/gwallet.mts";
 import { handleIncoming } from "../lib/bot.mts";
 import { getPlatform, hasBot, planOf, signup, slugFree, superList, superAction, sanitizePlatform } from "../lib/platform.mts";
 import { isLive } from "../lib/core.mts";
@@ -94,7 +95,13 @@ export default async (req: Request, context: Context) => {
       const order = await createOrder(kv, biz, body);
       return json({ order });
     }
-    if (parts[0] === "card" && parts[1] && req.method === "GET") return json(await getCard(kv, parts[1]));
+    if (parts[0] === "card" && parts[1] && parts[2] === "google" && req.method === "GET") {
+      if (!gwConfigured(env)) throw new HttpError(404, "wallet_off");
+      const { biz, c, save } = await cardClient(kv, parts[1]);
+      if (!c.gw) { c.gw = true; await save() }
+      return json({ url: await saveUrl(env, biz, c, siteUrl) });
+    }
+    if (parts[0] === "card" && parts[1] && req.method === "GET") return json({ ...await getCard(kv, parts[1]), gw: gwConfigured(env) });
     if (parts[0] === "booking" && parts[1]) {
       if (req.method === "GET" && !parts[2]) {
         const { biz, b } = await findByToken(kv, parts[1]);
@@ -166,8 +173,12 @@ export default async (req: Request, context: Context) => {
       }
       if (action === "clients" && req.method === "GET") return json({ clients: Object.values(await getClients(kv, biz.slug)) });
       if (action === "client" && req.method === "PUT") return json({ client: await adminUpdateClient(kv, biz.slug, body) });
-      if (action === "pack-sell" && req.method === "POST") return json({ client: await sellPack(kv, biz, body) });
-      if (action === "pack-use" && req.method === "POST") return json({ client: await redeemPack(kv, biz, body) });
+      if (action === "pack-sell" || action === "pack-use") {
+        if (req.method !== "POST") throw new HttpError(405, "method");
+        const client = action === "pack-sell" ? await sellPack(kv, biz, body) : await redeemPack(kv, biz, body);
+        await syncPass(env, biz, client, siteUrl);
+        return json({ client });
+      }
       if (action === "card-link" && req.method === "POST") return json({ token: await cardLink(kv, biz.slug, String(body.phone || "")) });
       if (action === "orders" && req.method === "GET") return json({ orders: await adminOrders(kv, biz.slug, +(url.searchParams.get("months") || 3)) });
       if (action === "order-status" && req.method === "POST") return json({ order: await adminOrderStatus(kv, biz, String(body.id), String(body.status)) });

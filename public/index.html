@@ -150,6 +150,7 @@ html[dir=ltr] .wc .meter i{transform-origin:left}
 .wpk.off{opacity:.55}
 .wpk .tr{height:6px;border-radius:6px;background:var(--line);margin:8px 0 4px;overflow:hidden}.wpk .tr i{display:block;height:100%;background:var(--gold)}
 .pk-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+.gwb{background:#000!important;color:#fff!important;border:1px solid #444!important}
 .home-tip{font-size:13px;color:var(--muted);line-height:1.6}
 .club{position:relative;border-radius:22px;padding:20px;overflow:hidden;color:#f8f1e2;border:1px solid var(--gold-line);
   background:radial-gradient(500px 200px at 100% 0%,var(--club-glow),transparent 60%),linear-gradient(135deg,var(--club1),#111012 70%)}
@@ -802,12 +803,12 @@ async function api(method,url,body,pin){
 }
 
 /* ---- packages + wallet card strings ---- */
-Object.assign(T.he,{myCard:'הכרטיס שלי',cardOpen:'לכרטיס האישי',cardLeft:'כניסות שנותרו',cardOf:'מתוך',cardNoPack:'אין חבילה פעילה',cardNext:'התור הבא שלך',cardNoNext:'אין תור עתידי',cardBook:'לקביעת תור',cardShow:'הציגו את הקוד בקופה',cardSince:'חבר/ה מאז',cardExp:'בתוקף עד',cardExpired:'פג תוקף',cardUsedUp:'נוצל',cardLast:'שימוש אחרון',cardHome:'הוספה למסך הבית',
+Object.assign(T.he,{gwAdd:'הוספה ל־Google Wallet',myCard:'הכרטיס שלי',cardOpen:'לכרטיס האישי',cardLeft:'כניסות שנותרו',cardOf:'מתוך',cardNoPack:'אין חבילה פעילה',cardNext:'התור הבא שלך',cardNoNext:'אין תור עתידי',cardBook:'לקביעת תור',cardShow:'הציגו את הקוד בקופה',cardSince:'חבר/ה מאז',cardExp:'בתוקף עד',cardExpired:'פג תוקף',cardUsedUp:'נוצל',cardLast:'שימוש אחרון',cardHome:'הוספה למסך הבית',
  cardHomeIos:'באייפון: לחצו על כפתור השיתוף ⬆︎ ואז "הוספה למסך הבית".',cardHomeAnd:'באנדרואיד: תפריט ⋮ ואז "הוספה למסך הבית" / "התקנת אפליקציה".',cardShare:'שיתוף',cardPacks:'החבילות שלי',cardUse1:'ניצול כניסה',cardUsed:'נוצלה כניסה ✓',cardOwner:'מצב בעל העסק',
  gPacks:'חבילות',pkNote:'חבילה = מספר טיפולים בתשלום מראש (כרטיסייה). הלקוח מקבל כרטיס דיגיטלי עם יתרה ו־QR.',pkName:'שם החבילה',pkSvc:'לאיזה טיפול',pkAny:'כל טיפול',pkCount:'כניסות',pkPrice:'מחיר ₪',pkDays:'תוקף (ימים, 0=ללא)',pkAdd:'הוספת חבילה',pkSave:'חיסכון',pkPer:'לכניסה',
  pkSell:'מכירת חבילה',pkMethod:'אמצעי תשלום',m_cash:'מזומן',m_bit:'ביט',m_card:'אשראי',m_transfer:'העברה',pkSold:'החבילה נמכרה ✓',pkUse:'ניצול −1',pkUndo:'ביטול ניצול',pkSendCard:'שליחת הכרטיס בוואטסאפ',pkCopy:'העתקת קישור',copied:'הקישור הועתק',pkNone:'עוד אין חבילות ללקוח/ה',
  pkWaText:'היי {n}! זה הכרטיס האישי שלך ב{b} – יתרת כניסות, QR והתור הבא, הכול במקום אחד. מומלץ להוסיף למסך הבית:',pkSureSell:'למכור את "{p}" ב־{x}?',e_no_pack:'אין חבילה פעילה לשימוש',e_bad_package:'חבילה לא נמצאה',e_already_used:'כבר נוצלה כניסה לתור הזה',e_nothing_to_undo:'אין מה לבטל'});
-Object.assign(T.ar,{myCard:'بطاقتي',cardOpen:'للبطاقة الشخصية',cardLeft:'دخولات باقية',cardOf:'من',cardNoPack:'ما في رزمة فعّالة',cardNext:'دورك الجاي',cardNoNext:'ما في دور قادم',cardBook:'لحجز دور',cardShow:'اعرض الكود بالصندوق',cardSince:'عضو من',cardExp:'صالحة لـ',cardExpired:'منتهية',cardUsedUp:'مستعملة',cardLast:'آخر استعمال',cardHome:'إضافة للشاشة الرئيسية',
+Object.assign(T.ar,{gwAdd:'إضافة لـ Google Wallet',myCard:'بطاقتي',cardOpen:'للبطاقة الشخصية',cardLeft:'دخولات باقية',cardOf:'من',cardNoPack:'ما في رزمة فعّالة',cardNext:'دورك الجاي',cardNoNext:'ما في دور قادم',cardBook:'لحجز دور',cardShow:'اعرض الكود بالصندوق',cardSince:'عضو من',cardExp:'صالحة لـ',cardExpired:'منتهية',cardUsedUp:'مستعملة',cardLast:'آخر استعمال',cardHome:'إضافة للشاشة الرئيسية',
  cardHomeIos:'بالآيفون: اضغط زر المشاركة ⬆︎ وبعدين "إضافة إلى الشاشة الرئيسية".',cardHomeAnd:'بالأندرويد: القائمة ⋮ وبعدين "إضافة للشاشة الرئيسية" / "تثبيت التطبيق".',cardShare:'مشاركة',cardPacks:'رزماتي',cardUse1:'استعمال دخول',cardUsed:'تم استعمال دخول ✓',cardOwner:'وضع صاحب المحل',
  gPacks:'رزم',pkNote:'الرزمة = عدد علاجات بدفع مسبق (كرتيسية). الزبون بياخد بطاقة ديجيتال فيها الرصيد و QR.',pkName:'اسم الرزمة',pkSvc:'لأي علاج',pkAny:'أي علاج',pkCount:'دخولات',pkPrice:'السعر ₪',pkDays:'الصلاحية (أيام، 0=بدون)',pkAdd:'إضافة رزمة',pkSave:'توفير',pkPer:'للدخول',
  pkSell:'بيع رزمة',pkMethod:'طريقة الدفع',m_cash:'كاش',m_bit:'بيت',m_card:'بطاقة',m_transfer:'تحويل',pkSold:'انباعت الرزمة ✓',pkUse:'استعمال −1',pkUndo:'إلغاء الاستعمال',pkSendCard:'إرسال البطاقة بالواتساب',pkCopy:'نسخ الرابط',copied:'انتسخ الرابط',pkNone:'لسا ما في رزم للزبون',
@@ -1042,7 +1043,7 @@ function renderCardPage(){
    ${main?`<div class="meter"><i style="width:${main.left*100/main.total}%"></i></div>`:''}</div>`;
   h+=`<div class="card" style="margin-top:14px"><div class="wqr"><div class="q">${qrSvg(url)}</div><div style="min-width:0"><b>${t('cardShow')}</b>
      <div class="note" style="margin:4px 0 10px">${t('cardSince')} ${fmtShort(new Date(c.since).toISOString().slice(0,10))}</div>
-     <div class="row" style="flex-wrap:wrap;gap:8px"><button class="btn sm" data-a="cardHome">${ic('smartphone','sm')}${t('cardHome')}</button><button class="btn sm ghost" data-a="cardShare">${ic('share-2','sm')}${t('cardShare')}</button></div></div></div>
+     <div class="row" style="flex-wrap:wrap;gap:8px"><button class="btn sm" data-a="cardHome">${ic('smartphone','sm')}${t('cardHome')}</button>${CD.gw&&!/iPhone|iPad|iPod/.test(navigator.userAgent)?`<button class="btn sm gwb" data-a="gwSave">${ic('wallet','sm')}${t('gwAdd')}</button>`:''}<button class="btn sm ghost" data-a="cardShare">${ic('share-2','sm')}${t('cardShare')}</button></div></div></div>
      ${CD.tip?`<div class="info-box" style="margin-top:12px">${ic('smartphone','sm')}<span class="home-tip">${t('cardHomeIos')}<br>${t('cardHomeAnd')}</span></div>`:''}</div>`;
   const n=CD.next;
   h+=`<div class="card"><h3 style="margin-top:0">${t('cardNext')}</h3>${n?`<a class="wnext" href="${href('/m/'+n.token)}"><div class="d"><b>${dnum(n.date)}</b><span>${t('months')[mon(n.date)]}</span></div>
@@ -2010,6 +2011,7 @@ document.addEventListener('click',async e=>{
   if(d.gal){const im=el.querySelector('img');if(im&&im.src)lightbox(im.src);return}
   if(d.a==='cardHome'){CD.tip=!CD.tip;render();return}
   if(d.a==='cardShare'){cardShare();return}
+  if(d.a==='gwSave'){el.disabled=true;try{const r=await api('GET','/card/'+encodeURIComponent(KEY)+'/google');location.href=r.url}catch(err){el.disabled=false;toast(errMsg(err.code))}return}
   if(d.cuse){const pin=store.sget('tl-pin-'+S.biz.slug);el.disabled=true;
     try{await api('POST',`/admin/${S.biz.slug}/pack-use`,{card:KEY,packId:d.cuse},pin);toast(t('cardUsed'));const r=await api('GET','/card/'+encodeURIComponent(KEY));CD={...r,tip:CD.tip}}catch(err){toast(errMsg(err.code))}
     render();return}

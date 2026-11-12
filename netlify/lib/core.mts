@@ -43,7 +43,7 @@ export interface Client {
   bookings: number; visits: number; noshows: number; cancels: number; spend: number; productSpend: number;
   last: string; visitDates: string[]; services: Record<string, number>;
   notes: string; tags: string[]; birthday: string; rewardsUsed: number;
-  packs?: Pack[]; card?: string;
+  packs?: Pack[]; card?: string; gw?: boolean;
 }
 export interface OrderItem { id: string; name: L; price: number; qty: number; icon: string }
 export interface Order { id: string; code: string; slug: string; items: OrderItem[]; total: number; name: string; phone: string; note: string; status: "new" | "ready" | "picked" | "cancelled"; created: number; lang: "he" | "ar" }
@@ -813,6 +813,16 @@ export async function cardLink(kv: KV, slug: string, phone: string) {
   const had = !!c.card, tok = await ensureCard(kv, slug, c);
   if (!had) await saveClients(kv, slug, items);
   return tok;
+}
+/** resolve a card token to its business + client record (for wallet passes) */
+export async function cardClient(kv: KV, token: string) {
+  if (!/^[A-Za-z0-9]{10,20}$/.test(token)) throw new HttpError(404, "not_found");
+  const idx = await kv.get(`card/${token}`, { type: "json" });
+  const biz = idx && await getBiz(kv, idx.slug);
+  if (!biz) throw new HttpError(404, "not_found");
+  const items = await getClients(kv, biz.slug), c = items[idx.phone];
+  if (!c || c.card !== token) throw new HttpError(404, "not_found");
+  return { biz, c, items, save: () => saveClients(kv, biz.slug, items) };
 }
 /** public card view: no phone number, only what the client needs to see */
 export async function getCard(kv: KV, token: string) {

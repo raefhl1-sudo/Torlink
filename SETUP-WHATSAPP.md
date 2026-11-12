@@ -174,3 +174,16 @@
 - דף המכירה: `https://torlink.netlify.app/`. עסק שנרשם מקבל סטטוס **ממתין לתשלום**. הוא יכול להיכנס ולהגדיר הכול, אבל לקוחות לא יכולים לקבוע תור עד שתפעיל אותו.
 - ב-`/super` לוחצים **+ חודש** או **+ שנה** אחרי שהתשלום התקבל. 3 ימים אחרי שהתוקף נגמר, קביעת התורים נעצרת לבד.
 - המחירים, היתרונות של כל חבילה והוראות התשלום נערכים ב-`/super` ← **מחירים והגדרות**.
+
+## 9. Google Wallet (client card in the wallet)
+
+1. pay.google.com/business/console → register as a business → Google Wallet API → copy the **Issuer ID**.
+2. console.cloud.google.com → new project → enable **Google Wallet API**.
+3. IAM → Service Accounts → create one → Keys → Add key → JSON (keep it private, never paste it in chats).
+4. Back in the Wallet console → Users → invite the service-account email as **Developer**.
+5. Netlify → Environment variables:
+   - `GW_ISSUER_ID` = the issuer number
+   - `GW_KEY` = the whole JSON file contents
+6. Redeploy. The "Add to Google Wallet" button appears on every client card (not on iPhone).
+   Balance updates automatically after each sale / redeem.
+7. Demo mode: only console users / test accounts can save passes. Request **publishing access** in the console to open it to all clients.
