@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-<link rel="icon" href="/wallet-logo.png">
+<link rel="icon" href="/icon-192.png">
+<link rel="manifest" id="mf" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" id="ati" href="/apple-touch-icon.png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0e0e10">
@@ -2245,13 +2247,16 @@ async function boot(){
     }
     if(!PREVIEW&&S.biz){
       // "install as app" with the business' own name, colors and logo
-      const add=(rel,href)=>{const l=document.createElement('link');l.rel=rel;l.href=href;document.head.appendChild(l)};
-      add('manifest','/api/manifest/'+S.biz.slug+(MODE==='card'?'?card='+encodeURIComponent(KEY):''));
-      if(S.biz.logoV){add('icon','/api/img/'+S.biz.slug+'/logo?v='+S.biz.logoV);add('apple-touch-icon','/api/img/'+S.biz.slug+'/logo?v='+S.biz.logoV)}
+      // business logo when there is one, otherwise the TorLink icon stays
+      setLink('mf','/api/manifest/'+S.biz.slug+(MODE==='card'?'?card='+encodeURIComponent(KEY):''));
+      if(S.biz.logoV){setLink('ati','/api/img/'+S.biz.slug+'/logo?v='+S.biz.logoV);const l=document.createElement('link');l.rel='icon';l.href='/api/img/'+S.biz.slug+'/logo?v='+S.biz.logoV;document.head.appendChild(l)}
     }
   }catch(e){S.loadErr=e.code}
   render();
 }
+function setLink(id,href){const l=document.getElementById(id);if(l)l.href=href}
+// owner installs the admin as "TorLink · <business>" and it opens straight to the dashboard
+if(!PREVIEW&&MODE==='admin'&&P[1])setLink('mf','/api/manifest/'+encodeURIComponent(P[1])+'?admin=1');
 boot();
 </script>
 </body>

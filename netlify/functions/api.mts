@@ -61,11 +61,13 @@ export default async (req: Request, context: Context) => {
     if (parts[0] === "manifest" && parts[1] && req.method === "GET") {
       const biz = await getBiz(kv, parts[1]);
       if (!biz) return json({ error: "not_found" }, 404);
-      const name = biz.name.he || biz.name.ar;
+      const admin = url.searchParams.get("admin") === "1";
+      const name = admin ? `TorLink · ${biz.name.he || biz.name.ar}` : (biz.name.he || biz.name.ar);
+      const tl = [{ src: "/icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" }, { src: "/icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" }, { src: "/icon-maskable-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" }];
       return new Response(JSON.stringify({
-        name, short_name: name.slice(0, 12), start_url: /^[A-Za-z0-9]{10,20}$/.test(url.searchParams.get("card") || "") ? `/c/${url.searchParams.get("card")}` : `/b/${biz.slug}`, scope: "/", display: "standalone", dir: "rtl", lang: "he",
-        background_color: biz.theme.mode === "light" ? "#f7f5f1" : "#0e0e10", theme_color: biz.theme.accent,
-        icons: biz.logoV ? [{ src: `/api/img/${biz.slug}/logo?v=${biz.logoV}`, sizes: "512x512", type: "image/png", purpose: "any" }] : [],
+        name, short_name: admin ? "TorLink" : name.slice(0, 12), start_url: admin ? `/admin/${biz.slug}` : /^[A-Za-z0-9]{10,20}$/.test(url.searchParams.get("card") || "") ? `/c/${url.searchParams.get("card")}` : `/b/${biz.slug}`, scope: "/", display: "standalone", dir: "rtl", lang: "he",
+        background_color: admin ? "#0B0A09" : biz.theme.mode === "light" ? "#f7f5f1" : "#0e0e10", theme_color: admin ? "#0B0A09" : biz.theme.accent,
+        icons: !admin && biz.logoV ? [{ src: `/api/img/${biz.slug}/logo?v=${biz.logoV}`, sizes: "512x512", type: "image/png", purpose: "any" }] : tl,
       }), { headers: { "content-type": "application/manifest+json", "cache-control": "no-cache" } });
     }
     if (parts[0] === "slots" && req.method === "GET") {
