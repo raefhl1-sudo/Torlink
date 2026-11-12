@@ -115,7 +115,7 @@
 
 **א. Webhook ב-Meta**
 ב-developers.facebook.com → האפליקציה → WhatsApp → **Configuration** → Webhook → Edit:
-- Callback URL: `https://torlink.netlify.app/wa/webhook` (או הדומיין שלך + `/wa/webhook`)
+- Callback URL: `https://torlink.app/wa/webhook`
 - Verify token: כל מילה סודית שתבחר, למשל `torlink-2026-xyz`
 - אחרי Verify and save → **Manage** → לסמן **messages** → Subscribe
 
