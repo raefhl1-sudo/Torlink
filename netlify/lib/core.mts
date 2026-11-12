@@ -21,6 +21,10 @@ export interface Closure { id: string; from: string; to: string; staff: string; 
 export interface Notify { phone: string; lang: "he" | "ar"; onBook: boolean; onCancel: boolean; daily: boolean }
 export interface Product { id: string; name: L; desc: L; price: number; stock: number; icon: string; active: boolean; img?: number; spin?: number; spinN?: number }
 export interface Club { enabled: boolean; rewardEvery: number; reward: L }
+/** prepaid package the business sells, e.g. "10 haircuts" */
+export interface Package { id: string; name: L; serviceId: string; count: number; price: number; validDays: number; active: boolean }
+/** a package a client bought; `uses` is the redeem log */
+export interface Pack { id: string; pkgId: string; name: L; serviceId: string; total: number; left: number; price: number; bought: number; expires: string; method: string; uses: { at: number; bookingId?: string }[] }
 export interface Biz {
   slug: string; type: string; icon: string; name: L; pin: string; cutoff: number;
   services: Service[]; staff: Staff[]; hours: Hours[]; blocked: string[]; created: number;
@@ -28,7 +32,7 @@ export interface Biz {
   theme: Theme; social: Social; tagline: L; logoV: number; gallery: string[]; rating: { avg: number; count: number };
   bot: { enabled: boolean; ai: boolean }; waPhoneId?: string;
   status: "pending" | "active" | "suspended"; paidUntil: string; plan: string; owner: { name: string; phone: string };
-  closed: Closure[]; notify: Notify;
+  closed: Closure[]; notify: Notify; packages: Package[];
 }
 export interface Theme { accent: string; mode: "dark" | "light"; logoBg?: "light" | "dark" | ""; skin?: string }
 export interface Social { instagram: string; facebook: string; tiktok: string; whatsapp: string; waze: string }
@@ -39,6 +43,7 @@ export interface Client {
   bookings: number; visits: number; noshows: number; cancels: number; spend: number; productSpend: number;
   last: string; visitDates: string[]; services: Record<string, number>;
   notes: string; tags: string[]; birthday: string; rewardsUsed: number;
+  packs?: Pack[]; card?: string;
 }
 export interface OrderItem { id: string; name: L; price: number; qty: number; icon: string }
 export interface Order { id: string; code: string; slug: string; items: OrderItem[]; total: number; name: string; phone: string; note: string; status: "new" | "ready" | "picked" | "cancelled"; created: number; lang: "he" | "ar" }
@@ -150,9 +155,16 @@ export function normalizeBiz(b: Biz): Biz {
   if (!b.owner) b.owner = { name: "", phone: b.phone || "" };
   if (!Array.isArray(b.closed)) b.closed = [];
   if (!b.notify) b.notify = { phone: (b.phone || "").replace(/\D/g, ""), lang: "he", onBook: true, onCancel: true, daily: true };
+  if (!Array.isArray(b.packages)) b.packages = defaultPackages(b);
   if (!ICONS.includes(b.icon)) b.icon = p.icon;
   b.services.forEach((s, i) => { if (!s.icon) s.icon = p.services[i]?.[4] || "scissors" });
   return b;
+}
+/** a starter "10 visits" package on the main service, ~15% off */
+export function defaultPackages(b: Biz): Package[] {
+  const s = b.services[0]; if (!s) return [];
+  const n = 10, price = Math.round(s.price * n * 0.85 / 10) * 10;
+  return [{ id: rid(6), name: { he: `כרטיסייה · ${n} × ${s.name.he}`, ar: `بطاقة · ${n} × ${s.name.ar}` }, serviceId: s.id, count: n, price, validDays: 365, active: true }];
 }
 const DEFAULT_HOURS: Hours[] = [0, 1, 2, 3, 4].map(() => ({ open: true, from: "09:00", to: "20:00" }))
   .concat([{ open: true, from: "08:00", to: "14:00" }, { open: false, from: "09:00", to: "18:00" }]);
@@ -712,6 +724,11 @@ export function sanitizeConfig(biz: Biz, c: any): Biz {
     .map((x: any) => ({ id: /^[A-Za-z0-9]{3,12}$/.test(x.id) ? x.id : rid(6), from: x.from, to: x.to, staff: x.staff === "all" || out.staff.some(s => s.id === x.staff) ? x.staff : "all", note: String(x.note || "").slice(0, 60) }))
     .filter((x: Closure) => x.to >= addDays(ilNow().date, -30));
   if (c.notify) out.notify = { phone: String(c.notify.phone || "").replace(/\D/g, "").slice(0, 13), lang: c.notify.lang === "ar" ? "ar" : "he", onBook: c.notify.onBook !== false, onCancel: c.notify.onCancel !== false, daily: c.notify.daily !== false };
+  if (Array.isArray(c.packages)) out.packages = c.packages.slice(0, 20).map((k: any) => ({
+    id: okId(k.id), name: L(k.name), serviceId: k.serviceId === "any" || out.services.some(x => x.id === k.serviceId) ? k.serviceId : "any",
+    count: Math.min(100, Math.max(1, Math.floor(+k.count || 10))), price: Math.max(0, Math.round(+k.price || 0)),
+    validDays: Math.min(1095, Math.max(0, Math.floor(+k.validDays || 0))), active: k.active !== false,
+  }));
   if (c.bot) out.bot = { enabled: c.bot.enabled !== false, ai: c.bot.ai !== false };
   if (c.cutoff != null) out.cutoff = Math.min(72, Math.max(0, +c.cutoff || 0));
   if (Array.isArray(c.blocked)) out.blocked = c.blocked.map(cleanPhone).filter((p: string) => /^05\d{8}$/.test(p)).slice(0, 500);
@@ -735,6 +752,88 @@ export async function adminUpdateClient(kv: KV, slug: string, input: any) {
   }
   await saveClients(kv, slug, items);
   return c;
+}
+/* ---------------- packages + "my card" (wallet-style page per client) ---------------- */
+const packLive = (k: Pack, today = ilNow().date) => k.left > 0 && (!k.expires || k.expires >= today);
+/** packs that can pay for a service (same service or "any"), soonest-expiring first */
+export function usablePacks(c: Client | undefined, serviceId?: string) {
+  return (c?.packs || []).filter(k => packLive(k) && (!serviceId || k.serviceId === "any" || k.serviceId === serviceId))
+    .sort((a, z) => (a.expires || "9999").localeCompare(z.expires || "9999"));
+}
+async function ensureCard(kv: KV, slug: string, c: Client) {
+  if (!c.card) { c.card = rid(14); await kv.setJSON(`card/${c.card}`, { slug, phone: c.phone }) }
+  return c.card;
+}
+export async function sellPack(kv: KV, biz: Biz, input: any) {
+  const phone = cleanPhone(input.phone);
+  const pkg = biz.packages.find(k => k.id === input.pkgId);
+  if (!pkg) throw new HttpError(400, "bad_package");
+  if (!/^05\d{8}$/.test(phone)) throw new HttpError(400, "bad_phone");
+  const items = await getClients(kv, biz.slug);
+  const c = items[phone] || (items[phone] = blankClient(phone, String(input.name || "").trim().slice(0, 60)));
+  const now = Date.now();
+  (c.packs ||= []).push({
+    id: rid(8), pkgId: pkg.id, name: { ...pkg.name }, serviceId: pkg.serviceId, total: pkg.count, left: pkg.count, price: pkg.price,
+    bought: now, expires: pkg.validDays ? addDays(ilNow(now).date, pkg.validDays) : "",
+    method: ["cash", "bit", "card", "transfer"].includes(input.method) ? input.method : "cash", uses: [],
+  });
+  c.productSpend += pkg.price;
+  await ensureCard(kv, biz.slug, c);
+  await saveClients(kv, biz.slug, items);
+  return c;
+}
+/** use one entry; packId optional (picks the best pack for the service) */
+export async function redeemPack(kv: KV, biz: Biz, input: any) {
+  let phone = cleanPhone(input.phone);
+  if (input.card) { // from the client's card page, opened on the owner's phone
+    const idx = /^[A-Za-z0-9]{10,20}$/.test(input.card) && await kv.get(`card/${input.card}`, { type: "json" });
+    if (!idx || idx.slug !== biz.slug) throw new HttpError(404, "not_found");
+    phone = idx.phone;
+  }
+  const items = await getClients(kv, biz.slug), c = items[phone];
+  if (!c) throw new HttpError(404, "not_found");
+  const bookingId = typeof input.bookingId === "string" ? input.bookingId.slice(0, 20) : undefined;
+  if (input.undo) {
+    const k = (c.packs || []).find(x => x.id === input.packId);
+    if (!k || !k.uses.length) throw new HttpError(400, "nothing_to_undo");
+    k.uses.pop(); k.left = Math.min(k.total, k.left + 1);
+  } else {
+    if (bookingId && (c.packs || []).some(k => k.uses.some(u => u.bookingId === bookingId))) throw new HttpError(409, "already_used");
+    const k = input.packId ? usablePacks(c).find(x => x.id === input.packId) : usablePacks(c, input.serviceId)[0];
+    if (!k) throw new HttpError(400, "no_pack");
+    k.left--; k.uses.push({ at: Date.now(), ...(bookingId ? { bookingId } : {}) });
+  }
+  await saveClients(kv, biz.slug, items);
+  return c;
+}
+export async function cardLink(kv: KV, slug: string, phone: string) {
+  phone = cleanPhone(phone);
+  const items = await getClients(kv, slug), c = items[phone];
+  if (!c) throw new HttpError(404, "not_found");
+  const had = !!c.card, tok = await ensureCard(kv, slug, c);
+  if (!had) await saveClients(kv, slug, items);
+  return tok;
+}
+/** public card view: no phone number, only what the client needs to see */
+export async function getCard(kv: KV, token: string) {
+  if (!/^[A-Za-z0-9]{10,20}$/.test(token)) throw new HttpError(404, "not_found");
+  const idx = await kv.get(`card/${token}`, { type: "json" });
+  const biz = idx && await getBiz(kv, idx.slug);
+  if (!biz) throw new HttpError(404, "not_found");
+  const c = (await getClients(kv, biz.slug))[idx.phone];
+  if (!c || c.card !== token) throw new HttpError(404, "not_found");
+  const today = ilNow().date, nowMin = ilNow().min;
+  const next = (await clientBookings(kv, biz.slug, c.phone))
+    .filter(b => b.status === "confirmed" && (b.date > today || b.date === today && toMin(b.time) >= nowMin))
+    .sort((a, z) => (a.date + a.time).localeCompare(z.date + z.time))[0];
+  return {
+    biz: publicBiz(biz), today,
+    client: { name: c.name, since: c.first, phoneTail: c.phone.slice(-4), visits: c.visits },
+    club: clubCard(biz, c),
+    packs: (c.packs || []).filter(k => packLive(k, today) || k.bought > Date.now() - 90 * 864e5)
+      .map(({ id, name, serviceId, total, left, expires, uses, bought }) => ({ id, name, serviceId, total, left, expires, bought, last: uses[uses.length - 1]?.at || 0, live: packLive({ left, expires } as Pack, today) })),
+    next: next ? { token: next.id, date: next.date, time: next.time, service: next.serviceName, staffId: next.staffId } : null,
+  };
 }
 /** messages the bot passed on to the business (questions it could not answer, "talk to a person") */
 export async function addInbox(kv: KV, slug: string, item: { phone: string; name: string; text: string; kind: string }) {
