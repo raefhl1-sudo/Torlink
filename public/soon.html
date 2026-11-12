@@ -4,124 +4,222 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>TorLink · קובעים. מנהלים. גדלים.</title>
-<meta name="description" content="TorLink – קובעים. מנהלים. גדלים. מערכת תורים וניהול לכל עסק שעובד עם תורים. בקרוב.">
-<meta name="theme-color" content="#0e0e10">
-<meta property="og:title" content="TorLink · בקרוב">
-<meta property="og:description" content="קובעים. מנהלים. גדלים. תורים, וואטסאפ, לקוחות ותשלומים – במקום אחד.">
+<meta name="description" content="TorLink – קובעים. מנהלים. גדלים. מערכת תורים וניהול לכל עסק שעובד עם תורים. בקרוב – הירשמו לגישה מוקדמת.">
+<meta name="theme-color" content="#0b0a09">
+<meta property="og:title" content="TorLink · העסק שלך, על טייס אוטומטי">
+<meta property="og:description" content="קובעים. מנהלים. גדלים. תורים, וואטסאפ, לקוחות ותשלומים – במקום אחד. הירשמו לגישה מוקדמת.">
+<meta property="og:image" content="https://torlink.app/media/torlink-explainer.jpg">
 <link rel="icon" href="/icon-192.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-title" content="TorLink">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=Suez+One&family=Reem+Kufi:wght@600;700&family=Cairo:wght@400;600;700&display=swap">
-<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=Suez+One&family=Reem+Kufi:wght@600;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=Suez+One&family=Reem+Kufi:wght@600;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=Suez+One&family=Sora:wght@300;600&family=Reem+Kufi:wght@600;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=Suez+One&family=Sora:wght@300;600&family=Reem+Kufi:wght@600;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
 <style>
 *{box-sizing:border-box;margin:0}
-html,body{height:100%}
-body{background:#0b0b0d;color:#f4efe6;font-family:Heebo,system-ui,sans-serif;display:grid;place-items:center;overflow-x:hidden;min-height:100%}
-body:before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(900px 520px at 50% -10%,rgba(201,164,92,.22),transparent 60%),radial-gradient(700px 400px at 50% 120%,rgba(201,164,92,.10),transparent 60%),#0b0b0d}
-.grain{position:fixed;inset:0;pointer-events:none;opacity:.05;background-image:repeating-radial-gradient(circle at 17% 23%,#fff 0 1px,transparent 1px 3px)}
-.vid{position:relative;width:min(340px,82vw);aspect-ratio:9/16;margin:34px auto 0;border-radius:34px;overflow:hidden;border:1px solid rgba(201,164,92,.45);box-shadow:0 30px 80px -20px rgba(0,0,0,.8),0 0 60px -10px rgba(201,164,92,.35);background:#000}
+html{scroll-behavior:smooth}
+html,body{overflow-x:hidden}main{overflow-x:clip}
+body{background:#0b0a09;color:#f4efe6;font-family:Heebo,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+body:before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(900px 600px at 50% -10%,rgba(201,164,92,.22),transparent 60%),radial-gradient(700px 500px at 100% 60%,rgba(201,164,92,.07),transparent 60%),#0b0a09}
+a{color:inherit}
+.w{max-width:1080px;margin:0 auto;padding:0 22px}
+.gold{background:linear-gradient(135deg,#ffe7b8,#d6a35c 55%,#f6d9a0);-webkit-background-clip:text;background-clip:text;color:transparent}
+/* nav */
+.nav{position:sticky;top:0;z-index:20;background:rgba(11,10,9,.82);border-bottom:1px solid rgba(201,164,92,.12)}
+.nav .w{display:flex;align-items:center;gap:14px;height:64px}
+.logo{display:flex;align-items:center;gap:10px;direction:ltr;text-decoration:none}.logo svg{width:34px;height:34px}
+.logo b{font:600 22px Sora,Heebo,sans-serif;letter-spacing:-.5px}.logo b span{color:#e8cb8a}
+.sp{flex:1}
+.lsw{display:inline-flex;gap:2px;padding:3px;border-radius:99px;border:1px solid rgba(201,164,92,.3)}
+.lsw button{border:0;cursor:pointer;background:transparent;color:#cfc4ae;font:600 13px Heebo,Cairo,sans-serif;padding:7px 12px;border-radius:99px;min-height:34px}
+.lsw button.on{background:linear-gradient(135deg,#f3dca6,#c99a4b);color:#1a140a}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;cursor:pointer;text-decoration:none;font:700 16px Heebo,Cairo,sans-serif;color:#1a140a;background:linear-gradient(135deg,#ffe7b8,#d6a35c);padding:15px 26px;border-radius:14px;box-shadow:0 14px 40px -10px rgba(214,163,92,.55);min-height:48px;transition:transform .15s}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:transparent;color:#f4efe6;box-shadow:none;border:1px solid rgba(244,239,230,.22)}
+.btn svg{width:18px;height:18px}
+.nav .btn{padding:10px 16px;font-size:14px;min-height:40px}
+@media(max-width:560px){.nav .btn{display:none}}
+/* hero */
+.hero{padding:64px 0 40px;text-align:center}
+.eb{display:inline-flex;align-items:center;gap:10px;font:600 13px Heebo,Cairo,sans-serif;color:#e8cb8a;border:1px solid rgba(201,164,92,.35);border-radius:99px;padding:8px 16px;background:rgba(201,164,92,.06)}
+.eb i{width:8px;height:8px;border-radius:50%;background:#4cb37d;box-shadow:0 0 0 0 rgba(76,179,125,.6);animation:pl 2s infinite}
+@keyframes pl{70%{box-shadow:0 0 0 10px rgba(76,179,125,0)}100%{box-shadow:0 0 0 0 rgba(76,179,125,0)}}
+.hero h1{font:400 clamp(40px,10vw,84px)/1.05 'Suez One',serif;margin:22px auto 0;max-width:820px;letter-spacing:-.5px}
+.hero .sl{font:700 clamp(18px,4.6vw,24px) Heebo,sans-serif;letter-spacing:.5px;color:#e8cb8a;margin-top:18px}
+.hero p.d{font-size:clamp(16px,4.2vw,19px);line-height:1.7;color:#b9b09f;max-width:620px;margin:16px auto 0}
+.ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:30px}
+.trust{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:22px;font-size:14px;color:#8f8676}
+.trust span{display:inline-flex;align-items:center;gap:6px}.trust svg{width:15px;height:15px;color:#d6aa5c}
+/* phones */
+.phones{position:relative;height:clamp(420px,110vw,600px);margin:46px auto 0;max-width:760px}
+.ph{position:absolute;top:0;left:50%;width:clamp(190px,46vw,270px);aspect-ratio:9/18.5;border-radius:38px;padding:9px;background:linear-gradient(145deg,#4a4038,#141210 40%,#2d2620);box-shadow:0 40px 90px -20px rgba(0,0,0,.8),inset 0 0 0 1px rgba(255,255,255,.08)}
+.ph div{width:100%;height:100%;border-radius:30px;overflow:hidden;background:#0e0e10}.ph img{width:100%;display:block}
+.ph.c{transform:translateX(-50%);z-index:3}
+.ph.l{transform:translateX(-118%) translateY(48px) rotate(-7deg) scale(.88);z-index:2;opacity:.85}
+.ph.r{transform:translateX(18%) translateY(48px) rotate(7deg) scale(.88);z-index:2;opacity:.85}
+.glow{position:absolute;inset:auto 10% -10px;height:120px;background:radial-gradient(closest-side,rgba(214,170,92,.35),transparent);filter:blur(10px)}
+/* sections */
+section{padding:70px 0}
+.kick{display:block;text-align:center;font:600 13px Sora,Heebo,sans-serif;letter-spacing:4px;color:#bfa67a;text-transform:uppercase}
+h2{font:400 clamp(30px,7.5vw,48px)/1.15 'Suez One',serif;text-align:center;margin:12px auto 0;max-width:760px}
+.lead2{text-align:center;color:#a9a294;font-size:17px;line-height:1.7;max-width:620px;margin:14px auto 0}
+/* pain/gain */
+.pg{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:36px}
+.box{border-radius:24px;padding:26px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}
+.box.g{border-color:rgba(201,164,92,.4);background:linear-gradient(160deg,rgba(201,164,92,.14),rgba(201,164,92,.03))}
+.box h3{font:700 18px Heebo,Cairo,sans-serif;margin-bottom:14px;color:#cfc4ae}.box.g h3{color:#e8cb8a}
+.box li{list-style:none;display:flex;gap:12px;align-items:center;padding:10px 0;font-size:17px;border-top:1px solid rgba(255,255,255,.06)}
+.box ul{padding:0}.box li svg{width:20px;height:20px;flex:none}
+.box:not(.g) li{color:#9d9483}.box:not(.g) li svg{color:#cf4a3f}.box.g li svg{color:#4cb37d}
+/* video */
+.vid{position:relative;width:min(360px,86vw);aspect-ratio:9/16;margin:36px auto 0;border-radius:34px;overflow:hidden;border:1px solid rgba(201,164,92,.45);box-shadow:0 40px 90px -24px rgba(0,0,0,.85),0 0 70px -10px rgba(201,164,92,.3);background:#000}
 .vid video{width:100%;height:100%;object-fit:cover;display:block}
-.snd{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:inline-flex;gap:8px;align-items:center;border:0;cursor:pointer;font:700 15px Heebo,sans-serif;color:#1a140a;background:linear-gradient(135deg,#f3dca6,#c99a4b);padding:10px 18px;border-radius:99px;white-space:nowrap;box-shadow:0 10px 24px rgba(0,0,0,.45)}
-.snd.off{display:none}
-footer{position:static!important;margin:30px 0 18px}
-.ben{margin-top:56px;text-align:center}
-.ben .tag{letter-spacing:1px}
-.ben h3{font:400 clamp(24px,6.4vw,34px)/1.25 'Suez One',serif;margin:10px 0 24px;color:#fff;padding:0 8px}
-.bg{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;text-align:right;direction:rtl}
-.b{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.015));border:1px solid rgba(201,164,92,.22)}
-.b i{width:46px;height:46px;border-radius:14px;flex:none;display:grid;place-items:center;background:linear-gradient(135deg,#f3dca6,#c99a4b)}
-.b i svg{width:24px;height:24px}
-.b b{display:block;font-size:17px;color:#f4efe6}.b small{display:block;font-size:14px;color:#a9a294;margin-top:3px;line-height:1.5}.b em{display:block;font-style:normal;font:600 13px 'Reem Kufi',sans-serif;color:#d9b977;margin-top:4px}
-.soon{display:inline-block;margin-top:30px;font:800 20px Heebo,sans-serif;color:#1a140a;background:linear-gradient(135deg,#ffe7b8,#d6a35c);padding:14px 34px;border-radius:99px;box-shadow:0 14px 40px rgba(214,163,92,.35)}
-.lead{margin-top:56px;text-align:center;scroll-margin-top:20px}
-.lead h3{font:400 clamp(26px,7vw,36px)/1.2 'Suez One',serif;margin:10px 0 8px;color:#fff}
-.lp{font-size:15px!important;margin-top:6px!important}.lp span{color:#d9b977;font-family:'Reem Kufi',sans-serif}
-#lf{display:grid;gap:10px;margin-top:20px;text-align:right}
-#lf input,#lf select{width:100%;font:500 16px Heebo,sans-serif;color:#f4efe6;background:rgba(255,255,255,.05);border:1px solid rgba(201,164,92,.3);border-radius:14px;padding:14px 16px;outline:none;-webkit-appearance:none;appearance:none}
+.snd{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);border:0;cursor:pointer;font:700 15px Heebo,Cairo,sans-serif;color:#1a140a;background:linear-gradient(135deg,#f3dca6,#c99a4b);padding:11px 18px;border-radius:99px;white-space:nowrap;min-height:44px}.snd.off{display:none}
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:36px}
+.st{border-radius:24px;padding:28px 24px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)}
+.st .n{font:600 44px Sora,sans-serif;line-height:1}
+.st h3{font:700 21px Heebo,Cairo,sans-serif;margin:14px 0 8px}.st p{color:#a9a294;line-height:1.65}
+/* benefits */
+.bg{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:36px}
+.b{display:flex;gap:14px;align-items:flex-start;padding:18px;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.015));border:1px solid rgba(201,164,92,.2)}
+.b i{width:46px;height:46px;border-radius:14px;flex:none;display:grid;place-items:center;background:linear-gradient(135deg,#f3dca6,#c99a4b)}.b i svg{width:24px;height:24px}
+.b b{display:block;font-size:17px}.b small{display:block;font-size:14px;color:#a9a294;margin-top:4px;line-height:1.5}
+/* sectors */
+.chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:28px}
+.chips span{font-size:15px;color:#e8dcc4;background:rgba(255,255,255,.04);border:1px solid rgba(201,164,92,.25);border-radius:99px;padding:10px 18px}
+/* gallery */
+.gal{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding:36px 22px 10px;margin:0 -22px;scrollbar-width:none}.gal::-webkit-scrollbar{display:none}
+.gal figure{flex:none;width:230px;scroll-snap-align:center;margin:0;text-align:center}
+.gal .ph{position:static;width:100%;transform:none;opacity:1}
+.gal figcaption{margin-top:14px;font-weight:600;color:#cfc4ae}
+@media(min-width:1000px){.gal{justify-content:center}}
+/* offer + form */
+.offer{border-radius:32px;padding:clamp(26px,6vw,48px);border:1px solid rgba(201,164,92,.45);background:radial-gradient(600px 300px at 100% 0%,rgba(232,203,138,.18),transparent 60%),linear-gradient(160deg,#1d1810,#0e0d0b 70%);box-shadow:0 40px 100px -30px rgba(0,0,0,.8)}
+.offer h2{margin-top:10px}
+.perks{display:flex;flex-wrap:wrap;gap:10px 22px;justify-content:center;margin:20px 0 6px;padding:0}
+.perks li{list-style:none;display:flex;gap:8px;align-items:center;color:#e8dcc4}.perks svg{width:18px;height:18px;color:#4cb37d}
+#lf{display:grid;gap:10px;max-width:520px;margin:24px auto 0}
+#lf input,#lf select{width:100%;font:500 16px Heebo,Cairo,sans-serif;color:#f4efe6;background:rgba(255,255,255,.05);border:1px solid rgba(201,164,92,.3);border-radius:14px;padding:15px 16px;outline:none;-webkit-appearance:none;appearance:none;min-height:50px}
 #lf input:focus,#lf select:focus{border-color:#e8cb8a;background:rgba(255,255,255,.08)}
 #lf input::placeholder{color:#8d867a}#lf input[dir=ltr]{text-align:right}
 #lf select{color:#cfc4ae}#lf option{background:#151311;color:#f4efe6}
-#lf button{margin-top:6px;border:0;cursor:pointer;font:800 18px Heebo,sans-serif;color:#1a140a;background:linear-gradient(135deg,#ffe7b8,#d6a35c);padding:16px;border-radius:14px;box-shadow:0 14px 40px rgba(214,163,92,.35)}
-#lf button:disabled{opacity:.6}
-.ok{padding:16px;border-radius:14px;background:rgba(76,179,125,.15);border:1px solid rgba(76,179,125,.5);color:#bfe8cf;font-weight:700;text-align:center}
+#lf .btn{width:100%;margin-top:6px;font-size:18px}#lf .btn:disabled{opacity:.6}
+.ok{padding:18px;border-radius:14px;background:rgba(76,179,125,.15);border:1px solid rgba(76,179,125,.5);color:#bfe8cf;font-weight:700;text-align:center}
 .er{padding:12px;border-radius:14px;background:rgba(207,74,63,.15);color:#f1b2ab;text-align:center}
-a.soon{text-decoration:none}
-.mark{gap:16px!important}
-.lm{width:64px;height:64px;display:block;filter:drop-shadow(0 10px 24px rgba(201,164,92,.35))}.lm svg{width:100%;height:100%}
-.wm{display:flex;flex-direction:column;align-items:flex-start;gap:4px}.wm small{font:300 11px Heebo,sans-serif;letter-spacing:5px;color:#bfa67a}
-.slogan{font:400 clamp(26px,7vw,38px)/1.2 'Suez One',serif!important;color:#f4efe6!important;margin-top:18px!important}.slogan em{font-style:normal;color:#e8cb8a}
-.slogan.ar{font:600 clamp(20px,5.5vw,28px) 'Reem Kufi',sans-serif!important;color:#d9b977!important;margin-top:4px!important}
-.lsw{position:relative;z-index:10;display:inline-flex;margin:0 auto 26px;gap:2px;padding:3px;border-radius:99px;background:rgba(20,18,16,.75);border:1px solid rgba(201,164,92,.3);}
-.lsw button{border:0;cursor:pointer;background:transparent;color:#cfc4ae;font:600 13px Heebo,'Cairo',sans-serif;padding:8px 14px;border-radius:99px}
-.lsw button.on{background:linear-gradient(135deg,#f3dca6,#c99a4b);color:#1a140a}
-html[lang=ar] body{font-family:'Cairo',Heebo,sans-serif}
-html[lang=ar] h1{font-family:'Reem Kufi',sans-serif!important;font-weight:700}
-html[lang=ar] .slogan,html[lang=ar] .ben h3,html[lang=ar] .lead h3{font-family:'Reem Kufi',sans-serif!important;font-weight:700!important}
-.ring{will-change:transform,opacity;position:fixed;left:50%;top:50%;width:min(130vw,900px);aspect-ratio:1;border-radius:50%;border:1px solid rgba(201,164,92,.12);transform:translate(-50%,-50%);animation:pulse 6s ease-in-out infinite}
-.ring.r2{width:min(95vw,640px);animation-delay:-2s}.ring.r3{width:min(60vw,400px);animation-delay:-4s}
-@keyframes pulse{0%,100%{opacity:.35;transform:translate(-50%,-50%) scale(.97)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.02)}}
-main{position:relative;text-align:center;padding:32px 24px;max-width:560px;animation:in 1s cubic-bezier(.2,.8,.2,1) both}
-@keyframes in{from{opacity:0;transform:translateY(18px)}}
-.mark{display:inline-flex;align-items:center;gap:12px;direction:ltr;margin-bottom:34px}
-.mark i{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(140deg,#e8cb8a,#b8913f);box-shadow:0 14px 34px -12px rgba(201,164,92,.7)}
-.mark i svg{width:26px;height:26px;stroke:#141210}
-.mark b{font:700 30px Heebo,sans-serif;letter-spacing:-.5px}.mark b span{color:#e8cb8a}
-.tag{display:inline-block;font-size:12px;letter-spacing:3px;color:#e8cb8a;border:1px solid rgba(201,164,92,.35);border-radius:99px;padding:6px 14px;margin-bottom:18px}
-h1{font:400 clamp(44px,12vw,76px)/1 'Suez One',serif;background:linear-gradient(180deg,#fff,#d9c39a);-webkit-background-clip:text;background-clip:text;color:transparent}
-h2{font:700 clamp(26px,7vw,40px)/1.2 'Reem Kufi',sans-serif;color:#e8cb8a;margin-top:8px}
-p{color:#a9a294;font-size:17px;line-height:1.7;margin-top:22px}
-p+p{margin-top:6px}
-.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:28px}
-.chips span{font-size:13px;color:#d9ccb0;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:99px;padding:7px 13px}
-.dots{display:inline-flex;gap:6px;margin-top:34px}.dots i{width:7px;height:7px;border-radius:50%;background:#c9a45c;animation:d 1.4s infinite}
-.dots i:nth-child(2){animation-delay:.2s}.dots i:nth-child(3){animation-delay:.4s}
-@keyframes d{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}
-footer{position:fixed;bottom:18px;left:0;right:0;text-align:center;font-size:12px;color:#5f5a52;direction:ltr}
-@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+.small{text-align:center;color:#7d7566;font-size:13px;margin-top:12px}
+/* faq */
+.faq{max-width:720px;margin:30px auto 0}
+.faq details{border-bottom:1px solid rgba(255,255,255,.08);padding:18px 4px}
+.faq summary{cursor:pointer;font:700 18px Heebo,Cairo,sans-serif;list-style:none;display:flex;justify-content:space-between;gap:12px}
+.faq summary::-webkit-details-marker{display:none}.faq summary:after{content:"+";color:#d6aa5c;font-size:24px;line-height:1}
+.faq details[open] summary:after{content:"–"}.faq details p{color:#a9a294;line-height:1.7;margin-top:10px}
+footer{text-align:center;padding:40px 0 110px;color:#6f6858;font-size:13px}footer a{color:#a9a294;text-decoration:none}
+footer .logo{justify-content:center;margin-bottom:10px}
+/* sticky cta */
+.sticky{position:fixed;left:12px;right:12px;bottom:12px;z-index:30;display:flex;transform:translateY(140%);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.sticky.on{transform:none}.sticky .btn{flex:1;padding:16px}
+@media(min-width:900px){.sticky{display:none}}
+/* reveal */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1)}.rv.in{opacity:1;transform:none}
+.hero .mk{width:84px;height:84px;margin:0 auto;filter:drop-shadow(0 14px 30px rgba(201,164,92,.4))}
+.mr{stroke-dasharray:330;stroke-dashoffset:330;animation:dr 1.6s .2s cubic-bezier(.6,0,.2,1) forwards}
+.mt{stroke-dasharray:120;stroke-dashoffset:120;animation:dr 1s 1s cubic-bezier(.6,0,.2,1) forwards}
+@keyframes dr{to{stroke-dashoffset:0}}
+html[lang=ar] body{font-family:Cairo,Heebo,sans-serif}
+html[lang=ar] .hero h1,html[lang=ar] h2{font-family:'Reem Kufi',sans-serif;font-weight:700}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}.mr,.mt{stroke-dashoffset:0}}
 </style>
 </head>
 <body>
-<div class="ring"></div><div class="ring r2"></div>
-
-<main>
-  <div style="text-align:center"><div class="lsw" role="group" aria-label="שפה / اللغة"><button type="button" data-lang="he">עברית</button><button type="button" data-lang="ar">العربية</button></div></div>
-  <div class="mark"><span class="lm"><svg viewBox="0 0 120 120" fill="none" role="img" aria-label="TorLink"><defs><linearGradient id="tlg" x1="10" y1="6" x2="110" y2="114" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F7E7BE"/><stop offset=".45" stop-color="#D6AA5C"/><stop offset="1" stop-color="#9A7230"/></linearGradient></defs><path d="M77.78 11.14 A52 52 0 1 1 42.22 11.14" stroke="url(#tlg)" stroke-width="6" stroke-linecap="round"/><circle cx="60" cy="9" r="5" fill="url(#tlg)"/><path d="M35 50 H85 M60 50 V87" stroke="url(#tlg)" stroke-width="9.5" stroke-linecap="round"/><circle cx="60" cy="50" r="3.2" fill="#0B0A09"/></svg></span><span class="wm"><b>Tor<span>Link</span></b><small>BOOK · MANAGE · GROW</small></span></div>
-  <div><span class="tag">COMING SOON</span></div>
-  <h1 data-t="h1">בקרוב</h1>
-  <p data-t="slogan" class="slogan">קובעים. מנהלים. <em>גדלים.</em></p>
-  <p data-t="desc">מערכת אחת לכל עסק שעובד עם תורים – תורים, לקוחות, תשלומים ומכירות.</p>
-  <div class="chips"><span data-t="sec0">מספרות וברברים</span><span data-t="sec1">רופאי שיניים</span><span data-t="sec2">מכוני כושר ומאמנים</span><span data-t="sec3">קליניקות וטיפולים</span><span data-t="sec4">ציפורניים וקוסמטיקה</span><span data-t="sec5">פיזיותרפיה</span><span data-t="sec6">מורים פרטיים</span><span data-t="sec7">מוסכים ושירותים</span></div>
+<header class="nav"><div class="w">
+  <a class="logo" href="#top" aria-label="TorLink"><svg viewBox="0 0 120 120" fill="none" aria-hidden="true"><defs><linearGradient id="gn" x1="10" y1="6" x2="110" y2="114" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F7E7BE"/><stop offset=".45" stop-color="#D6AA5C"/><stop offset="1" stop-color="#9A7230"/></linearGradient></defs><path class="mr" d="M77.78 11.14 A52 52 0 1 1 42.22 11.14" stroke="url(#gn)" stroke-width="6" stroke-linecap="round"/><circle cx="60" cy="9" r="5" fill="url(#gn)"/><path class="mt" d="M35 50 H85 M60 50 V87" stroke="url(#gn)" stroke-width="9.5" stroke-linecap="round"/><circle cx="60" cy="50" r="3.2" fill="#0B0A09"/></svg><b>Tor<span>Link</span></b></a>
+  <div class="sp"></div>
+  <div class="lsw" role="group" aria-label="שפה / اللغة"><button type="button" data-lang="he">עברית</button><button type="button" data-lang="ar">العربية</button></div>
+  <a data-t="navcta" class="btn" href="#lead">לגישה מוקדמת</a>
+</div></header>
+<main id="top">
+<div class="hero w">
+  <div class="mk"><svg viewBox="0 0 120 120" fill="none" aria-hidden="true"><defs><linearGradient id="gh" x1="10" y1="6" x2="110" y2="114" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F7E7BE"/><stop offset=".45" stop-color="#D6AA5C"/><stop offset="1" stop-color="#9A7230"/></linearGradient></defs><path class="mr" d="M77.78 11.14 A52 52 0 1 1 42.22 11.14" stroke="url(#gh)" stroke-width="6" stroke-linecap="round"/><circle cx="60" cy="9" r="5" fill="url(#gh)"/><path class="mt" d="M35 50 H85 M60 50 V87" stroke="url(#gh)" stroke-width="9.5" stroke-linecap="round"/><circle cx="60" cy="50" r="3.2" fill="#0B0A09"/></svg></div>
+  <div style="margin-top:22px"><span class="eb"><i></i><span data-t="eb">ההשקה מתקרבת · ההרשמה המוקדמת פתוחה</span></span></div>
+  <h1 data-t="h1">העסק שלך,<br><span class="gold">על טייס אוטומטי.</span></h1>
+  <p data-t="sl" class="sl">קובעים. מנהלים. גדלים.</p>
+  <p data-t="d" class="d">מערכת אחת לכל עסק שעובד עם תורים: הלקוחות קובעים לבד, הוואטסאפ מאשר ומזכיר, ואתה רואה את כל העסק – בטלפון.</p>
+  <div class="ctas"><a data-t="cta1" class="btn" href="#lead">הצטרפו לרשימת ההמתנה</a><a class="btn ghost" href="#video"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span data-t="cta2">צפו בסרטון</span></a></div>
+  <div class="trust"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span data-t="tr1">ללא התחייבות</span></span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span data-t="tr2">עברית וערבית</span></span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span data-t="tr3">בלי להתקין כלום</span></span></div>
+  <div class="phones"><div class="glow"></div>
+    <div class="ph l"><div><img src="/media/shot-admin.jpg" alt="" loading="lazy"></div></div>
+    <div class="ph r"><div><img src="/media/shot-card.jpg" alt="" loading="lazy"></div></div>
+    <div class="ph c"><div><img src="/media/shot-book.jpg" alt="TorLink"></div></div>
+  </div>
+</div>
+<section class="w rv">
+  <span data-t="k1" class="kick">למה TorLink</span>
+  <h2 data-t="h2a">פחות טלפונים. יותר לקוחות.</h2>
+  <div class="pg">
+    <div class="box"><h3 data-t="pgx">בלי TorLink</h3><ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span data-t="pn0">הטלפון מצלצל באמצע העבודה</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span data-t="pn1">לקוחות שוכחים ולא מגיעים</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span data-t="pn2">יומן בנייר והודעות בכל מקום</span></li></ul></div>
+    <div class="box g"><h3 data-t="pgv">עם TorLink</h3><ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span data-t="gn0">הלקוחות קובעים לבד, 24/7</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span data-t="gn1">תזכורת אוטומטית יום לפני</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span data-t="gn2">הכול במקום אחד, בטלפון</span></li></ul></div>
+  </div>
+</section>
+<section class="w rv" id="video">
+  <span data-t="k2" class="kick">ראו את זה בפעולה</span>
+  <h2 data-t="h2b">47 שניות שישנו לך את העסק</h2>
   <div class="vid"><video id="vd" src="/media/torlink-explainer.mp4" poster="/media/torlink-explainer.jpg" muted loop playsinline preload="none"></video>
     <button class="snd" id="snd" type="button">🔊 <span data-t="snd">הפעלת סאונד</span></button></div>
-  <div class="dots"><i></i><i></i><i></i></div>
-  <section class="ben"><span data-t="btag" class="tag">הכול במערכת אחת</span>
-    <h3 data-t="bh">כל העסק שלך – במקום אחד</h3>
-    <div class="bg"><div class="b"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1a140a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></i><div><b data-t="bt0">תורים אונליין 24/7</b><small data-t="bd0">הלקוחות קובעים לבד, בלי שיחות</small></div></div><div class="b"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1a140a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.6A8.4 8.4 0 1 1 21 11.5z"/></svg></i><div><b data-t="bt1">וואטסאפ אוטומטי</b><small data-t="bd1">אישור, שינוי וביטול – לבד</small></div></div><div class="b"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1a140a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg></i><div><b data-t="bt2">תזכורות לפני התור</b><small data-t="bd2">פחות "שכחתי", פחות חורים ביומן</small></div></div><div class="b"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1a140a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="12" rx="3"/><path d="M12 8V4M8 14h.01M16 14h.01"/></svg></i><div><b data-t="bt3">בוט חכם בוואטסאפ</b><small data-t="bd3">עונה ללקוחות וקובע תורים</small></div></div><div class="b"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1a140a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18h20M3 7l5 5 4-7 4 7 5-5-2 11H5z"/></svg></i><div><b data-t="bt4">מועדון לקוחות</b><small data-t="bd4">ניקובים, הטבות ויום הולדת</small></div></div><div class="b"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1a140a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 0 0 6v3a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-3a3 3 0 0 0 0-6V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/></svg></i><div><b data-t="bt5">כרטיסיות וחבילות</b><small data-t="bd5">כרטיס דיגיטלי עם QR וארנק</small></div></div><div class="b"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1a140a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg></i><div><b data-t="bt6">חנות מוצרים</b><small data-t="bd6">הזמנה מראש ואיסוף בעסק</small></div></div><div class="b"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1a140a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></i><div><b data-t="bt7">קטלוג 3D</b><small data-t="bd7">מחירון שמדפדפים, עם סאונד</small></div></div><div class="b"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1a140a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 6-6"/></svg></i><div><b data-t="bt8">דוחות והכנסות</b><small data-t="bd8">הכנסות, לקוחות ואי־הגעות</small></div></div><div class="b"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1a140a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></i><div><b data-t="bt9">מעמד NFC לדלפק</b><small data-t="bd9">נגיעה בטלפון – ונכנסים לקבוע</small></div></div><div class="b"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1a140a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="8" cy="10" r="1.3"/><circle cx="12" cy="7" r="1.3"/><circle cx="16" cy="10" r="1.3"/></svg></i><div><b data-t="bt10">עיצוב לפי התחום</b><small data-t="bd10">מספרה, קליניקה, מכון כושר ועוד</small></div></div><div class="b"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1a140a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg></i><div><b data-t="bt11">עברית וערבית</b><small data-t="bd11">כל לקוח בשפה שלו</small></div></div></div>
-    <a data-t="join" class="soon" href="#lead">אני רוצה להצטרף</a></section>
-  <section class="lead" id="lead"><span data-t="ltag" class="tag">הרשמה מוקדמת</span>
-    <h3 data-t="lh">רוצים להיות הראשונים?</h3>
-    <p data-t="lp" class="lp">השאירו פרטים ונחזור אליכם לפני ההשקה – עם הטבת מצטרפים ראשונים.</p>
+</section>
+<section class="w rv">
+  <span data-t="k3" class="kick">איך זה עובד</span>
+  <h2 data-t="h2c">שלושה צעדים, וזהו.</h2>
+  <div class="steps"><div class="st"><div class="n gold">01</div><h3 data-t="sh0">נרשמים ומעלים לוגו</h3><p data-t="sd0">בדקות ספורות העסק מוכן – שירותים, שעות, מחירים ועיצוב לפי התחום.</p></div><div class="st"><div class="n gold">02</div><h3 data-t="sh1">משתפים קישור אחד</h3><p data-t="sd1">בוואטסאפ, באינסטגרם, בגוגל או במעמד NFC על הדלפק.</p></div><div class="st"><div class="n gold">03</div><h3 data-t="sh2">TorLink עושה את השאר</h3><p data-t="sd2">תורים, אישורים, תזכורות, מועדון ודוחות – אוטומטית.</p></div></div>
+</section>
+<section class="w rv">
+  <span data-t="k4" class="kick">הכול במערכת אחת</span>
+  <h2 data-t="h2d">כל העסק שלך – במקום אחד</h2>
+  <div class="bg"><div class="b"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1a140a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></i><div><b data-t="bt0">תורים אונליין 24/7</b><small data-t="bd0">הלקוחות קובעים לבד, בלי שיחות</small></div></div><div class="b"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1a140a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.6A8.4 8.4 0 1 1 21 11.5z"/></svg></i><div><b data-t="bt1">וואטסאפ אוטומטי</b><small data-t="bd1">אישור, שינוי וביטול – לבד</small></div></div><div class="b"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1a140a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg></i><div><b data-t="bt2">תזכורות לפני התור</b><small data-t="bd2">פחות "שכחתי", פחות חורים ביומן</small></div></div><div class="b"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1a140a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="12" rx="3"/><path d="M12 8V4M8 14h.01M16 14h.01"/></svg></i><div><b data-t="bt3">בוט חכם בוואטסאפ</b><small data-t="bd3">עונה ללקוחות וקובע תורים</small></div></div><div class="b"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1a140a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18h20M3 7l5 5 4-7 4 7 5-5-2 11H5z"/></svg></i><div><b data-t="bt4">מועדון לקוחות</b><small data-t="bd4">ניקובים, הטבות ויום הולדת</small></div></div><div class="b"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1a140a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 0 0 6v3a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-3a3 3 0 0 0 0-6V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/></svg></i><div><b data-t="bt5">כרטיסיות וחבילות</b><small data-t="bd5">כרטיס דיגיטלי עם QR וארנק</small></div></div><div class="b"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1a140a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg></i><div><b data-t="bt6">חנות מוצרים</b><small data-t="bd6">הזמנה מראש ואיסוף בעסק</small></div></div><div class="b"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1a140a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></i><div><b data-t="bt7">קטלוג 3D</b><small data-t="bd7">מחירון שמדפדפים, עם סאונד</small></div></div><div class="b"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1a140a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 6-6"/></svg></i><div><b data-t="bt8">דוחות והכנסות</b><small data-t="bd8">הכנסות, לקוחות ואי־הגעות</small></div></div><div class="b"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1a140a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></i><div><b data-t="bt9">מעמד NFC לדלפק</b><small data-t="bd9">נגיעה בטלפון – ונכנסים לקבוע</small></div></div><div class="b"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1a140a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="8" cy="10" r="1.3"/><circle cx="12" cy="7" r="1.3"/><circle cx="16" cy="10" r="1.3"/></svg></i><div><b data-t="bt10">עיצוב לפי התחום</b><small data-t="bd10">מספרה, קליניקה, מכון כושר ועוד</small></div></div><div class="b"><i><svg viewBox="0 0 24 24" fill="none" stroke="#1a140a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg></i><div><b data-t="bt11">עברית וערבית</b><small data-t="bd11">כל לקוח בשפה שלו</small></div></div></div>
+</section>
+<section class="w rv">
+  <span data-t="k5" class="kick">הצצה למערכת</span>
+  <h2 data-t="h2e">מעוצב כמו אפליקציה של מותג</h2>
+  <div class="gal"><figure><div class="ph"><div><img src="/media/shot-book.jpg" alt="" loading="lazy"></div></div><figcaption data-t="gc0">דף התורים של העסק</figcaption></figure><figure><div class="ph"><div><img src="/media/shot-admin.jpg" alt="" loading="lazy"></div></div><figcaption data-t="gc1">לוח הניהול</figcaption></figure><figure><div class="ph"><div><img src="/media/shot-card.jpg" alt="" loading="lazy"></div></div><figcaption data-t="gc2">הכרטיס הדיגיטלי של הלקוח</figcaption></figure><figure><div class="ph"><div><img src="/media/shot-cat2.jpg" alt="" loading="lazy"></div></div><figcaption data-t="gc3">קטלוג 3D</figcaption></figure></div>
+</section>
+<section class="w rv">
+  <span data-t="k6" class="kick">למי זה מתאים</span>
+  <h2 data-t="h2f">לכל עסק שעובד עם תורים</h2>
+  <div class="chips"><span data-t="sec0">מספרות וברברים</span><span data-t="sec1">רופאי שיניים</span><span data-t="sec2">מכוני כושר ומאמנים</span><span data-t="sec3">קליניקות וטיפולים</span><span data-t="sec4">ציפורניים וקוסמטיקה</span><span data-t="sec5">פיזיותרפיה</span><span data-t="sec6">מורים פרטיים</span><span data-t="sec7">מוסכים ושירותים</span></div>
+</section>
+<section class="w rv" id="lead">
+  <div class="offer">
+    <span data-t="k7" class="kick">גישה מוקדמת</span>
+    <h2 data-t="h2g">היו הראשונים בעיר שלכם</h2>
+    <p data-t="lp" class="lead2">מספר המקומות בהשקה מוגבל. השאירו פרטים ונחזור אליכם לפני כולם.</p>
+    <ul class="perks"><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span data-t="pk1">גישה לפני כולם</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span data-t="pk2">הטבת מצטרפים ראשונים</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg><span data-t="pk3">ללא התחייבות</span></li></ul>
     <form name="leads" method="POST" action="/soon.html" data-netlify="true" netlify-honeypot="company" id="lf">
       <input type="hidden" name="form-name" value="leads">
       <p hidden><label>Company <input name="company"></label></p>
-      <input name="name" required maxlength="60" placeholder="שם מלא" data-ph="pn" autocomplete="name">
-      <input name="business" required maxlength="80" placeholder="שם העסק" data-ph="pb">
-      <input name="phone" required type="tel" inputmode="tel" pattern="[0-9+\-\s]{9,15}" placeholder="טלפון" data-ph="pp" autocomplete="tel" dir="ltr">
-      <select name="type" required><option value="" disabled selected data-t="pt">סוג העסק</option><option value="מספרה / ברבר" data-t="ty0">מספרה / ברבר</option><option value="סטודיו לציפורניים" data-t="ty1">סטודיו לציפורניים</option><option value="קוסמטיקה / ריסים" data-t="ty2">קוסמטיקה / ריסים</option><option value="רופא שיניים" data-t="ty3">רופא שיניים</option><option value="מכון כושר / מאמן" data-t="ty4">מכון כושר / מאמן</option><option value="קליניקה / טיפולים" data-t="ty5">קליניקה / טיפולים</option><option value="פיזיותרפיה" data-t="ty6">פיזיותרפיה</option><option value="מורה פרטי" data-t="ty7">מורה פרטי</option><option value="מוסך / שירות" data-t="ty8">מוסך / שירות</option><option value="אחר" data-t="ty9">אחר</option></select>
-      <input name="city" maxlength="40" placeholder="עיר" data-ph="pc">
       <input type="hidden" name="lang" id="flang" value="he">
-      <button type="submit" data-t="join2">אני רוצה להצטרף</button>
-      <div class="ok" id="lok" hidden>✓ <span data-t="ok">תודה! נחזור אליך בקרוב</span></div>
-      <div class="er" id="ler" hidden data-t="er">משהו השתבש, נסו שוב</div>
-    </form></section>
+      <label class="vh" for="f1" hidden>name</label><input id="f1" name="name" required maxlength="60" placeholder="שם מלא" data-ph="pn" autocomplete="name">
+      <input name="business" required maxlength="80" placeholder="שם העסק" data-ph="pb" aria-label="business">
+      <input name="phone" required type="tel" inputmode="tel" pattern="[0-9+\-\s]{9,15}" placeholder="טלפון" data-ph="pp" autocomplete="tel" dir="ltr" aria-label="phone">
+      <select name="type" required aria-label="type"><option data-t="pt" value="" disabled selected>סוג העסק</option><option data-t="ty0" value="מספרה / ברבר">מספרה / ברבר</option><option data-t="ty1" value="סטודיו לציפורניים">סטודיו לציפורניים</option><option data-t="ty2" value="קוסמטיקה / ריסים">קוסמטיקה / ריסים</option><option data-t="ty3" value="רופא שיניים">רופא שיניים</option><option data-t="ty4" value="מכון כושר / מאמן">מכון כושר / מאמן</option><option data-t="ty5" value="קליניקה / טיפולים">קליניקה / טיפולים</option><option data-t="ty6" value="פיזיותרפיה">פיזיותרפיה</option><option data-t="ty7" value="מורה פרטי">מורה פרטי</option><option data-t="ty8" value="מוסך / שירות">מוסך / שירות</option><option data-t="ty9" value="אחר">אחר</option></select>
+      <input name="city" maxlength="40" placeholder="עיר" data-ph="pc" aria-label="city">
+      <button data-t="join2" type="submit" class="btn">שמרו לי מקום</button>
+      <div class="ok" id="lok" hidden>✓ <span data-t="ok">נרשמת! נחזור אליך לפני ההשקה.</span></div>
+      <div class="er" id="ler" hidden><span data-t="er">משהו השתבש, נסו שוב</span></div>
+    </form>
+    <p data-t="priv" class="small">הפרטים שלכם נשמרים אצלנו בלבד ומשמשים רק ליצירת קשר.</p>
+  </div>
+</section>
+<section class="w rv">
+  <span data-t="k8" class="kick">שאלות נפוצות</span>
+  <div class="faq"><details><summary data-t="fq0">מתי משיקים?</summary><p data-t="fa0">בקרוב מאוד. מי שנרשם עכשיו מקבל גישה ראשון והודעה אישית לפני כולם.</p></details><details><summary data-t="fq1">צריך להתקין משהו?</summary><p data-t="fa1">לא. הכול עובד מהדפדפן בכל טלפון ומחשב, ואפשר להוסיף למסך הבית כמו אפליקציה.</p></details><details><summary data-t="fq2">זה מתאים לעסק שלי?</summary><p data-t="fa2">אם העסק שלך עובד עם תורים – מספרה, קליניקה, רופא שיניים, מכון כושר, מורה או מוסך – כן.</p></details><details><summary data-t="fq3">הלקוחות שלי מדברים ערבית</summary><p data-t="fa3">מעולה. כל המערכת בעברית ובערבית, וכל לקוח בוחר את השפה שלו.</p></details><details><summary data-t="fq4">ההרשמה מחייבת?</summary><p data-t="fa4">לא. ההרשמה המוקדמת חינמית וללא התחייבות.</p></details></div>
+</section>
 </main>
-<footer>© TorLink · <a href="mailto:info@torlink.app" style="color:#a9a294;text-decoration:none">info@torlink.app</a> · torlink.app</footer>
+<footer><a class="logo" href="#top"><svg viewBox="0 0 120 120" fill="none" aria-hidden="true"><defs><linearGradient id="gf" x1="10" y1="6" x2="110" y2="114" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F7E7BE"/><stop offset=".45" stop-color="#D6AA5C"/><stop offset="1" stop-color="#9A7230"/></linearGradient></defs><path class="mr" d="M77.78 11.14 A52 52 0 1 1 42.22 11.14" stroke="url(#gf)" stroke-width="6" stroke-linecap="round"/><circle cx="60" cy="9" r="5" fill="url(#gf)"/><path class="mt" d="M35 50 H85 M60 50 V87" stroke="url(#gf)" stroke-width="9.5" stroke-linecap="round"/><circle cx="60" cy="50" r="3.2" fill="#0B0A09"/></svg><b>Tor<span>Link</span></b></a><div data-t="ft">קובעים. מנהלים. גדלים.</div><div style="margin-top:10px;direction:ltr">© TorLink · <a href="mailto:info@torlink.app">info@torlink.app</a> · torlink.app</div></footer>
+<div class="sticky" id="stk"><a data-t="stk" class="btn" href="#lead">הצטרפו לרשימת ההמתנה</a></div>
 <script>
-const T={"he": {"slogan": "קובעים. מנהלים. <em>גדלים.</em>", "desc": "מערכת אחת לכל עסק שעובד עם תורים – תורים, לקוחות, תשלומים ומכירות.", "sec0": "מספרות וברברים", "sec1": "רופאי שיניים", "sec2": "מכוני כושר ומאמנים", "sec3": "קליניקות וטיפולים", "sec4": "ציפורניים וקוסמטיקה", "sec5": "פיזיותרפיה", "sec6": "מורים פרטיים", "sec7": "מוסכים ושירותים", "h1": "בקרוב", "snd": "הפעלת סאונד", "bt0": "תורים אונליין 24/7", "bd0": "הלקוחות קובעים לבד, בלי שיחות", "bt1": "וואטסאפ אוטומטי", "bd1": "אישור, שינוי וביטול – לבד", "bt2": "תזכורות לפני התור", "bd2": "פחות \"שכחתי\", פחות חורים ביומן", "bt3": "בוט חכם בוואטסאפ", "bd3": "עונה ללקוחות וקובע תורים", "bt4": "מועדון לקוחות", "bd4": "ניקובים, הטבות ויום הולדת", "bt5": "כרטיסיות וחבילות", "bd5": "כרטיס דיגיטלי עם QR וארנק", "bt6": "חנות מוצרים", "bd6": "הזמנה מראש ואיסוף בעסק", "bt7": "קטלוג 3D", "bd7": "מחירון שמדפדפים, עם סאונד", "bt8": "דוחות והכנסות", "bd8": "הכנסות, לקוחות ואי־הגעות", "bt9": "מעמד NFC לדלפק", "bd9": "נגיעה בטלפון – ונכנסים לקבוע", "bt10": "עיצוב לפי התחום", "bd10": "מספרה, קליניקה, מכון כושר ועוד", "bt11": "עברית וערבית", "bd11": "כל לקוח בשפה שלו", "btag": "הכול במערכת אחת", "bh": "כל העסק שלך – במקום אחד", "join": "אני רוצה להצטרף", "ltag": "הרשמה מוקדמת", "lh": "רוצים להיות הראשונים?", "lp": "השאירו פרטים ונחזור אליכם לפני ההשקה – עם הטבת מצטרפים ראשונים.", "pn": "שם מלא", "pb": "שם העסק", "pp": "טלפון", "pc": "עיר", "join2": "אני רוצה להצטרף", "ok": "תודה! נחזור אליך בקרוב", "er": "משהו השתבש, נסו שוב", "pt": "סוג העסק", "ty0": "מספרה / ברבר", "ty1": "סטודיו לציפורניים", "ty2": "קוסמטיקה / ריסים", "ty3": "רופא שיניים", "ty4": "מכון כושר / מאמן", "ty5": "קליניקה / טיפולים", "ty6": "פיזיותרפיה", "ty7": "מורה פרטי", "ty8": "מוסך / שירות", "ty9": "אחר"}, "ar": {"slogan": "بتحجز. بتدير. <em>بتكبر.</em>", "desc": "نظام واحد لكل مصلحة بتشتغل بالمواعيد – مواعيد، زباين، دفعات ومبيعات.", "sec0": "صالونات وحلاقين", "sec1": "أطباء أسنان", "sec2": "نوادي رياضية ومدربين", "sec3": "عيادات وعلاجات", "sec4": "أظافر وتجميل", "sec5": "علاج طبيعي", "sec6": "معلمين خصوصيين", "sec7": "كراجات وخدمات", "h1": "قريبًا", "snd": "شغّل الصوت", "bt0": "حجز أونلاين ٢٤/٧", "bd0": "الزباين بيحجزوا لحالهم بدون تلفونات", "bt1": "واتساب أوتوماتيك", "bd1": "تأكيد، تغيير وإلغاء – لحاله", "bt2": "تذكير قبل الدور", "bd2": "أقل \"نسيت\"، أقل فراغات بالجدول", "bt3": "بوت ذكي بالواتساب", "bd3": "بيرد عالزباين وبيحجز أدوار", "bt4": "نادي زباين", "bd4": "نقاط، هدايا وعيد ميلاد", "bt5": "بطاقات ورزم", "bd5": "بطاقة ديجيتال مع QR ومحفظة", "bt6": "متجر منتجات", "bd6": "اطلب مسبقًا واستلم بالمحل", "bt7": "كتالوج 3D", "bd7": "قائمة أسعار بتقلّبها، مع صوت", "bt8": "تقارير ودخل", "bd8": "دخل، زباين وغيابات", "bt9": "ستاند NFC للكاونتر", "bd9": "لمسة بالتلفون وبتحجز", "bt10": "تصميم حسب المجال", "bd10": "صالون، عيادة، نادي وغيرهم", "bt11": "عبري وعربي", "bd11": "كل زبون بلغته", "btag": "كل شي بنظام واحد", "bh": "شغلك كله – بمكان واحد", "join": "بدي أنضم", "ltag": "تسجيل مبكر", "lh": "بدك تكون من الأوائل؟", "lp": "اترك تفاصيلك ومنرجعلك قبل الإطلاق – مع هدية للمنضمين الأوائل.", "pn": "الاسم الكامل", "pb": "اسم المحل", "pp": "رقم الهاتف", "pc": "المدينة", "join2": "بدي أنضم", "ok": "شكرًا! منرجعلك قريبًا", "er": "صار خطأ، جرّب كمان مرة", "pt": "نوع المصلحة", "ty0": "صالون / حلاق", "ty1": "استوديو أظافر", "ty2": "تجميل / رموش", "ty3": "طبيب أسنان", "ty4": "نادي رياضي / مدرب", "ty5": "عيادة / علاجات", "ty6": "علاج طبيعي", "ty7": "معلم خصوصي", "ty8": "كراج / خدمة", "ty9": "غير ذلك"}};
+const T={"he": {"navcta": "לגישה מוקדמת", "eb": "ההשקה מתקרבת · ההרשמה המוקדמת פתוחה", "h1": "העסק שלך,<br><span class=\"gold\">על טייס אוטומטי.</span>", "sl": "קובעים. מנהלים. גדלים.", "d": "מערכת אחת לכל עסק שעובד עם תורים: הלקוחות קובעים לבד, הוואטסאפ מאשר ומזכיר, ואתה רואה את כל העסק – בטלפון.", "cta1": "הצטרפו לרשימת ההמתנה", "cta2": "צפו בסרטון", "tr1": "ללא התחייבות", "tr2": "עברית וערבית", "tr3": "בלי להתקין כלום", "k1": "למה TorLink", "h2a": "פחות טלפונים. יותר לקוחות.", "pgx": "בלי TorLink", "pn0": "הטלפון מצלצל באמצע העבודה", "pn1": "לקוחות שוכחים ולא מגיעים", "pn2": "יומן בנייר והודעות בכל מקום", "pgv": "עם TorLink", "gn0": "הלקוחות קובעים לבד, 24/7", "gn1": "תזכורת אוטומטית יום לפני", "gn2": "הכול במקום אחד, בטלפון", "k2": "ראו את זה בפעולה", "h2b": "47 שניות שישנו לך את העסק", "snd": "הפעלת סאונד", "k3": "איך זה עובד", "h2c": "שלושה צעדים, וזהו.", "sh0": "נרשמים ומעלים לוגו", "sd0": "בדקות ספורות העסק מוכן – שירותים, שעות, מחירים ועיצוב לפי התחום.", "sh1": "משתפים קישור אחד", "sd1": "בוואטסאפ, באינסטגרם, בגוגל או במעמד NFC על הדלפק.", "sh2": "TorLink עושה את השאר", "sd2": "תורים, אישורים, תזכורות, מועדון ודוחות – אוטומטית.", "k4": "הכול במערכת אחת", "h2d": "כל העסק שלך – במקום אחד", "bt0": "תורים אונליין 24/7", "bd0": "הלקוחות קובעים לבד, בלי שיחות", "bt1": "וואטסאפ אוטומטי", "bd1": "אישור, שינוי וביטול – לבד", "bt2": "תזכורות לפני התור", "bd2": "פחות \"שכחתי\", פחות חורים ביומן", "bt3": "בוט חכם בוואטסאפ", "bd3": "עונה ללקוחות וקובע תורים", "bt4": "מועדון לקוחות", "bd4": "ניקובים, הטבות ויום הולדת", "bt5": "כרטיסיות וחבילות", "bd5": "כרטיס דיגיטלי עם QR וארנק", "bt6": "חנות מוצרים", "bd6": "הזמנה מראש ואיסוף בעסק", "bt7": "קטלוג 3D", "bd7": "מחירון שמדפדפים, עם סאונד", "bt8": "דוחות והכנסות", "bd8": "הכנסות, לקוחות ואי־הגעות", "bt9": "מעמד NFC לדלפק", "bd9": "נגיעה בטלפון – ונכנסים לקבוע", "bt10": "עיצוב לפי התחום", "bd10": "מספרה, קליניקה, מכון כושר ועוד", "bt11": "עברית וערבית", "bd11": "כל לקוח בשפה שלו", "k5": "הצצה למערכת", "h2e": "מעוצב כמו אפליקציה של מותג", "gc0": "דף התורים של העסק", "gc1": "לוח הניהול", "gc2": "הכרטיס הדיגיטלי של הלקוח", "gc3": "קטלוג 3D", "k6": "למי זה מתאים", "h2f": "לכל עסק שעובד עם תורים", "sec0": "מספרות וברברים", "sec1": "רופאי שיניים", "sec2": "מכוני כושר ומאמנים", "sec3": "קליניקות וטיפולים", "sec4": "ציפורניים וקוסמטיקה", "sec5": "פיזיותרפיה", "sec6": "מורים פרטיים", "sec7": "מוסכים ושירותים", "k7": "גישה מוקדמת", "h2g": "היו הראשונים בעיר שלכם", "lp": "מספר המקומות בהשקה מוגבל. השאירו פרטים ונחזור אליכם לפני כולם.", "pk1": "גישה לפני כולם", "pk2": "הטבת מצטרפים ראשונים", "pk3": "ללא התחייבות", "pn": "שם מלא", "pb": "שם העסק", "pp": "טלפון", "pt": "סוג העסק", "ty0": "מספרה / ברבר", "ty1": "סטודיו לציפורניים", "ty2": "קוסמטיקה / ריסים", "ty3": "רופא שיניים", "ty4": "מכון כושר / מאמן", "ty5": "קליניקה / טיפולים", "ty6": "פיזיותרפיה", "ty7": "מורה פרטי", "ty8": "מוסך / שירות", "ty9": "אחר", "pc": "עיר", "join2": "שמרו לי מקום", "ok": "נרשמת! נחזור אליך לפני ההשקה.", "er": "משהו השתבש, נסו שוב", "priv": "הפרטים שלכם נשמרים אצלנו בלבד ומשמשים רק ליצירת קשר.", "k8": "שאלות נפוצות", "fq0": "מתי משיקים?", "fa0": "בקרוב מאוד. מי שנרשם עכשיו מקבל גישה ראשון והודעה אישית לפני כולם.", "fq1": "צריך להתקין משהו?", "fa1": "לא. הכול עובד מהדפדפן בכל טלפון ומחשב, ואפשר להוסיף למסך הבית כמו אפליקציה.", "fq2": "זה מתאים לעסק שלי?", "fa2": "אם העסק שלך עובד עם תורים – מספרה, קליניקה, רופא שיניים, מכון כושר, מורה או מוסך – כן.", "fq3": "הלקוחות שלי מדברים ערבית", "fa3": "מעולה. כל המערכת בעברית ובערבית, וכל לקוח בוחר את השפה שלו.", "fq4": "ההרשמה מחייבת?", "fa4": "לא. ההרשמה המוקדמת חינמית וללא התחייבות.", "ft": "קובעים. מנהלים. גדלים.", "stk": "הצטרפו לרשימת ההמתנה"}, "ar": {"navcta": "للوصول المبكر", "eb": "الإطلاق قرّب · التسجيل المبكر مفتوح", "h1": "مصلحتك،<br><span class=\"gold\">على الطيار الآلي.</span>", "sl": "بتحجز. بتدير. بتكبر.", "d": "نظام واحد لكل مصلحة بتشتغل بالمواعيد: الزباين بيحجزوا لحالهم، الواتساب بيأكد وبيذكّر، وإنت بتشوف كل الشغل – بالتلفون.", "cta1": "انضم لقائمة الانتظار", "cta2": "شوف الفيديو", "tr1": "بدون التزام", "tr2": "عبري وعربي", "tr3": "بدون تنزيل إشي", "k1": "ليش TorLink", "h2a": "تلفونات أقل. زباين أكثر.", "pgx": "بدون TorLink", "pn0": "التلفون بيرن بنص الشغل", "pn1": "زباين بنسوا وما بيجوا", "pn2": "دفتر ورق ورسائل بكل مكان", "pgv": "مع TorLink", "gn0": "الزباين بيحجزوا لحالهم ٢٤/٧", "gn1": "تذكير أوتوماتيك قبل بيوم", "gn2": "كل شي بمكان واحد، بالتلفون", "k2": "شوفه وهو شغّال", "h2b": "٤٧ ثانية بتغيّر شغلك", "snd": "شغّل الصوت", "k3": "كيف بيشتغل", "h2c": "ثلاث خطوات، وخلص.", "sh0": "بتسجّل وبتنزّل اللوغو", "sd0": "بدقائق المصلحة جاهزة – خدمات، ساعات، أسعار وتصميم حسب المجال.", "sh1": "بتشارك رابط واحد", "sd1": "بالواتساب، بالإنستغرام، بجوجل أو بستاند NFC عالكاونتر.", "sh2": "TorLink بيعمل الباقي", "sd2": "أدوار، تأكيدات، تذكيرات، نادي وتقارير – أوتوماتيك.", "k4": "كل شي بنظام واحد", "h2d": "شغلك كله – بمكان واحد", "bt0": "حجز أونلاين ٢٤/٧", "bd0": "الزباين بيحجزوا لحالهم بدون تلفونات", "bt1": "واتساب أوتوماتيك", "bd1": "تأكيد، تغيير وإلغاء – لحاله", "bt2": "تذكير قبل الدور", "bd2": "أقل \"نسيت\"، أقل فراغات بالجدول", "bt3": "بوت ذكي بالواتساب", "bd3": "بيرد عالزباين وبيحجز أدوار", "bt4": "نادي زباين", "bd4": "نقاط، هدايا وعيد ميلاد", "bt5": "بطاقات ورزم", "bd5": "بطاقة ديجيتال مع QR ومحفظة", "bt6": "متجر منتجات", "bd6": "اطلب مسبقًا واستلم بالمحل", "bt7": "كتالوج 3D", "bd7": "قائمة أسعار بتقلّبها، مع صوت", "bt8": "تقارير ودخل", "bd8": "دخل، زباين وغيابات", "bt9": "ستاند NFC للكاونتر", "bd9": "لمسة بالتلفون وبتحجز", "bt10": "تصميم حسب المجال", "bd10": "صالون، عيادة، نادي وغيرهم", "bt11": "عبري وعربي", "bd11": "كل زبون بلغته", "k5": "نظرة عالنظام", "h2e": "مصمّم متل تطبيق ماركة عالمية", "gc0": "صفحة الحجز للمصلحة", "gc1": "لوحة الإدارة", "gc2": "بطاقة الزبون الديجيتال", "gc3": "كتالوج 3D", "k6": "لمين بيناسب", "h2f": "لكل مصلحة بتشتغل بالمواعيد", "sec0": "صالونات وحلاقين", "sec1": "أطباء أسنان", "sec2": "نوادي رياضية ومدربين", "sec3": "عيادات وعلاجات", "sec4": "أظافر وتجميل", "sec5": "علاج طبيعي", "sec6": "معلمين خصوصيين", "sec7": "كراجات وخدمات", "k7": "وصول مبكر", "h2g": "كون الأول ببلدك", "lp": "الأماكن بالإطلاق محدودة. اترك تفاصيلك ومنرجعلك قبل الكل.", "pk1": "وصول قبل الكل", "pk2": "هدية للمنضمين الأوائل", "pk3": "بدون التزام", "pn": "الاسم الكامل", "pb": "اسم المصلحة", "pp": "رقم الهاتف", "pt": "نوع المصلحة", "ty0": "صالون / حلاق", "ty1": "استوديو أظافر", "ty2": "تجميل / رموش", "ty3": "طبيب أسنان", "ty4": "نادي رياضي / مدرب", "ty5": "عيادة / علاجات", "ty6": "علاج طبيعي", "ty7": "معلم خصوصي", "ty8": "كراج / خدمة", "ty9": "غير ذلك", "pc": "المدينة", "join2": "احجزلي مكان", "ok": "تم التسجيل! منرجعلك قبل الإطلاق.", "er": "صار خطأ، جرّب كمان مرة", "priv": "تفاصيلك محفوظة عنا بس ومنستعملها للتواصل بس.", "k8": "أسئلة شائعة", "fq0": "إيمتى الإطلاق؟", "fa0": "قريب كتير. اللي بيسجّل هلأ بياخد وصول أول ورسالة شخصية قبل الكل.", "fq1": "لازم أنزّل إشي؟", "fa1": "لا. كل شي بيشتغل من المتصفح بأي تلفون أو كمبيوتر، وفيك تضيفه للشاشة متل تطبيق.", "fq2": "بيناسب مصلحتي؟", "fa2": "إذا مصلحتك بتشتغل بالمواعيد – صالون، عيادة، طبيب أسنان، نادي، معلم أو كراج – أكيد.", "fq3": "زباينّي بيحكوا عبري", "fa3": "ممتاز. كل النظام بالعربي والعبري، وكل زبون بيختار لغته.", "fq4": "التسجيل ملزم؟", "fa4": "لا. التسجيل المبكر مجاني وبدون التزام.", "ft": "بتحجز. بتدير. بتكبر.", "stk": "انضم لقائمة الانتظار"}};
 function setLang(l){document.documentElement.lang=l;document.querySelectorAll('[data-t]').forEach(e=>{const v=T[l][e.dataset.t];if(v!=null)e.innerHTML=v});
  document.querySelectorAll('[data-ph]').forEach(e=>e.placeholder=T[l][e.dataset.ph]);document.querySelectorAll('.lsw button').forEach(b=>b.classList.toggle('on',b.dataset.lang===l));
  document.getElementById('flang').value=l;document.title=l==='ar'?'TorLink · بتحجز. بتدير. بتكبر.':'TorLink · קובעים. מנהלים. גדלים.';try{localStorage.setItem('tl-lang',l)}catch(_){}}
@@ -130,9 +228,14 @@ let L0='he';try{L0=localStorage.getItem('tl-lang')||((navigator.language||'').st
 if(new URLSearchParams(location.search).get('lang')==='ar')L0='ar';
 setLang(L0);
 const v=document.getElementById('vd'),b=document.getElementById('snd');
-if('IntersectionObserver' in window){new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){v.play().catch(()=>{})}else v.pause()}),{threshold:.35}).observe(v)}else v.play().catch(()=>{});
+const io=('IntersectionObserver' in window);
+if(io){new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)v.play().catch(()=>{});else v.pause()}),{threshold:.35}).observe(v)}else v.play().catch(()=>{});
 b.onclick=()=>{v.muted=false;v.currentTime=0;v.play();b.classList.add('off')};
 v.addEventListener('volumechange',()=>b.classList.toggle('off',!v.muted));
+document.querySelectorAll('.rv').forEach(el=>{if(!io){el.classList.add('in');return}new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){el.classList.add('in');o.disconnect()}}),{threshold:.12}).observe(el)});
+const stk=document.getElementById('stk'),hero=document.querySelector('.ctas'),lead=document.getElementById('lead');
+let hv=true,lv=false;const upd=()=>stk.classList.toggle('on',!hv&&!lv);
+if(io){new IntersectionObserver(es=>{hv=es[0].isIntersecting;upd()}).observe(hero);new IntersectionObserver(es=>{lv=es[0].isIntersecting;upd()},{threshold:.15}).observe(lead)}
 const lf=document.getElementById('lf');
 lf.addEventListener('submit',async e=>{e.preventDefault();const bt=lf.querySelector('button');bt.disabled=true;document.getElementById('ler').hidden=true;
   try{const r=await fetch('/soon.html',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(lf)).toString()});
