@@ -49,3 +49,19 @@
   from = "/super"
   to = "/index.html"
   status = 200
+
+# ---- caching: static assets are cached by the browser, pages stay fresh
+[[headers]]
+  for = "/media/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/manifest.webmanifest"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"

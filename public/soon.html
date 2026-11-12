@@ -13,7 +13,10 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-title" content="TorLink">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=Suez+One&family=Reem+Kufi:wght@600;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=Suez+One&family=Reem+Kufi:wght@600;700&family=Cairo:wght@400;600;700&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=Suez+One&family=Reem+Kufi:wght@600;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=Suez+One&family=Reem+Kufi:wght@600;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
 <style>
 *{box-sizing:border-box;margin:0}
 html,body{height:100%}
@@ -52,13 +55,13 @@ a.soon{text-decoration:none}
 .wm{display:flex;flex-direction:column;align-items:flex-start;gap:4px}.wm small{font:300 11px Heebo,sans-serif;letter-spacing:5px;color:#bfa67a}
 .slogan{font:400 clamp(26px,7vw,38px)/1.2 'Suez One',serif!important;color:#f4efe6!important;margin-top:18px!important}.slogan em{font-style:normal;color:#e8cb8a}
 .slogan.ar{font:600 clamp(20px,5.5vw,28px) 'Reem Kufi',sans-serif!important;color:#d9b977!important;margin-top:4px!important}
-.lsw{position:relative;z-index:10;display:inline-flex;margin:0 auto 26px;gap:2px;padding:3px;border-radius:99px;background:rgba(20,18,16,.75);border:1px solid rgba(201,164,92,.3);backdrop-filter:blur(8px)}
+.lsw{position:relative;z-index:10;display:inline-flex;margin:0 auto 26px;gap:2px;padding:3px;border-radius:99px;background:rgba(20,18,16,.75);border:1px solid rgba(201,164,92,.3);}
 .lsw button{border:0;cursor:pointer;background:transparent;color:#cfc4ae;font:600 13px Heebo,'Cairo',sans-serif;padding:8px 14px;border-radius:99px}
 .lsw button.on{background:linear-gradient(135deg,#f3dca6,#c99a4b);color:#1a140a}
 html[lang=ar] body{font-family:'Cairo',Heebo,sans-serif}
 html[lang=ar] h1{font-family:'Reem Kufi',sans-serif!important;font-weight:700}
 html[lang=ar] .slogan,html[lang=ar] .ben h3,html[lang=ar] .lead h3{font-family:'Reem Kufi',sans-serif!important;font-weight:700!important}
-.ring{position:fixed;left:50%;top:50%;width:min(130vw,900px);aspect-ratio:1;border-radius:50%;border:1px solid rgba(201,164,92,.12);transform:translate(-50%,-50%);animation:pulse 6s ease-in-out infinite}
+.ring{will-change:transform,opacity;position:fixed;left:50%;top:50%;width:min(130vw,900px);aspect-ratio:1;border-radius:50%;border:1px solid rgba(201,164,92,.12);transform:translate(-50%,-50%);animation:pulse 6s ease-in-out infinite}
 .ring.r2{width:min(95vw,640px);animation-delay:-2s}.ring.r3{width:min(60vw,400px);animation-delay:-4s}
 @keyframes pulse{0%,100%{opacity:.35;transform:translate(-50%,-50%) scale(.97)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.02)}}
 main{position:relative;text-align:center;padding:32px 24px;max-width:560px;animation:in 1s cubic-bezier(.2,.8,.2,1) both}
@@ -82,7 +85,7 @@ footer{position:fixed;bottom:18px;left:0;right:0;text-align:center;font-size:12p
 </style>
 </head>
 <body>
-<div class="grain"></div><div class="ring"></div><div class="ring r2"></div><div class="ring r3"></div>
+<div class="ring"></div><div class="ring r2"></div>
 
 <main>
   <div style="text-align:center"><div class="lsw" role="group" aria-label="שפה / اللغة"><button type="button" data-lang="he">עברית</button><button type="button" data-lang="ar">العربية</button></div></div>
@@ -92,7 +95,7 @@ footer{position:fixed;bottom:18px;left:0;right:0;text-align:center;font-size:12p
   <p data-t="slogan" class="slogan">קובעים. מנהלים. <em>גדלים.</em></p>
   <p data-t="desc">מערכת אחת לכל עסק שעובד עם תורים – תורים, לקוחות, תשלומים ומכירות.</p>
   <div class="chips"><span data-t="sec0">מספרות וברברים</span><span data-t="sec1">רופאי שיניים</span><span data-t="sec2">מכוני כושר ומאמנים</span><span data-t="sec3">קליניקות וטיפולים</span><span data-t="sec4">ציפורניים וקוסמטיקה</span><span data-t="sec5">פיזיותרפיה</span><span data-t="sec6">מורים פרטיים</span><span data-t="sec7">מוסכים ושירותים</span></div>
-  <div class="vid"><video id="vd" src="/media/torlink-explainer.mp4" poster="/media/torlink-explainer.jpg" autoplay muted loop playsinline preload="metadata"></video>
+  <div class="vid"><video id="vd" src="/media/torlink-explainer.mp4" poster="/media/torlink-explainer.jpg" muted loop playsinline preload="none"></video>
     <button class="snd" id="snd" type="button">🔊 <span data-t="snd">הפעלת סאונד</span></button></div>
   <div class="dots"><i></i><i></i><i></i></div>
   <section class="ben"><span data-t="btag" class="tag">הכול במערכת אחת</span>
@@ -127,6 +130,7 @@ let L0='he';try{L0=localStorage.getItem('tl-lang')||((navigator.language||'').st
 if(new URLSearchParams(location.search).get('lang')==='ar')L0='ar';
 setLang(L0);
 const v=document.getElementById('vd'),b=document.getElementById('snd');
+if('IntersectionObserver' in window){new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){v.play().catch(()=>{})}else v.pause()}),{threshold:.35}).observe(v)}else v.play().catch(()=>{});
 b.onclick=()=>{v.muted=false;v.currentTime=0;v.play();b.classList.add('off')};
 v.addEventListener('volumechange',()=>b.classList.toggle('off',!v.muted));
 const lf=document.getElementById('lf');
